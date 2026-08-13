@@ -3,32 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AgriSync OS — AI-Powered Farm-to-Factory Procurement Platform. From Farm. To Factory. Smarter." />
-  <meta name="theme-color" content="#1a4a2e" />
   <title>AgriSync OS — From Farm. To Factory. Smarter.</title>
-
-  <!-- Favicon: logo image -->
   <link rel="icon" type="image/png" href="assets/images/logo.png" />
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />  
-
-  <!-- Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-  <!-- AgriSync Styles -->
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/responsive.css" />
-
   <style>
-    /* ── FONT OVERRIDE ── */
     :root {
       --font-base: 'Inter', system-ui, -apple-system, sans-serif;
-
-      /* Refined brand palette matching logo */
       --forest-green:  #1a4a2e;
       --leaf-green:    #2d7a4f;
       --sage-green:    #6aab82;
@@ -37,8 +23,6 @@
       --warm-cream:    #f5f0e8;
       --charcoal:      #1c2b22;
       --white:         #ffffff;
-
-      /* Semantic */
       --primary:       var(--forest-green);
       --accent:        var(--harvest-gold);
       --bg:            var(--warm-cream);
@@ -47,29 +31,49 @@
       --text-secondary:#4a6355;
       --text-muted:    #7a9485;
     }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-base); background: var(--warm-cream); }
 
-    body {
-      font-family: var(--font-base);
-      background: var(--warm-cream);
+    /* ── ANNOUNCE BAR ── */
+    .announce-bar {
+      background: var(--forest-green);
+      color: rgba(255,255,255,0.85);
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 9px 0;
+      text-align: center;
+      position: relative;
+      z-index: 1001;
     }
+    .announce-bar .items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .announce-bar a { color: var(--gold-light); font-weight: 700; text-decoration: none; margin-left: 5px; }
+    .announce-bar .sep { opacity: 0.3; }
 
     /* ── NAVBAR ── */
     .landing-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 900;
-      padding: 14px 0;
-      transition: all 0.35s ease;
-      background: transparent;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #fff;
+      border-bottom: 1px solid rgba(26,74,46,0.10);
+      box-shadow: 0 2px 12px rgba(26,74,46,0.07);
+      padding: 0;
     }
-    .landing-nav.scrolled {
-      background: rgba(26, 74, 46, 0.97);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 2px 24px rgba(0,0,0,0.18);
-      padding: 10px 0;
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px;
     }
-
-    /* Logo: real image */
     .nav-logo {
       display: flex;
       align-items: center;
@@ -77,46 +81,37 @@
       text-decoration: none;
     }
     .nav-logo-img {
-      height: 48px;
+      height: 44px;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
-    }
-    .nav-logo-text {
-      display: flex;
-      flex-direction: column;
     }
     .nav-logo-name {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
-      color: var(--white);
+      color: var(--forest-green);
       letter-spacing: -0.5px;
       line-height: 1.1;
     }
-    .nav-logo-name span { color: var(--gold-light); }
+    .nav-logo-name span { color: var(--harvest-gold); }
     .nav-logo-tagline {
       font-size: 10px;
-      color: rgba(255,255,255,0.55);
+      color: var(--text-muted);
       font-weight: 500;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
-
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 32px;
     }
     .nav-links a {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.75);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
       text-decoration: none;
       transition: color 0.2s;
-      letter-spacing: 0.2px;
     }
-    .nav-links a:hover { color: var(--gold-light); }
-
+    .nav-links a:hover { color: var(--forest-green); }
     .nav-actions {
       display: flex;
       align-items: center;
@@ -127,334 +122,228 @@
       border-radius: 999px;
       font-size: 13px;
       font-weight: 600;
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.20);
+      color: var(--forest-green);
+      background: transparent;
+      border: 1.5px solid rgba(26,74,46,0.25);
       cursor: pointer;
       text-decoration: none;
       transition: all 0.2s;
     }
-    .nav-btn-signin:hover {
-      background: rgba(255,255,255,0.18);
-      color: var(--white);
-    }
+    .nav-btn-signin:hover { background: rgba(26,74,46,0.06); }
     .nav-btn-start {
       padding: 8px 22px;
       border-radius: 999px;
       font-size: 13px;
       font-weight: 700;
-      color: var(--charcoal);
-      background: var(--gold-light);
+      color: #fff;
+      background: var(--forest-green);
       border: none;
       cursor: pointer;
       text-decoration: none;
       transition: all 0.2s;
-      box-shadow: 0 2px 12px rgba(201,162,39,0.35);
+      box-shadow: 0 2px 10px rgba(26,74,46,0.25);
     }
-    .nav-btn-start:hover {
-      background: #ffd84a;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 18px rgba(201,162,39,0.45);
-    }
+    .nav-btn-start:hover { background: var(--leaf-green); transform: translateY(-1px); }
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
+    /* ── HERO BANNER ── */
+    .hero-banner {
       position: relative;
+      width: 100%;
+      height: 500px;
       overflow: hidden;
-      background: linear-gradient(135deg,
-        #0d2b1a 0%,
-        #1a4a2e 35%,
-        #1e5535 65%,
-        #0f3320 100%
+      background: #0d2b1a;
+    }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.9s ease;
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(8,28,16,0.80) 0%,
+        rgba(8,28,16,0.55) 45%,
+        rgba(8,28,16,0.08) 100%
       );
     }
-    .hero::before {
-      content: '';
+    .hero-content {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse at 15% 60%, rgba(201,162,39,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 20%, rgba(106,171,130,0.08) 0%, transparent 45%),
-        radial-gradient(ellipse at 60% 90%, rgba(76,140,138,0.06) 0%, transparent 40%);
-      pointer-events: none;
-    }
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 56px 56px;
-      pointer-events: none;
-    }
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 460px;
-      gap: 40px;
+      display: flex;
       align-items: center;
+      padding: 0 72px;
     }
-
-    .hero-content { max-width: 640px; }
-
+    .hero-text { max-width: 540px; }
     .hero-eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(201,162,39,0.15);
-      border: 1px solid rgba(201,162,39,0.35);
+      gap: 7px;
+      background: rgba(240,200,74,0.18);
+      border: 1px solid rgba(240,200,74,0.40);
       color: var(--gold-light);
-      padding: 6px 16px;
+      padding: 5px 14px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
+      margin-bottom: 18px;
     }
-
     .hero-title {
-      font-size: clamp(40px, 5.5vw, 68px);
+      font-size: clamp(34px, 4.8vw, 60px);
       font-weight: 900;
-      color: var(--white);
-      line-height: 1.05;
-      letter-spacing: -2px;
-      margin-bottom: 20px;
+      color: #fff;
+      line-height: 1.07;
+      letter-spacing: -1.5px;
+      margin-bottom: 14px;
     }
-    .hero-title .accent-gold { color: var(--gold-light); }
-    .hero-title .accent-green { color: #6adb8a; }
-
+    .hero-title .gold  { color: var(--gold-light); }
+    .hero-title .green { color: #6adb8a; }
     .hero-desc {
-      font-size: 17px;
-      color: rgba(255,255,255,0.62);
-      line-height: 1.75;
-      margin-bottom: 40px;
-      max-width: 520px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.72;
+      margin-bottom: 28px;
+      max-width: 420px;
     }
-
-    .hero-cta {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 52px;
-    }
-    .hero-cta-primary {
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 16px 36px;
+      padding: 13px 30px;
       border-radius: 999px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--charcoal);
       background: var(--gold-light);
-      border: none;
-      cursor: pointer;
       text-decoration: none;
-      box-shadow: 0 4px 20px rgba(201,162,39,0.40);
+      box-shadow: 0 4px 18px rgba(201,162,39,0.45);
       transition: all 0.22s;
     }
-    .hero-cta-primary:hover {
-      background: #ffd84a;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(201,162,39,0.50);
-    }
-    .hero-cta-secondary {
+    .btn-primary:hover { background: #ffd84a; transform: translateY(-2px); }
+    .btn-ghost {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 16px 32px;
+      padding: 13px 26px;
       border-radius: 999px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       color: rgba(255,255,255,0.88);
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.22);
-      cursor: pointer;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.28);
       text-decoration: none;
       backdrop-filter: blur(8px);
       transition: all 0.22s;
     }
-    .hero-cta-secondary:hover {
-      background: rgba(255,255,255,0.14);
-      color: var(--white);
-    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.18); }
 
-    .hero-stats {
-      display: flex;
-      gap: 40px;
-      padding-top: 32px;
-      border-top: 1px solid rgba(255,255,255,0.10);
-    }
-    .hero-stat-value {
-      font-size: 28px;
-      font-weight: 900;
-      color: var(--gold-light);
-      line-height: 1;
-    }
-    .hero-stat-label {
-      font-size: 11px;
-      color: rgba(255,255,255,0.45);
-      margin-top: 5px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-    }
-
-    /* ── HERO RIGHT: LOGO PANEL ── */
-    /* ── HERO RIGHT: FARMER PHOTO ── */
-    .hero-logo-panel {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      padding: 20px 0 20px 20px;
-    }
-    .hero-farmer-frame {
-      position: relative;
-      width: 420px;
-      height: 480px;
-      flex-shrink: 0;
-    }
-    /* Main photo */
-    .hero-farmer-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 40% 60% 55% 45% / 45% 40% 60% 55%;
-      display: block;
-      filter: drop-shadow(0 16px 48px rgba(0,0,0,0.45));
-      animation: morphFloat 8s ease-in-out infinite;
-      position: relative;
-      z-index: 2;
-    }
-    @keyframes morphFloat {
-      0%,100% { border-radius:40% 60% 55% 45%/45% 40% 60% 55%; transform:translateY(0); }
-      33%     { border-radius:55% 45% 40% 60%/60% 55% 45% 40%; transform:translateY(-10px); }
-      66%     { border-radius:45% 55% 60% 40%/40% 60% 55% 45%; transform:translateY(-5px); }
-    }
-    /* Glow ring behind photo */
-    .hero-farmer-glow {
-      position: absolute;
-      inset: -20px;
-      background: radial-gradient(circle, rgba(201,162,39,0.22) 0%, rgba(45,122,79,0.12) 50%, transparent 75%);
-      border-radius: 50%;
-      z-index: 1;
-      animation: glowPulse 4s ease-in-out infinite;
-    }
-    @keyframes glowPulse {
-      0%,100% { opacity:0.7; transform:scale(1); }
-      50%     { opacity:1;   transform:scale(1.06); }
-    }
-    /* Decorative ring */
-    .hero-farmer-ring {
-      position: absolute;
-      inset: -12px;
-      border-radius: 50%;
-      border: 2px dashed rgba(201,162,39,0.35);
-      z-index: 1;
-      animation: spinSlow 20s linear infinite;
-    }
-    @keyframes spinSlow { to { transform:rotate(360deg); } }
-    /* Small logo badge */
-    .hero-logo-badge {
+    /* Slide dots */
+    .hero-dots {
       position: absolute;
       bottom: 20px;
-      right: -10px;
-      z-index: 4;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 16px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .hero-logo-badge img {
-      width: 36px; height: 36px;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-    .hero-logo-badge-text {
-      font-size: 12px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.3;
-    }
-    .hero-logo-badge-text span { color: var(--gold-light); }
-    /* Stat pill top-left */
-    .hero-farmer-stat {
-      position: absolute;
-      top: 30px;
-      left: -20px;
-      z-index: 4;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 14px;
-      padding: 10px 16px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: fc1float 4s ease-in-out infinite;
-    }
-    .hero-farmer-stat2 {
-      position: absolute;
-      top: 50%;
-      right: -24px;
-      z-index: 4;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 14px;
-      padding: 10px 16px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: fc1float 4s ease-in-out infinite 2s;
-    }
-    @keyframes fc1float {
-      0%,100% { transform:translateY(0); }
-      50%     { transform:translateY(-8px); }
-    }
-
-
-    /* ── SCROLL HINT ── */
-    .hero-scroll {
-      position: absolute;
-      bottom: 32px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+    .hero-dot {
+      width: 28px; height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.35);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 0;
+    }
+    .hero-dot.active { background: var(--gold-light); width: 44px; }
+
+    /* ── CATEGORIES ── */
+    .categories-section {
+      background: #fff;
+      padding: 36px 0 44px;
+      border-bottom: 1px solid rgba(26,74,46,0.08);
+    }
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .section-row-title {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.4px;
+    }
+    .view-all {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--leaf-green);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .view-all:hover { color: var(--forest-green); }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 14px;
+    }
+    .cat-card {
+      display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      color: rgba(255,255,255,0.35);
-      font-size: 11px;
-      letter-spacing: 0.5px;
-      animation: scrollBounce 2s infinite;
+      gap: 9px;
+      padding: 16px 8px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(26,74,46,0.09);
+      background: var(--warm-cream);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.22s;
     }
-    @keyframes scrollBounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50%       { transform: translateX(-50%) translateY(7px); }
+    .cat-card:hover {
+      border-color: var(--leaf-green);
+      background: rgba(45,122,79,0.06);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(26,74,46,0.10);
+    }
+    .cat-icon {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .cat-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: center;
+      line-height: 1.3;
     }
 
-    /* ── SECTIONS ── */
-    .section { padding: 96px 0; }
+    /* ── SHARED SECTION ── */
+    .section { padding: 88px 0; }
     .section-alt { background: rgba(26,74,46,0.04); }
-    .section-header { text-align: center; max-width: 620px; margin: 0 auto 64px; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .section-header { text-align: center; max-width: 600px; margin: 0 auto 56px; }
     .section-eyebrow {
       display: inline-block;
       font-size: 11px;
@@ -462,21 +351,17 @@
       color: var(--leaf-green);
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .section-title {
-      font-size: clamp(28px, 3.5vw, 42px);
+      font-size: clamp(26px, 3.2vw, 40px);
       font-weight: 900;
       color: var(--text-primary);
       letter-spacing: -1px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       line-height: 1.1;
     }
-    .section-desc {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-    }
+    .section-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.75; }
 
     /* ── WORKFLOW ── */
     .workflow-wrap {
@@ -487,8 +372,7 @@
       flex-wrap: wrap;
     }
     .workflow-step {
-      flex: 1;
-      min-width: 130px;
+      flex: 1; min-width: 130px;
       text-align: center;
       padding: 0 16px;
       position: relative;
@@ -501,118 +385,44 @@
       background: linear-gradient(90deg, var(--sage-green), transparent);
     }
     .workflow-step:last-child::after { display: none; }
-    .wf-icon {
-      width: 60px; height: 60px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      margin: 0 auto 16px;
-    }
-    .wf-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
+    .wf-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 14px; }
+    .wf-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; color: var(--text-primary); }
     .wf-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
 
-    /* ── ROLE CARDS ── */
-    .roles-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
+    /* ── ROLES ── */
+    .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .role-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 32px 24px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 22px;
       border: 1.5px solid rgba(26,74,46,0.10);
-      box-shadow: 0 2px 12px rgba(26,74,46,0.06);
-      transition: all 0.28s ease;
+      box-shadow: 0 2px 10px rgba(26,74,46,0.05);
+      transition: all 0.26s;
       cursor: pointer;
     }
-    .role-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 40px rgba(26,74,46,0.14);
-      border-color: var(--leaf-green);
-    }
-    .role-icon {
-      width: 64px; height: 64px;
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      margin-bottom: 18px;
-    }
-    .role-title { font-size: 17px; font-weight: 800; margin-bottom: 10px; color: var(--text-primary); }
-    .role-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
-    .role-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: rgba(26,74,46,0.07);
-      border: 1px solid rgba(26,74,46,0.12);
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-size: 11px; font-weight: 600;
-      color: var(--forest-green);
-      margin: 3px 2px;
-    }
+    .role-card:hover { transform: translateY(-5px); box-shadow: 0 10px 36px rgba(26,74,46,0.13); border-color: var(--leaf-green); }
+    .role-icon { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 16px; }
+    .role-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
+    .role-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px; }
+    .role-pill  { display: inline-flex; align-items: center; gap: 4px; background: rgba(26,74,46,0.07); border: 1px solid rgba(26,74,46,0.12); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--forest-green); margin: 2px; }
 
-    /* ── FEATURE CARDS ── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    .feature-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 28px 24px;
-      border: 1.5px solid rgba(26,74,46,0.09);
-      box-shadow: 0 2px 10px rgba(26,74,46,0.05);
-      transition: all 0.25s ease;
-    }
-    .feature-card:hover {
-      border-color: var(--leaf-green);
-      box-shadow: 0 8px 32px rgba(26,74,46,0.12);
-      transform: translateY(-3px);
-    }
-    .feature-icon {
-      width: 50px; height: 50px;
-      border-radius: 12px;
-      background: rgba(26,74,46,0.08);
-      color: var(--forest-green);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      margin-bottom: 16px;
-    }
-    .feature-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+    /* ── FEATURES ── */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .feature-card { background: #fff; border-radius: 14px; padding: 26px 22px; border: 1.5px solid rgba(26,74,46,0.09); box-shadow: 0 2px 8px rgba(26,74,46,0.04); transition: all 0.24s; }
+    .feature-card:hover { border-color: var(--leaf-green); box-shadow: 0 8px 28px rgba(26,74,46,0.11); transform: translateY(-3px); }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(26,74,46,0.08); color: var(--forest-green); display: flex; align-items: center; justify-content: center; font-size: 19px; margin-bottom: 14px; }
+    .feature-title { font-size: 14px; font-weight: 700; margin-bottom: 7px; color: var(--text-primary); }
     .feature-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-
-    /* ── STATS SECTION ── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-      background: rgba(26,74,46,0.08);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-    .stat-item {
-      background: var(--white);
-      padding: 40px 24px;
-      text-align: center;
-    }
-    .stat-num {
-      font-size: 38px;
-      font-weight: 900;
-      color: var(--forest-green);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stat-lbl {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
+    /* ── STATS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; background: rgba(26,74,46,0.08); border-radius: 18px; overflow: hidden; }
+    .stat-item { background: #fff; padding: 36px 20px; text-align: center; }
+    .stat-num { font-size: 36px; font-weight: 900; color: var(--forest-green); line-height: 1; margin-bottom: 7px; }
+    .stat-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
     /* ── CTA SECTION ── */
     .cta-section {
       background: linear-gradient(135deg, #0d2b1a 0%, #1a4a2e 50%, #1e5535 100%);
-      padding: 96px 0;
+      padding: 88px 0;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -620,115 +430,87 @@
     .cta-section::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(201,162,39,0.14) 0%, transparent 65%);
+      background: radial-gradient(ellipse at 50% 50%, rgba(201,162,39,0.13) 0%, transparent 65%);
     }
+    .hero-cta-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 15px 34px; border-radius: 999px; font-size: 15px; font-weight: 700;
+      color: var(--charcoal); background: var(--gold-light); text-decoration: none;
+      box-shadow: 0 4px 18px rgba(201,162,39,0.40); transition: all 0.22s;
+    }
+    .hero-cta-primary:hover { background: #ffd84a; transform: translateY(-2px); }
+    .hero-cta-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 15px 30px; border-radius: 999px; font-size: 15px; font-weight: 600;
+      color: rgba(255,255,255,0.88); background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.22); text-decoration: none;
+      backdrop-filter: blur(8px); transition: all 0.22s;
+    }
+    .hero-cta-secondary:hover { background: rgba(255,255,255,0.14); }
 
     /* ── FOOTER ── */
-    .footer {
-      background: #0d1f14;
-      color: rgba(255,255,255,0.55);
-      padding: 72px 0 32px;
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr 1fr;
-      gap: 48px;
-      margin-bottom: 48px;
-    }
-    .footer-brand-name { font-size: 20px; font-weight: 800; color: var(--white); }
-    .footer-tagline    { font-size: 12px; color: var(--sage-green); margin-top: 3px; }
-    .footer-desc       { font-size: 13px; line-height: 1.75; margin-top: 14px; max-width: 260px; }
-    .footer-heading    { font-size: 11px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 18px; }
-    .footer-links      { display: flex; flex-direction: column; gap: 12px; }
+    .footer { background: #0d1f14; color: rgba(255,255,255,0.55); padding: 64px 0 28px; }
+    .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 44px; }
+    .footer-brand-name { font-size: 19px; font-weight: 800; color: #fff; }
+    .footer-tagline    { font-size: 11px; color: var(--sage-green); margin-top: 2px; }
+    .footer-desc       { font-size: 13px; line-height: 1.75; margin-top: 12px; max-width: 250px; }
+    .footer-heading    { font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .footer-links      { display: flex; flex-direction: column; gap: 11px; }
     .footer-links a    { font-size: 13px; color: rgba(255,255,255,0.50); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--gold-light); }
-    .footer-bottom {
-      padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,0.07);
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; color: rgba(255,255,255,0.28);
-    }
+    .footer-bottom { padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.28); }
 
     /* ── WEATHER CARD ── */
-    .weather-card {
-      background: linear-gradient(135deg, #1a4a2e, #2d7a4f);
-      border-radius: 20px;
-      padding: 28px;
-      color: var(--white);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(26,74,46,0.30);
-    }
-    .weather-temp { font-size: 52px; font-weight: 900; line-height: 1; }
-    .weather-condition { font-size: 16px; color: rgba(255,255,255,0.80); margin-top: 6px; }
-    .weather-location  { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
-    .weather-details   { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.12); }
-    .weather-detail-val   { font-size: 16px; font-weight: 700; }
+    .weather-card { background: linear-gradient(135deg,#1a4a2e,#2d7a4f); border-radius: 18px; padding: 26px; color: #fff; position: relative; overflow: hidden; box-shadow: 0 8px 28px rgba(26,74,46,0.28); }
+    .weather-temp { font-size: 50px; font-weight: 900; line-height: 1; }
+    .weather-condition { font-size: 15px; color: rgba(255,255,255,0.80); margin-top: 5px; }
+    .weather-location  { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+    .weather-details   { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .weather-detail-val   { font-size: 15px; font-weight: 700; }
     .weather-detail-label { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
-    .weather-rec {
-      background: rgba(255,255,255,0.10);
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 16px;
-      font-size: 13px;
-      display: flex; gap: 10px; align-items: flex-start;
-    }
+    .weather-rec { background: rgba(255,255,255,0.10); border-radius: 10px; padding: 12px; margin-top: 14px; font-size: 13px; display: flex; gap: 9px; align-items: flex-start; }
 
     /* ── LANG FLAGS ── */
-    .lang-flag {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--white);
-      border: 1px solid rgba(26,74,46,0.12);
-      border-radius: 999px;
-      padding: 5px 14px;
-      font-size: 13px; font-weight: 500;
-      color: var(--text-secondary);
-      margin: 3px;
-      box-shadow: 0 1px 4px rgba(26,74,46,0.06);
-    }
+    .lang-flag { display: inline-flex; align-items: center; gap: 5px; background: #fff; border: 1px solid rgba(26,74,46,0.12); border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin: 3px; box-shadow: 0 1px 4px rgba(26,74,46,0.05); }
 
     /* ── VOICE BTN ── */
-    .voice-btn {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: var(--forest-green);
-      color: var(--white);
-      border: none; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 4px; font-size: 26px;
-      box-shadow: 0 4px 20px rgba(26,74,46,0.40);
-      transition: all 0.2s;
-      margin: 0 auto 24px;
-    }
+    .voice-btn { width: 76px; height: 76px; border-radius: 50%; background: var(--forest-green); color: #fff; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 24px; box-shadow: 0 4px 18px rgba(26,74,46,0.38); transition: all 0.2s; margin: 0 auto 22px; }
     .voice-btn:hover { transform: scale(1.06); }
     .voice-btn-label { font-size: 10px; font-weight: 600; }
   </style>
 </head>
 <body>
-
 <div id="toast-container"></div>
 
-<!-- ══════════════════════════════════════════
-     NAVBAR
-══════════════════════════════════════════ -->
-<nav class="landing-nav" id="landing-nav" role="navigation" aria-label="Main navigation">
-  <div class="container nav-inner">
+<!-- ANNOUNCE BAR -->
+<div class="announce-bar">
+  <div class="container">
+    <div class="items">
+      <span>Sell your crops on AgriSync <a href="register.html">Register Free &rarr;</a></span>
+      <span class="sep">|</span>
+      <span>Bulk Procurement Inquiries <a href="register.html">Contact Us</a></span>
+      <span class="sep">|</span>
+      <span style="color:var(--gold-light);font-weight:700">&#128222; Helpline: 1800-AGRI-SYNC</span>
+    </div>
+  </div>
+</div>
 
+<!-- NAVBAR -->
+<nav class="landing-nav" id="landing-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
     <a href="index.html" class="nav-logo" aria-label="AgriSync OS Home">
       <img src="assets/images/logo.png" alt="AgriSync OS Logo" class="nav-logo-img" />
-      <div class="nav-logo-text">
+      <div>
         <div class="nav-logo-name">Agri<span>Sync</span> OS</div>
         <div class="nav-logo-tagline">From Farm. To Factory. Smarter.</div>
       </div>
     </a>
-
     <div class="nav-links" id="nav-links">
       <a href="#how-it-works">How It Works</a>
       <a href="#roles">For You</a>
       <a href="#ai-features">AI Features</a>
       <a href="#stats">Impact</a>
     </div>
-
     <div class="nav-actions">
       <a href="login.html" class="nav-btn-signin">
         <i class="fa-solid fa-right-to-bracket"></i> Sign In
@@ -737,189 +519,204 @@
         Get Started <i class="fa-solid fa-arrow-right"></i>
       </a>
     </div>
-
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
-<section class="hero" id="hero" aria-label="Hero">
-  <div class="hero-grid"></div>
+<!-- HERO BANNER SLIDER -->
+<section class="hero-banner" id="hero" aria-label="Hero">
 
-  <div class="container" style="position:relative;z-index:2;width:100%">
-    <div class="hero-inner">
-
-      <!-- LEFT: Text Content -->
-      <div class="hero-content">
-
+  <!-- Slide 1: Indian farmer in wheat field -->
+  <div class="hero-slide active" id="slide-0">
+    <img
+      src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1600&q=85"
+      alt="Indian farmer in wheat field with orange turban"
+    />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-text">
         <div class="hero-eyebrow">
-          <i class="fa-solid fa-seedling"></i>
-          India's First AI Agricultural Procurement OS
+          <i class="fa-solid fa-seedling"></i> India's First AI Procurement OS
         </div>
-
         <h1 class="hero-title">
-          From <span class="accent-gold">Farm.</span><br>
-          To <span class="accent-gold">Factory.</span><br>
-          <span class="accent-green">Smarter.</span>
+          From <span class="gold">Farm.</span><br>
+          To <span class="gold">Factory.</span><br>
+          <span class="green">Smarter.</span>
         </h1>
-
         <p class="hero-desc">
-          AI-powered agricultural procurement connecting farmers, factories,
-          logistics providers and government across India — in your language,
-          with real-time intelligence.
+          AI-powered procurement connecting 10,000+ farmers with factories across India — in your language.
         </p>
-
-        <div class="hero-cta">
-          <a href="register.html" class="hero-cta-primary">
+        <div class="hero-btns">
+          <a href="register.html" class="btn-primary">
             <i class="fa-solid fa-seedling"></i> Get Started Free
           </a>
-          <a href="#how-it-works" class="hero-cta-secondary">
-            <i class="fa-solid fa-play-circle"></i> See How It Works
+          <a href="#how-it-works" class="btn-ghost">
+            <i class="fa-solid fa-play-circle"></i> How It Works
           </a>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="hero-stats">
-          <div>
-            <div class="hero-stat-value">10K+</div>
-            <div class="hero-stat-label">Farmers</div>
-          </div>
-          <div>
-            <div class="hero-stat-value">500+</div>
-            <div class="hero-stat-label">Factories</div>
-          </div>
-          <div>
-            <div class="hero-stat-value">₹50Cr+</div>
-            <div class="hero-stat-label">Procurement</div>
-          </div>
-          <div>
-            <div class="hero-stat-value">9</div>
-            <div class="hero-stat-label">Languages</div>
-          </div>
+  <!-- Slide 2: AI Matching -->
+  <div class="hero-slide" id="slide-1">
+    <img
+      src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=1600&q=85"
+      alt="Agricultural supply chain"
+    />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <i class="fa-solid fa-robot"></i> AI Procurement Matching
         </div>
-
-      </div><!-- /hero-content -->
-
-      <!-- RIGHT: Farmer Photo -->
-      <div class="hero-logo-panel">
-        <div class="hero-farmer-frame">
-          <div class="hero-farmer-glow"></div>
-          <div class="hero-farmer-ring"></div>
-
-          <img
-            src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80"
-            alt="Indian Farmer in wheat field"
-            class="hero-farmer-img"
-            onerror="this.src='assets/images/logo.png';this.style.borderRadius='50%';this.style.padding='20px';this.style.background='rgba(255,255,255,0.08)'"
-          />
-
-          <div class="hero-farmer-stat">
-            <span style="font-size:18px">🌾</span>
-            <div>
-              <div style="font-size:10px;opacity:0.65;margin-bottom:1px">Farmers Connected</div>
-              <div style="font-size:14px;font-weight:800;color:var(--gold-light)">10,000+</div>
-            </div>
-          </div>
-
-          <div class="hero-farmer-stat2">
-            <span style="font-size:18px">🤖</span>
-            <div>
-              <div style="font-size:10px;opacity:0.65;margin-bottom:1px">AI Matched Today</div>
-              <div style="font-size:14px;font-weight:800;color:var(--gold-light)">₹2.4Cr</div>
-            </div>
-          </div>
-
-          <div class="hero-logo-badge">
-            <img src="assets/images/logo.png" alt="AgriSync OS" />
-            <div class="hero-logo-badge-text">
-              Agri<span>Sync</span> OS<br>
-              <span style="color:rgba(255,255,255,0.55);font-size:10px;font-weight:500">From Farm. To Factory.</span>
-            </div>
-          </div>
-
+        <h1 class="hero-title">
+          <span class="gold">AI Matches</span><br>
+          Best Farmers<br>
+          <span class="green">Instantly.</span>
+        </h1>
+        <p class="hero-desc">
+          Smart scoring by price, distance, quality and reliability — with full transparency.
+        </p>
+        <div class="hero-btns">
+          <a href="register.html" class="btn-primary">
+            <i class="fa-solid fa-handshake"></i> Find Farmers Now
+          </a>
         </div>
-      </div><!-- /hero-logo-panel -->
+      </div>
+    </div>
+  </div>
 
-    </div><!-- /hero-inner -->
-  </div><!-- /container -->
+  <!-- Slide 3: Logistics -->
+  <div class="hero-slide" id="slide-2">
+    <img
+      src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1600&q=85"
+      alt="Logistics and delivery trucks"
+    />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <i class="fa-solid fa-truck"></i> Smart Logistics
+        </div>
+        <h1 class="hero-title">
+          Optimized<br>
+          <span class="gold">Routes.</span><br>
+          <span class="green">On Time.</span>
+        </h1>
+        <p class="hero-desc">
+          Real-time route optimization and fleet management for every delivery.
+        </p>
+        <div class="hero-btns">
+          <a href="register.html" class="btn-primary">
+            <i class="fa-solid fa-route"></i> Manage Fleet
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <div class="hero-scroll">
-    <i class="fa-solid fa-chevron-down"></i>
-    <span>Scroll to explore</span>
+  <!-- Dots -->
+  <div class="hero-dots">
+    <button class="hero-dot active" data-slide="0"></button>
+    <button class="hero-dot" data-slide="1"></button>
+    <button class="hero-dot" data-slide="2"></button>
   </div>
 
 </section>
 
-<!-- ══════════════════════════════════════════
-     HOW IT WORKS
-══════════════════════════════════════════ -->
+<!-- CATEGORIES STRIP -->
+<section class="categories-section" id="categories">
+  <div class="container">
+    <div class="section-row">
+      <div class="section-row-title">Categories</div>
+      <a href="#roles" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="cat-grid">
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(26,74,46,0.10)">&#127806;</div>
+        <div class="cat-name">Grains &amp; Cereals</div>
+      </a>
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(201,107,75,0.10)">&#127813;</div>
+        <div class="cat-name">Vegetables</div>
+      </a>
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(255,193,7,0.12)">&#127819;</div>
+        <div class="cat-name">Fruits</div>
+      </a>
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(76,140,138,0.10)">&#127807;</div>
+        <div class="cat-name">Spices &amp; Herbs</div>
+      </a>
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(121,85,72,0.10)">&#129372;</div>
+        <div class="cat-name">Pulses &amp; Oilseeds</div>
+      </a>
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(201,162,39,0.12)">&#127819;</div>
+        <div class="cat-name">Cash Crops</div>
+      </a>
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(45,122,79,0.10)">&#129371;</div>
+        <div class="cat-name">Dairy &amp; Livestock</div>
+      </a>
+      <a href="register.html" class="cat-card">
+        <div class="cat-icon" style="background:rgba(106,171,130,0.12)">&#127807;</div>
+        <div class="cat-name">Organic Produce</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
 <section class="section" id="how-it-works" aria-label="How AgriSync Works">
   <div class="container">
-
     <div class="section-header">
       <span class="section-eyebrow">The Process</span>
       <h2 class="section-title">How AgriSync OS Works</h2>
-      <p class="section-desc">
-        A seamless end-to-end supply chain — from the farmer's field
-        to the factory floor, powered by AI and real-time data.
-      </p>
+      <p class="section-desc">A seamless end-to-end supply chain — from the farmer's field to the factory floor, powered by AI and real-time data.</p>
     </div>
-
     <div class="workflow-wrap">
-
       <div class="workflow-step">
-        <div class="wf-icon" style="background:rgba(26,74,46,0.10)">🌾</div>
+        <div class="wf-icon" style="background:rgba(26,74,46,0.10)">&#127806;</div>
         <div class="wf-title">Farmer Lists Crop</div>
         <div class="wf-desc">Add crop details, quantity, price and location</div>
       </div>
-
       <div class="workflow-step">
-        <div class="wf-icon" style="background:rgba(201,162,39,0.12)">🤖</div>
+        <div class="wf-icon" style="background:rgba(201,162,39,0.12)">&#129302;</div>
         <div class="wf-title">AI Matches</div>
-        <div class="wf-desc">AI finds best factory buyers by price, distance & reliability</div>
+        <div class="wf-desc">AI finds best factory buyers by price, distance &amp; reliability</div>
       </div>
-
       <div class="workflow-step">
-        <div class="wf-icon" style="background:rgba(76,140,138,0.12)">🏭</div>
+        <div class="wf-icon" style="background:rgba(76,140,138,0.12)">&#127981;</div>
         <div class="wf-title">Factory Orders</div>
         <div class="wf-desc">Factory sends procurement request, farmer accepts</div>
       </div>
-
       <div class="workflow-step">
-        <div class="wf-icon" style="background:rgba(201,107,75,0.12)">🚚</div>
+        <div class="wf-icon" style="background:rgba(201,107,75,0.12)">&#128666;</div>
         <div class="wf-title">Logistics Delivers</div>
         <div class="wf-desc">Truck assigned, route optimized, real-time tracking</div>
       </div>
-
       <div class="workflow-step">
-        <div class="wf-icon" style="background:rgba(121,85,72,0.12)">📊</div>
+        <div class="wf-icon" style="background:rgba(121,85,72,0.12)">&#128202;</div>
         <div class="wf-title">Government Monitors</div>
         <div class="wf-desc">Analytics, surplus/shortage alerts, policy insights</div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     USER ROLES
-══════════════════════════════════════════ -->
+<!-- USER ROLES -->
 <section class="section section-alt" id="roles" aria-label="User Roles">
   <div class="container">
-
     <div class="section-header">
       <span class="section-eyebrow">Built For Everyone</span>
       <h2 class="section-title">One Platform. Every Role.</h2>
-      <p class="section-desc">
-        AgriSync OS serves every stakeholder in India's agricultural
-        supply chain with a tailored, role-specific experience.
-      </p>
+      <p class="section-desc">AgriSync OS serves every stakeholder in India's agricultural supply chain with a tailored, role-specific experience.</p>
     </div>
-
     <div class="roles-grid">
-
       <div class="role-card" onclick="location.href='register.html'">
-        <div class="role-icon" style="background:rgba(26,74,46,0.10)">👨‍🌾</div>
+        <div class="role-icon" style="background:rgba(26,74,46,0.10)">&#128104;&#127805;</div>
         <div class="role-title">Farmer</div>
         <p class="role-desc">List crops, find buyers, get AI price forecasts, weather alerts and voice assistance — in your language.</p>
         <div>
@@ -928,9 +725,8 @@
           <span class="role-pill"><i class="fa-solid fa-store"></i> Find Buyers</span>
         </div>
       </div>
-
       <div class="role-card" onclick="location.href='register.html'">
-        <div class="role-icon" style="background:rgba(76,140,138,0.10)">🏭</div>
+        <div class="role-icon" style="background:rgba(76,140,138,0.10)">&#127981;</div>
         <div class="role-title">Factory / Buyer</div>
         <p class="role-desc">Discover verified farmers, get AI procurement recommendations, manage orders and track supplier reliability.</p>
         <div>
@@ -938,9 +734,8 @@
           <span class="role-pill"><i class="fa-solid fa-star"></i> Reliability Score</span>
         </div>
       </div>
-
       <div class="role-card" onclick="location.href='register.html'">
-        <div class="role-icon" style="background:rgba(201,107,75,0.10)">🚚</div>
+        <div class="role-icon" style="background:rgba(201,107,75,0.10)">&#128666;</div>
         <div class="role-title">Logistics Provider</div>
         <p class="role-desc">Manage trucks, drivers and deliveries. Get optimized routes, live order assignments and status updates.</p>
         <div>
@@ -948,9 +743,8 @@
           <span class="role-pill"><i class="fa-solid fa-truck"></i> Fleet</span>
         </div>
       </div>
-
       <div class="role-card" onclick="location.href='register.html'">
-        <div class="role-icon" style="background:rgba(201,162,39,0.10)">🏢</div>
+        <div class="role-icon" style="background:rgba(201,162,39,0.10)">&#127970;</div>
         <div class="role-title">Government / FPO</div>
         <p class="role-desc">Monitor production, detect surplus and shortage zones, access district-level analytics and generate reports.</p>
         <div>
@@ -958,9 +752,8 @@
           <span class="role-pill"><i class="fa-solid fa-triangle-exclamation"></i> Alerts</span>
         </div>
       </div>
-
       <div class="role-card" onclick="location.href='register.html'">
-        <div class="role-icon" style="background:rgba(121,85,72,0.10)">👨‍💼</div>
+        <div class="role-icon" style="background:rgba(121,85,72,0.10)">&#128104;&#128188;</div>
         <div class="role-title">Platform Admin</div>
         <p class="role-desc">Full platform oversight — manage users, monitor activity, configure settings and ensure platform health.</p>
         <div>
@@ -968,118 +761,96 @@
           <span class="role-pill"><i class="fa-solid fa-shield"></i> Security</span>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     AI FEATURES
-══════════════════════════════════════════ -->
+<!-- AI FEATURES -->
 <section class="section" id="ai-features" aria-label="AI Features">
   <div class="container">
-
     <div class="section-header">
       <span class="section-eyebrow">Artificial Intelligence</span>
       <h2 class="section-title">AI That Works For Farmers</h2>
-      <p class="section-desc">
-        Transparent, explainable AI recommendations — not a black box.
-        Every suggestion comes with a clear reason.
-      </p>
+      <p class="section-desc">Transparent, explainable AI recommendations — not a black box. Every suggestion comes with a clear reason.</p>
     </div>
-
     <div class="features-grid">
-
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-handshake"></i></div>
         <div class="feature-title">Smart Procurement Matching</div>
         <p class="feature-desc">AI scores every farmer-factory pair using distance, price, quality, quantity and reliability — and explains the score.</p>
       </div>
-
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
         <div class="feature-title">Price Forecasting</div>
         <p class="feature-desc">Seasonal price trend analysis helps farmers decide the best time to sell and factories plan procurement budgets.</p>
       </div>
-
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-star"></i></div>
         <div class="feature-title">Supplier Reliability Score</div>
         <p class="feature-desc">Every farmer gets a 0–100 reliability score based on delivery history, quality, timeliness and consistency.</p>
       </div>
-
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-calendar-check"></i></div>
         <div class="feature-title">Harvest Prediction</div>
         <p class="feature-desc">Predict harvest windows based on crop type and sowing date so factories can plan procurement in advance.</p>
       </div>
-
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-        <div class="feature-title">Surplus & Shortage Detection</div>
+        <div class="feature-title">Surplus &amp; Shortage Detection</div>
         <p class="feature-desc">Real-time analysis of supply vs demand across districts to alert government and FPOs before crises occur.</p>
       </div>
-
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-route"></i></div>
         <div class="feature-title">Route Optimization</div>
-        <p class="feature-desc">Google Maps integration calculates the fastest, most cost-effective delivery routes for logistics providers.</p>
+        <p class="feature-desc">Free routing via OSRM calculates the fastest, most cost-effective delivery routes for logistics providers.</p>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     WEATHER INTELLIGENCE
-══════════════════════════════════════════ -->
+<!-- WEATHER INTELLIGENCE -->
 <section class="section section-alt" id="weather" aria-label="Weather Intelligence">
   <div class="container">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
-
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center">
       <div>
         <span class="section-eyebrow">Weather Intelligence</span>
         <h2 class="section-title" style="text-align:left">Farm Smarter With Real-Time Weather</h2>
-        <p class="section-desc" style="text-align:left;margin-bottom:28px">
-          Hyperlocal weather data from OpenWeather API, translated into
-          actionable farming recommendations — in your language.
-        </p>
-        <div style="display:flex;flex-direction:column;gap:18px">
-          <div style="display:flex;gap:14px;align-items:flex-start">
-            <div style="width:42px;height:42px;border-radius:12px;background:rgba(26,74,46,0.10);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌡️</div>
+        <p class="section-desc" style="text-align:left;margin-bottom:26px">Hyperlocal weather data, translated into actionable farming recommendations — in your language.</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:11px;background:rgba(26,74,46,0.10);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">&#127777;&#65039;</div>
             <div>
-              <div style="font-weight:700;font-size:14px;margin-bottom:3px;color:var(--text-primary)">Temperature & Humidity</div>
-              <div style="font-size:13px;color:var(--text-muted)">Real-time conditions with feels-like temperature</div>
+              <div style="font-weight:700;font-size:13px;margin-bottom:2px;color:var(--text-primary)">Temperature &amp; Humidity</div>
+              <div style="font-size:12px;color:var(--text-muted)">Real-time conditions with feels-like temperature</div>
             </div>
           </div>
-          <div style="display:flex;gap:14px;align-items:flex-start">
-            <div style="width:42px;height:42px;border-radius:12px;background:rgba(76,140,138,0.10);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌧️</div>
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:11px;background:rgba(76,140,138,0.10);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">&#127783;&#65039;</div>
             <div>
-              <div style="font-weight:700;font-size:14px;margin-bottom:3px;color:var(--text-primary)">Rain Alerts</div>
-              <div style="font-size:13px;color:var(--text-muted)">Advance warning to protect and harvest crops</div>
+              <div style="font-weight:700;font-size:13px;margin-bottom:2px;color:var(--text-primary)">Rain Alerts</div>
+              <div style="font-size:12px;color:var(--text-muted)">Advance warning to protect and harvest crops</div>
             </div>
           </div>
-          <div style="display:flex;gap:14px;align-items:flex-start">
-            <div style="width:42px;height:42px;border-radius:12px;background:rgba(201,162,39,0.10);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌱</div>
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:11px;background:rgba(201,162,39,0.10);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">&#127807;</div>
             <div>
-              <div style="font-weight:700;font-size:14px;margin-bottom:3px;color:var(--text-primary)">Farming Recommendations</div>
-              <div style="font-size:13px;color:var(--text-muted)">AI-generated advice based on current conditions</div>
+              <div style="font-weight:700;font-size:13px;margin-bottom:2px;color:var(--text-primary)">Farming Recommendations</div>
+              <div style="font-size:12px;color:var(--text-muted)">AI-generated advice based on current conditions</div>
             </div>
           </div>
         </div>
       </div>
-
       <div>
         <div class="weather-card">
           <div style="display:flex;justify-content:space-between;align-items:flex-start">
             <div>
               <div class="weather-temp">28°C</div>
-              <div class="weather-condition">⛅ Partly Cloudy</div>
+              <div class="weather-condition">&#9925; Partly Cloudy</div>
               <div class="weather-location"><i class="fa-solid fa-location-dot"></i> Hyderabad, IN</div>
             </div>
             <div style="text-align:right;color:rgba(255,255,255,0.65);font-size:13px">
-              <div>🌅 06:12 AM</div>
-              <div style="margin-top:4px">🌇 06:48 PM</div>
+              <div>&#127749; 06:12 AM</div>
+              <div style="margin-top:4px">&#127751; 06:48 PM</div>
             </div>
           </div>
           <div class="weather-details">
@@ -1088,84 +859,71 @@
             <div style="text-align:center"><div class="weather-detail-val">30%</div><div class="weather-detail-label">Rain</div></div>
           </div>
           <div class="weather-rec">
-            <span style="font-size:20px">🌱</span>
+            <span style="font-size:19px">&#127807;</span>
             <div>
-              <div style="font-weight:700;margin-bottom:3px">Good farming conditions</div>
+              <div style="font-weight:700;margin-bottom:2px">Good farming conditions</div>
               <div style="font-size:12px;opacity:0.85">Ideal for field operations. Moderate humidity is good for most crops.</div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     VOICE & LANGUAGE
-══════════════════════════════════════════ -->
+<!-- VOICE & LANGUAGE -->
 <section class="section" id="voice" aria-label="Voice and Language">
   <div class="container">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
-
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center">
       <div style="text-align:center">
-        <div style="background:linear-gradient(135deg,rgba(26,74,46,0.05),rgba(45,122,79,0.08));border-radius:20px;padding:40px;border:1.5px solid rgba(26,74,46,0.10)">
+        <div style="background:linear-gradient(135deg,rgba(26,74,46,0.05),rgba(45,122,79,0.08));border-radius:18px;padding:36px;border:1.5px solid rgba(26,74,46,0.10)">
           <button class="voice-btn" aria-label="Voice demo">
             <i class="fa-solid fa-microphone"></i>
-            <span class="voice-btn-label">Tap & Speak</span>
+            <span class="voice-btn-label">Tap &amp; Speak</span>
           </button>
-          <div style="background:var(--white);border-radius:12px;padding:16px;border:1px solid rgba(26,74,46,0.10);font-size:13px;text-align:left">
-            <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Farmer says:</div>
-            <div style="font-style:italic;color:var(--text-primary);margin-bottom:12px">"I want to sell 500 kilograms of tomatoes"</div>
-            <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">AgriSync understands:</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <span style="background:rgba(26,74,46,0.10);color:var(--forest-green);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600">🍅 Tomato</span>
-              <span style="background:rgba(76,140,138,0.10);color:#2d7a7a;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600">500 kg</span>
-              <span style="background:rgba(201,162,39,0.12);color:#8a6e10;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600">Ready to list</span>
+          <div style="background:#fff;border-radius:11px;padding:14px;border:1px solid rgba(26,74,46,0.10);font-size:13px;text-align:left">
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px">Farmer says:</div>
+            <div style="font-style:italic;color:var(--text-primary);margin-bottom:10px">"I want to sell 500 kilograms of tomatoes"</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px">AgriSync understands:</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="background:rgba(26,74,46,0.10);color:var(--forest-green);padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600">&#127813; Tomato</span>
+              <span style="background:rgba(76,140,138,0.10);color:#2d7a7a;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600">500 kg</span>
+              <span style="background:rgba(201,162,39,0.12);color:#8a6e10;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600">Ready to list</span>
             </div>
           </div>
         </div>
       </div>
-
       <div>
-        <span class="section-eyebrow">Multilingual & Voice</span>
+        <span class="section-eyebrow">Multilingual &amp; Voice</span>
         <h2 class="section-title" style="text-align:left">Speak Your Language. We Understand.</h2>
-        <p class="section-desc" style="text-align:left;margin-bottom:24px">
-          AgriSync OS supports 9 Indian languages with full voice input and text-to-speech —
-          so every farmer can use it, regardless of literacy or technical skill.
-        </p>
-        <div style="margin-bottom:28px">
-          <span class="lang-flag">🇮🇳 हिन्दी</span>
-          <span class="lang-flag">🇮🇳 తెలుగు</span>
-          <span class="lang-flag">🇮🇳 தமிழ்</span>
-          <span class="lang-flag">🇮🇳 ಕನ್ನಡ</span>
-          <span class="lang-flag">🇮🇳 മലയാളം</span>
-          <span class="lang-flag">🇮🇳 मराठी</span>
-          <span class="lang-flag">🇮🇳 বাংলা</span>
-          <span class="lang-flag">🇮🇳 ਪੰਜਾਬੀ</span>
-          <span class="lang-flag">🇬🇧 English</span>
+        <p class="section-desc" style="text-align:left;margin-bottom:22px">AgriSync OS supports 9 Indian languages with full voice input and text-to-speech — so every farmer can use it, regardless of literacy or technical skill.</p>
+        <div style="margin-bottom:26px">
+          <span class="lang-flag">&#127470;&#127475; &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span>
+          <span class="lang-flag">&#127470;&#127475; &#3108;&#3142;&#3122;&#3137;&#3095;&#3137;</span>
+          <span class="lang-flag">&#127470;&#127475; &#2980;&#2990;&#3007;&#2996;&#3021;</span>
+          <span class="lang-flag">&#127470;&#127475; &#3221;&#3240;&#3277;&#3240;&#3233;</span>
+          <span class="lang-flag">&#127470;&#127475; &#3374;&#3378;&#3375;&#3390;&#3379;&#3330;</span>
+          <span class="lang-flag">&#127470;&#127475; &#2350;&#2352;&#2366;&#2336;&#2368;</span>
+          <span class="lang-flag">&#127470;&#127475; &#2476;&#2494;&#2434;&#2482;&#2494;</span>
+          <span class="lang-flag">&#127470;&#127475; &#2602;&#2672;&#2588;&#2622;&#2604;&#2624;</span>
+          <span class="lang-flag">&#127468;&#127463; English</span>
         </div>
         <a href="register.html" class="hero-cta-primary" style="display:inline-flex">
           <i class="fa-solid fa-globe"></i> Start in Your Language
         </a>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     PLATFORM STATISTICS
-══════════════════════════════════════════ -->
+<!-- PLATFORM STATISTICS -->
 <section class="section section-alt" id="stats" aria-label="Platform Statistics">
   <div class="container">
-
     <div class="section-header">
       <span class="section-eyebrow">Platform Impact</span>
       <h2 class="section-title">Numbers That Matter</h2>
       <p class="section-desc">Real impact across India's agricultural ecosystem.</p>
     </div>
-
     <div class="stats-grid">
       <div class="stat-item">
         <div class="stat-num">10,000+</div>
@@ -1176,7 +934,7 @@
         <div class="stat-lbl">Factory Partners</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num">₹50 Cr+</div>
+        <div class="stat-num">&#8377;50 Cr+</div>
         <div class="stat-lbl">Procurement Value</div>
       </div>
       <div class="stat-item">
@@ -1184,65 +942,45 @@
         <div class="stat-lbl">States Covered</div>
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     CALL TO ACTION
-══════════════════════════════════════════ -->
+<!-- CALL TO ACTION -->
 <section class="cta-section" aria-label="Call to Action">
   <div class="container" style="position:relative;z-index:1">
-    <div>
-
-      <img src="assets/images/logo.png" alt="AgriSync OS"
-           style="height:90px;width:auto;object-fit:contain;margin:0 auto 24px;display:block;
-                  filter:drop-shadow(0 4px 16px rgba(0,0,0,0.30))" />
-
-      <h2 style="font-size:clamp(26px,3.5vw,42px);font-weight:900;color:var(--white);
-                 margin-bottom:16px;letter-spacing:-1px">
-        Ready to Transform Your<br>Agricultural Business?
-      </h2>
-      <p style="font-size:16px;color:rgba(255,255,255,0.65);margin-bottom:40px;
-                max-width:500px;margin-left:auto;margin-right:auto;line-height:1.75">
-        Join thousands of farmers, factories and logistics providers
-        already using AgriSync OS to build a smarter supply chain.
-      </p>
-      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-        <a href="register.html" class="hero-cta-primary">
-          <i class="fa-solid fa-seedling"></i> Create Free Account
-        </a>
-        <a href="login.html" class="hero-cta-secondary">
-          <i class="fa-solid fa-right-to-bracket"></i> Sign In
-        </a>
-      </div>
-
+    <img src="assets/images/logo.png" alt="AgriSync OS"
+         style="height:80px;width:auto;object-fit:contain;margin:0 auto 22px;display:block;filter:drop-shadow(0 4px 14px rgba(0,0,0,0.28))" />
+    <h2 style="font-size:clamp(24px,3.2vw,40px);font-weight:900;color:#fff;margin-bottom:14px;letter-spacing:-1px">
+      Ready to Transform Your<br>Agricultural Business?
+    </h2>
+    <p style="font-size:15px;color:rgba(255,255,255,0.65);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.75">
+      Join thousands of farmers, factories and logistics providers already using AgriSync OS to build a smarter supply chain.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="register.html" class="hero-cta-primary">
+        <i class="fa-solid fa-seedling"></i> Create Free Account
+      </a>
+      <a href="login.html" class="hero-cta-secondary">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+      </a>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer class="footer" role="contentinfo">
   <div class="container">
     <div class="footer-grid">
-
       <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <img src="assets/images/logo.png" alt="AgriSync OS"
-               style="height:44px;width:auto;object-fit:contain;filter:brightness(0.9)" />
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+          <img src="assets/images/logo.png" alt="AgriSync OS" style="height:40px;width:auto;object-fit:contain;filter:brightness(0.9)" />
           <div>
             <div class="footer-brand-name">AgriSync OS</div>
             <div class="footer-tagline">From Farm. To Factory. Smarter.</div>
           </div>
         </div>
-        <p class="footer-desc">
-          AI-powered agricultural procurement and supply-chain intelligence
-          for India's farming ecosystem.
-        </p>
+        <p class="footer-desc">AI-powered agricultural procurement and supply-chain intelligence for India's farming ecosystem.</p>
       </div>
-
       <div>
         <div class="footer-heading">Platform</div>
         <div class="footer-links">
@@ -1252,7 +990,6 @@
           <a href="register.html">For Government</a>
         </div>
       </div>
-
       <div>
         <div class="footer-heading">Features</div>
         <div class="footer-links">
@@ -1262,7 +999,6 @@
           <a href="#roles">Role Dashboards</a>
         </div>
       </div>
-
       <div>
         <div class="footer-heading">Support</div>
         <div class="footer-links">
@@ -1272,24 +1008,19 @@
           <a href="#">Terms of Service</a>
         </div>
       </div>
-
     </div>
-
     <div class="footer-bottom">
-      <div>© 2025 AgriSync OS. Built for India's farmers.</div>
+      <div>&copy; 2025 AgriSync OS. Built for India's farmers.</div>
       <div style="display:flex;align-items:center;gap:8px">
-        <span>🇮🇳 Made in India</span>
-        <span style="opacity:0.3">·</span>
+        <span>&#127470;&#127475; Made in India</span>
+        <span style="opacity:0.3">&middot;</span>
         <span>Powered by Firebase + AI</span>
       </div>
     </div>
-
   </div>
 </footer>
 
-<!-- ══════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════ -->
+<!-- SCRIPTS -->
 <script type="module">
   import { initLandingNav } from './js/navigation.js';
   initLandingNav();
@@ -1302,12 +1033,24 @@
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+</script>
 
-  // Navbar scroll class
-  const nav = document.getElementById('landing-nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 40);
-  });
+<script>
+  // Hero slider
+  let current = 0;
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots   = document.querySelectorAll('.hero-dot');
+
+  function goSlide(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  dots.forEach(d => d.addEventListener('click', () => goSlide(+d.dataset.slide)));
+  setInterval(() => goSlide((current + 1) % slides.length), 5000);
 </script>
 
 </body>
