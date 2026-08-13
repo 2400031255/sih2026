@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Deliveries — AgriSync OS</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚚</text></svg>" />
+  <link rel="icon" type="image/png" href="../assets/images/logo.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/dashboard.css" />
@@ -17,7 +17,7 @@
 <div class="app-shell">
   <aside class="sidebar" id="sidebar">
     <a href="../index.html" class="sidebar-brand">
-      <div class="sidebar-logo">🚚</div>
+      <img src="../assets/images/logo.png" alt="AgriSync OS" style="height:36px;width:36px;object-fit:contain;border-radius:8px;flex-shrink:0" />
       <div class="sidebar-brand-text">
         <div class="sidebar-brand-name">AgriSync OS</div>
         <div class="sidebar-brand-tag">Logistics Portal</div>
@@ -123,6 +123,7 @@
 
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initSupportWidget } from '../js/support.js';
   import { initDashboardUI, showToast, openModal, closeModal, formatDate } from '../js/navigation.js';
   import { listenDeliveries, updateDeliveryStatus, renderDeliveryRow, getStatusConfig } from '../js/logistics.js';
 
@@ -131,6 +132,7 @@
   document.getElementById('sidebar-avatar').textContent = (profile.name||'L').charAt(0).toUpperCase();
   document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
   initDashboardUI();
+  initSupportWidget(profile);
   window.closeModal = closeModal;
 
   let allDeliveries = [];

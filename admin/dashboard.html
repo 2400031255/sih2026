@@ -157,6 +157,7 @@
 
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initSupportWidget } from '../js/support.js';
   import { initDashboardUI, showToast } from '../js/navigation.js';
   import { getAllUsers, toggleUserStatus, renderUserRow } from '../js/admin.js';
   import { getPlatformStats } from '../js/government.js';
@@ -168,6 +169,7 @@
     weekday: 'long', day: 'numeric', month: 'long'
   });
   initDashboardUI();
+  initSupportWidget(profile);
   document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
 
   // Platform stats

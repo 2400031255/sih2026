@@ -1,55 +1,50 @@
 /* ============================================================
    AGRISYNC OS — MAPS MODULE
-   Uses: Google Maps JavaScript API
-   ⚠️  Requires GOOGLE_MAPS_KEY in firebase.js
+   Uses: Leaflet.js + OpenStreetMap (FREE, no API key needed)
    ============================================================ */
 
-import { GOOGLE_MAPS_KEY } from './firebase.js';
+let leafletLoaded = false;
+let leafletPromise = null;
 
-let mapsLoaded = false;
-let mapsLoadPromise = null;
+// ── LOAD LEAFLET ───────────────────────────────────────────
+export function loadLeaflet() {
+  if (leafletLoaded && window.L) return Promise.resolve();
+  if (leafletPromise) return leafletPromise;
 
-// ── LOAD GOOGLE MAPS SDK ───────────────────────────────────
-export function loadGoogleMaps() {
-  if (mapsLoaded) return Promise.resolve();
-  if (mapsLoadPromise) return mapsLoadPromise;
-
-  if (!GOOGLE_MAPS_KEY || GOOGLE_MAPS_KEY === 'YOUR_GOOGLE_MAPS_API_KEY') {
-    return Promise.reject(new Error('Google Maps API key not configured'));
-  }
-
-  mapsLoadPromise = new Promise((resolve, reject) => {
-    window.__gmapsCallback = () => { mapsLoaded = true; resolve(); };
+  leafletPromise = new Promise((resolve, reject) => {
+    // CSS
+    if (!document.getElementById('leaflet-css')) {
+      const link = document.createElement('link');
+      link.id   = 'leaflet-css';
+      link.rel  = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+    // JS
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_KEY}&libraries=places,geometry&callback=__gmapsCallback`;
-    script.async = true;
-    script.defer = true;
-    script.onerror = () => reject(new Error('Failed to load Google Maps'));
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload  = () => { leafletLoaded = true; resolve(); };
+    script.onerror = () => reject(new Error('Failed to load Leaflet'));
     document.head.appendChild(script);
   });
-
-  return mapsLoadPromise;
+  return leafletPromise;
 }
 
 // ── INIT BASIC MAP ─────────────────────────────────────────
 export async function initMap(containerId, options = {}) {
   try {
-    await loadGoogleMaps();
+    await loadLeaflet();
     const container = document.getElementById(containerId);
     if (!container) return null;
+    container.style.height = options.height || '420px';
 
-    const defaultCenter = options.center || { lat: 17.3850, lng: 78.4867 }; // Hyderabad
-    const map = new google.maps.Map(container, {
-      center:    defaultCenter,
-      zoom:      options.zoom || 12,
-      mapTypeId: options.type || 'roadmap',
-      styles:    getMapStyles(),
-      disableDefaultUI: false,
-      zoomControl: true,
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: true,
-    });
+    const center = options.center || [17.3850, 78.4867];
+    const map = L.map(containerId, { zoomControl: true }).setView(center, options.zoom || 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
 
     return map;
   } catch (err) {
@@ -58,126 +53,115 @@ export async function initMap(containerId, options = {}) {
   }
 }
 
-// ── ADD MARKER ─────────────────────────────────────────────
-export function addMarker(map, { lat, lng, title, icon, info, color = '#245C3A' }) {
-  if (!map || !google) return null;
-
-  const marker = new google.maps.Marker({
-    position: { lat, lng },
-    map,
-    title,
-    icon: icon || {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 10,
-      fillColor: color,
-      fillOpacity: 1,
-      strokeColor: '#fff',
-      strokeWeight: 2,
-    },
-    animation: google.maps.Animation.DROP,
+// ── CUSTOM ICON ────────────────────────────────────────────
+function makeIcon(color, emoji) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      background:${color};color:#fff;border-radius:50%;
+      width:36px;height:36px;display:flex;align-items:center;
+      justify-content:center;font-size:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.3);
+      border:2px solid #fff;">${emoji}</div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    popupAnchor: [0, -20],
   });
-
-  if (info) {
-    const infoWindow = new google.maps.InfoWindow({ content: info });
-    marker.addListener('click', () => infoWindow.open(map, marker));
-  }
-
-  return marker;
 }
 
-// ── FARMER MAP: Show location + nearby factories ───────────
-export async function initFarmerMap(containerId, farmerLat, farmerLng, factories = []) {
-  const map = await initMap(containerId, {
-    center: { lat: farmerLat, lng: farmerLng },
-    zoom: 11,
-  });
+// ── FARMER MAP: live location + nearby factories ───────────
+export async function initFarmerMap(containerId, lat, lon, factories = []) {
+  const map = await initMap(containerId, { center: [lat, lon], zoom: 12 });
   if (!map) return;
 
-  // Farmer marker
-  addMarker(map, {
-    lat: farmerLat, lng: farmerLng,
-    title: 'Your Location',
-    color: '#245C3A',
-    info: '<div style="padding:8px"><strong>📍 Your Farm</strong></div>',
-  });
+  // Live location marker with accuracy circle
+  L.circle([lat, lon], { radius: 200, color: '#245C3A', fillOpacity: 0.1 }).addTo(map);
+  L.marker([lat, lon], { icon: makeIcon('#245C3A', '📍') })
+    .addTo(map)
+    .bindPopup('<strong>📍 Your Farm Location</strong><br><small>Live GPS</small>')
+    .openPopup();
 
   // Factory markers
   factories.forEach(f => {
-    addMarker(map, {
-      lat: f.lat, lng: f.lng,
-      title: f.name,
-      color: '#D5A928',
-      info: `
-        <div style="padding:8px;min-width:160px">
+    if (!f.lat || !f.lng) return;
+    L.marker([f.lat, f.lng], { icon: makeIcon('#D5A928', '🏭') })
+      .addTo(map)
+      .bindPopup(`
+        <div style="min-width:160px">
           <strong>🏭 ${f.name}</strong><br>
           <span style="font-size:12px;color:#666">${f.distance} km away</span><br>
-          <span style="font-size:12px;color:#245C3A">${f.crop || ''}</span>
-        </div>
-      `,
-    });
-  });
-}
-
-// ── LOGISTICS MAP: Route between pickup and delivery ───────
-export async function initRouteMap(containerId, origin, destination) {
-  const map = await initMap(containerId, { zoom: 10 });
-  if (!map) return;
-
-  const directionsService  = new google.maps.DirectionsService();
-  const directionsRenderer = new google.maps.DirectionsRenderer({
-    map,
-    polylineOptions: { strokeColor: '#245C3A', strokeWeight: 4 },
-    suppressMarkers: false,
+          <span style="font-size:12px;color:#245C3A">${f.crop || 'Multiple crops'}</span>
+        </div>`);
   });
 
-  try {
-    const result = await directionsService.route({
-      origin,
-      destination,
-      travelMode: google.maps.TravelMode.DRIVING,
-    });
-    directionsRenderer.setDirections(result);
-
-    const leg = result.routes[0].legs[0];
-    return {
-      distance: leg.distance.text,
-      duration: leg.duration.text,
-    };
-  } catch (err) {
-    console.warn('Route calculation failed:', err);
-    return null;
-  }
+  return map;
 }
 
-// ── GEOCODE ADDRESS ────────────────────────────────────────
-export async function geocodeAddress(address) {
+// ── ROUTE MAP: pickup → delivery with polyline ─────────────
+export async function initRouteMap(containerId, originLatLng, destLatLng, stops = []) {
+  const midLat = (originLatLng[0] + destLatLng[0]) / 2;
+  const midLon = (originLatLng[1] + destLatLng[1]) / 2;
+  const map = await initMap(containerId, { center: [midLat, midLon], zoom: 10 });
+  if (!map) return null;
+
+  // Draw route via OSRM (free routing)
   try {
-    await loadGoogleMaps();
-    return new Promise((resolve, reject) => {
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          const loc = results[0].geometry.location;
-          resolve({ lat: loc.lat(), lng: loc.lng() });
-        } else {
-          reject(new Error('Geocoding failed'));
-        }
-      });
-    });
-  } catch (err) {
-    return null;
+    const coords = [originLatLng, ...stops, destLatLng];
+    const waypoints = coords.map(c => `${c[1]},${c[0]}`).join(';');
+    const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${waypoints}?overview=full&geometries=geojson`);
+    const data = await res.json();
+    if (data.routes?.[0]) {
+      const route = data.routes[0];
+      L.geoJSON(route.geometry, {
+        style: { color: '#245C3A', weight: 5, opacity: 0.8 }
+      }).addTo(map);
+      map.fitBounds(L.geoJSON(route.geometry).getBounds(), { padding: [40, 40] });
+
+      const dist = (route.distance / 1000).toFixed(1);
+      const dur  = Math.round(route.duration / 60);
+      return { distance: `${dist} km`, duration: `${dur} min` };
+    }
+  } catch {
+    // Fallback: straight line
+    L.polyline([originLatLng, destLatLng], { color: '#245C3A', weight: 4, dashArray: '8,6' }).addTo(map);
   }
+
+  // Markers
+  L.marker(originLatLng, { icon: makeIcon('#245C3A', '📦') }).addTo(map)
+    .bindPopup('<strong>📦 Pickup Point</strong>');
+  L.marker(destLatLng, { icon: makeIcon('#C96B4B', '🏭') }).addTo(map)
+    .bindPopup('<strong>🏭 Delivery Point</strong>');
+
+  const dist = calculateDistance(originLatLng[0], originLatLng[1], destLatLng[0], destLatLng[1]);
+  return { distance: `${dist} km`, duration: 'Calculating...' };
 }
 
-// ── CALCULATE DISTANCE ─────────────────────────────────────
+// ── LIVE TRACKING MAP ──────────────────────────────────────
+export async function initLiveTrackingMap(containerId, deliveries = []) {
+  const map = await initMap(containerId, { zoom: 11 });
+  if (!map) return null;
+
+  const bounds = [];
+  deliveries.forEach(d => {
+    if (d.currentLat && d.currentLng) {
+      const m = L.marker([d.currentLat, d.currentLng], { icon: makeIcon('#C96B4B', '🚚') })
+        .addTo(map)
+        .bindPopup(`<strong>🚚 ${d.truckNo || 'Truck'}</strong><br>${d.cropName || ''}<br><span style="color:#245C3A">${d.status}</span>`);
+      bounds.push([d.currentLat, d.currentLng]);
+    }
+  });
+
+  if (bounds.length) map.fitBounds(bounds, { padding: [40, 40] });
+  return map;
+}
+
+// ── CALCULATE DISTANCE (Haversine) ────────────────────────
 export function calculateDistance(lat1, lng1, lat2, lng2) {
-  // Haversine formula
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) ** 2
-          + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180)
-          * Math.sin(dLng/2) ** 2;
+  const a = Math.sin(dLat/2)**2
+          + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLng/2)**2;
   return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
@@ -185,26 +169,12 @@ export function calculateDistance(lat1, lng1, lat2, lng2) {
 function showMapError(containerId, msg) {
   const el = document.getElementById(containerId);
   if (!el) return;
+  el.style.height = '200px';
   el.innerHTML = `
-    <div class="map-placeholder">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+                height:100%;gap:12px;background:rgba(36,92,58,0.04);border-radius:12px">
       <div style="font-size:40px">🗺️</div>
       <div style="font-weight:600;color:var(--text-primary)">Map unavailable</div>
-      <div style="font-size:13px;color:var(--text-muted);text-align:center;max-width:240px">
-        ${msg || 'Configure Google Maps API key to enable maps.'}
-      </div>
-    </div>
-  `;
-}
-
-// ── CUSTOM MAP STYLES (Natural/Agricultural theme) ─────────
-function getMapStyles() {
-  return [
-    { featureType: 'water',      elementType: 'geometry', stylers: [{ color: '#a0c4d8' }] },
-    { featureType: 'landscape',  elementType: 'geometry', stylers: [{ color: '#e8f0e0' }] },
-    { featureType: 'road',       elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
-    { featureType: 'road',       elementType: 'geometry.stroke', stylers: [{ color: '#d4d4d4' }] },
-    { featureType: 'poi.park',   elementType: 'geometry', stylers: [{ color: '#c5dba4' }] },
-    { featureType: 'transit',    stylers: [{ visibility: 'off' }] },
-    { featureType: 'administrative', elementType: 'labels.text.fill', stylers: [{ color: '#444444' }] },
-  ];
+      <div style="font-size:13px;color:var(--text-muted);text-align:center;max-width:240px">${msg}</div>
+    </div>`;
 }

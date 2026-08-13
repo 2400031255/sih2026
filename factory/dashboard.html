@@ -309,6 +309,7 @@
 
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initSupportWidget } from '../js/support.js';
   import { initDashboardUI, showToast, openModal, closeModal, formatCurrency } from '../js/navigation.js';
   import { searchCrops, listenFactoryOrders, listenFactoryRequests,
            createProcurementRequest, renderCropListingRow } from '../js/factory.js';
@@ -324,6 +325,7 @@
     weekday: 'long', day: 'numeric', month: 'long'
   });
   initDashboardUI();
+  initSupportWidget(profile);
   window.closeModal = closeModal;
   document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
 

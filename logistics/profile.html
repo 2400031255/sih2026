@@ -74,11 +74,13 @@
 </div>
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initSupportWidget } from '../js/support.js';
   import { initDashboardUI } from '../js/navigation.js';
   const { profile } = await requireAuth('logistics');
   document.getElementById('sidebar-name').textContent = profile.name || 'logistics';
   document.getElementById('sidebar-avatar').textContent = (profile.name||'U').charAt(0).toUpperCase();
   initDashboardUI();
+  initSupportWidget(profile);
   document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
 </script>
 </body>

@@ -18,8 +18,8 @@ const firebaseConfig = {
 };
 
 // ── EXTERNAL API KEYS ──────────────────────────────────────
-export const OPENWEATHER_KEY = "YOUR_OPENWEATHER_API_KEY";
-export const GOOGLE_MAPS_KEY = "YOUR_GOOGLE_MAPS_API_KEY";
+export const OPENWEATHER_KEY = "YOUR_OPENWEATHER_API_KEY"; // optional, falls back to Open-Meteo
+export const GOOGLE_MAPS_KEY = ""; // not needed — using Leaflet/OpenStreetMap (free)
 
 // ── INITIALIZE ─────────────────────────────────────────────
 const app = initializeApp(firebaseConfig);

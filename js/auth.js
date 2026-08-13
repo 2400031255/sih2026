@@ -26,7 +26,7 @@ const ROLE_ROUTES = {
   factory:    'factory/dashboard.html',
   logistics:  'logistics/dashboard.html',
   government: 'government/dashboard.html',
-  admin:      'admin/dashboard.html',
+  admin:      'government/dashboard.html', // admin redirects to government dashboard
 };
 
 // ── REGISTER ───────────────────────────────────────────────
@@ -153,7 +153,7 @@ export function requireAuth(allowedRole) {
         window.location.href = 'login.html';
         return;
       }
-      if (allowedRole && profile.role !== allowedRole && profile.role !== 'admin') {
+      if (allowedRole && profile.role !== allowedRole && profile.role !== 'admin' && profile.role !== 'government') {
         window.location.href = ROLE_ROUTES[profile.role] || 'login.html';
         return;
       }

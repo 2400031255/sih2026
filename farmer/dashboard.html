@@ -390,6 +390,7 @@
 <!-- ── SCRIPTS ───────────────────────────────────────────── -->
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initSupportWidget } from '../js/support.js';
   import { initDashboardUI, showToast, formatCurrency, timeAgo, renderEmpty } from '../js/navigation.js';
   import { fetchWeather, getUserLocation, renderWeatherCard } from '../js/weather.js';
   import { listenFarmerCrops, listenFarmerOrders, listenIncomingRequests,
@@ -412,6 +413,7 @@
 
   // ── INIT UI ────────────────────────────────────────────
   initDashboardUI();
+  initSupportWidget(profile);
 
   // ── LOGOUT ─────────────────────────────────────────────
   document.getElementById('logout-btn').addEventListener('click', (e) => {

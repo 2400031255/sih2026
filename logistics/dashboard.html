@@ -267,6 +267,7 @@
 
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initSupportWidget } from '../js/support.js';
   import { initDashboardUI, showToast, openModal, closeModal } from '../js/navigation.js';
   import { listenDeliveries, listenTrucks, listenDrivers,
            addTruck, addDriver, renderDeliveryRow, renderTruckCard, getStatusConfig } from '../js/logistics.js';
@@ -280,6 +281,7 @@
     weekday: 'long', day: 'numeric', month: 'long'
   });
   initDashboardUI();
+  initSupportWidget(profile);
   window.openModal  = openModal;
   window.closeModal = closeModal;
   document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
