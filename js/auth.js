@@ -186,7 +186,7 @@ function parseAuthError(code) {
     'auth/too-many-requests':      'Too many attempts. Please wait and try again.',
     'auth/network-request-failed': 'Network error. Check your connection.',
     'auth/user-disabled':          'This account has been disabled.',
-    'auth/invalid-credential':     'Invalid email or password.',
+    'auth/invalid-credential':     'Invalid email or password. If using demo accounts, visit setup.html first.',
   };
   return map[code] || 'Authentication failed. Please try again.';
 }
