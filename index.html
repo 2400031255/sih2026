@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AgriSync OS — AI-Powered Farm-to-Factory Procurement Platform. From Farm. To Factory. Smarter." />
+  <meta name="theme-color" content="#1a4a2e" />
+  <title>AgriSync OS — From Farm. To Factory. Smarter.</title>
+
+  <!-- Favicon: logo image -->
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- AOS Animations -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+  <!-- AgriSync Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <style>
+    /* ── FONT OVERRIDE ── */
+    :root {
+      --font-base: 'Inter', system-ui, -apple-system, sans-serif;
+
+      /* Refined brand palette matching logo */
+      --forest-green:  #1a4a2e;
+      --leaf-green:    #2d7a4f;
+      --sage-green:    #6aab82;
+      --harvest-gold:  #c9a227;
+      --gold-light:    #f0c84a;
+      --warm-cream:    #f5f0e8;
+      --charcoal:      #1c2b22;
+      --white:         #ffffff;
+
+      /* Semantic */
+      --primary:       var(--forest-green);
+      --accent:        var(--harvest-gold);
+      --bg:            var(--warm-cream);
+      --surface:       var(--white);
+      --text-primary:  #1c2b22;
+      --text-secondary:#4a6355;
+      --text-muted:    #7a9485;
+    }
+
+    body {
+      font-family: var(--font-base);
+      background: var(--warm-cream);
+    }
+
+    /* ── NAVBAR ── */
+    .landing-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      padding: 14px 0;
+      transition: all 0.35s ease;
+      background: transparent;
+    }
+    .landing-nav.scrolled {
+      background: rgba(26, 74, 46, 0.97);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 2px 24px rgba(0,0,0,0.18);
+      padding: 10px 0;
+    }
+
+    /* Logo: real image */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
+    }
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-logo-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    .nav-logo-name span { color: var(--gold-light); }
+    .nav-logo-tagline {
+      font-size: 10px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.2px;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-btn-signin {
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.20);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .nav-btn-signin:hover {
+      background: rgba(255,255,255,0.18);
+      color: var(--white);
+    }
+    .nav-btn-start {
+      padding: 8px 22px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--charcoal);
+      background: var(--gold-light);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(201,162,39,0.35);
+    }
+    .nav-btn-start:hover {
+      background: #ffd84a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(201,162,39,0.45);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg,
+        #0d2b1a 0%,
+        #1a4a2e 35%,
+        #1e5535 65%,
+        #0f3320 100%
+      );
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 60%, rgba(201,162,39,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(106,171,130,0.08) 0%, transparent 45%),
+        radial-gradient(ellipse at 60% 90%, rgba(76,140,138,0.06) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-content { max-width: 640px; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,162,39,0.15);
+      border: 1px solid rgba(201,162,39,0.35);
+      color: var(--gold-light);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: clamp(40px, 5.5vw, 68px);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+    }
+    .hero-title .accent-gold { color: var(--gold-light); }
+    .hero-title .accent-green { color: #6adb8a; }
+
+    .hero-desc {
+      font-size: 17px;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.75;
+      margin-bottom: 40px;
+      max-width: 520px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 52px;
+    }
+    .hero-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--charcoal);
+      background: var(--gold-light);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(201,162,39,0.40);
+      transition: all 0.22s;
+    }
+    .hero-cta-primary:hover {
+      background: #ffd84a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201,162,39,0.50);
+    }
+    .hero-cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 32px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.22);
+      cursor: pointer;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      transition: all 0.22s;
+    }
+    .hero-cta-secondary:hover {
+      background: rgba(255,255,255,0.14);
+      color: var(--white);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+    .hero-stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 5px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    /* ── HERO RIGHT: LOGO PANEL ── */
+    .hero-logo-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+    }
+    .hero-logo-wrap {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-logo-glow {
+      position: absolute;
+      inset: -30px;
+      background: radial-gradient(circle, rgba(201,162,39,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.08); }
+    }
+    .hero-logo-img {
+      width: 300px;
+      height: 300px;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 8px 32px rgba(0,0,0,0.35));
+      animation: logoFloat 5s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-12px); }
+    }
+
+    /* ── FLOATING INFO CARDS ── */
+    .float-card {
+      position: absolute;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 14px;
+      padding: 12px 16px;
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 3;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.20);
+    }
+    .float-card-icon { font-size: 20px; }
+    .float-card-label { font-size: 10px; opacity: 0.65; margin-bottom: 2px; }
+    .float-card-value { font-size: 13px; font-weight: 700; }
+    .float-card.fc-1 {
+      top: 5%; left: -30px;
+      animation: fc1float 4s ease-in-out infinite;
+    }
+    .float-card.fc-2 {
+      bottom: 18%; left: -20px;
+      animation: fc1float 4s ease-in-out infinite 1.5s;
+    }
+    .float-card.fc-3 {
+      top: 40%; right: -20px;
+      animation: fc1float 4s ease-in-out infinite 3s;
+    }
+    @keyframes fc1float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ── SCROLL HINT ── */
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.35);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      animation: scrollBounce 2s infinite;
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(7px); }
+    }
+
+    /* ── SECTIONS ── */
+    .section { padding: 96px 0; }
+    .section-alt { background: rgba(26,74,46,0.04); }
+    .section-header { text-align: center; max-width: 620px; margin: 0 auto 64px; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--leaf-green);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 900;
+      color: var(--text-primary);
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    /* ── WORKFLOW ── */
+    .workflow-wrap {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .workflow-step {
+      flex: 1;
+      min-width: 130px;
+      text-align: center;
+      padding: 0 16px;
+      position: relative;
+    }
+    .workflow-step::after {
+      content: '';
+      position: absolute;
+      top: 30px; right: -50%;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--sage-green), transparent);
+    }
+    .workflow-step:last-child::after { display: none; }
+    .wf-icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 16px;
+    }
+    .wf-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
+    .wf-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── ROLE CARDS ── */
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .role-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 32px 24px;
+      border: 1.5px solid rgba(26,74,46,0.10);
+      box-shadow: 0 2px 12px rgba(26,74,46,0.06);
+      transition: all 0.28s ease;
+      cursor: pointer;
+    }
+    .role-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(26,74,46,0.14);
+      border-color: var(--leaf-green);
+    }
+    .role-icon {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin-bottom: 18px;
+    }
+    .role-title { font-size: 17px; font-weight: 800; margin-bottom: 10px; color: var(--text-primary); }
+    .role-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
+    .role-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(26,74,46,0.07);
+      border: 1px solid rgba(26,74,46,0.12);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 11px; font-weight: 600;
+      color: var(--forest-green);
+      margin: 3px 2px;
+    }
+
+    /* ── FEATURE CARDS ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 28px 24px;
+      border: 1.5px solid rgba(26,74,46,0.09);
+      box-shadow: 0 2px 10px rgba(26,74,46,0.05);
+      transition: all 0.25s ease;
+    }
+    .feature-card:hover {
+      border-color: var(--leaf-green);
+      box-shadow: 0 8px 32px rgba(26,74,46,0.12);
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      width: 50px; height: 50px;
+      border-radius: 12px;
+      background: rgba(26,74,46,0.08);
+      color: var(--forest-green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .feature-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+    .feature-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── STATS SECTION ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: rgba(26,74,46,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .stat-item {
+      background: var(--white);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--forest-green);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-lbl {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      background: linear-gradient(135deg, #0d2b1a 0%, #1a4a2e 50%, #1e5535 100%);
+      padding: 96px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(201,162,39,0.14) 0%, transparent 65%);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #0d1f14;
+      color: rgba(255,255,255,0.55);
+      padding: 72px 0 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand-name { font-size: 20px; font-weight: 800; color: var(--white); }
+    .footer-tagline    { font-size: 12px; color: var(--sage-green); margin-top: 3px; }
+    .footer-desc       { font-size: 13px; line-height: 1.75; margin-top: 14px; max-width: 260px; }
+    .footer-heading    { font-size: 11px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 18px; }
+    .footer-links      { display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a    { font-size: 13px; color: rgba(255,255,255,0.50); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold-light); }
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; color: rgba(255,255,255,0.28);
+    }
+
+    /* ── WEATHER CARD ── */
+    .weather-card {
+      background: linear-gradient(135deg, #1a4a2e, #2d7a4f);
+      border-radius: 20px;
+      padding: 28px;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(26,74,46,0.30);
+    }
+    .weather-temp { font-size: 52px; font-weight: 900; line-height: 1; }
+    .weather-condition { font-size: 16px; color: rgba(255,255,255,0.80); margin-top: 6px; }
+    .weather-location  { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+    .weather-details   { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .weather-detail-val   { font-size: 16px; font-weight: 700; }
+    .weather-detail-label { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+    .weather-rec {
+      background: rgba(255,255,255,0.10);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 16px;
+      font-size: 13px;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+
+    /* ── LANG FLAGS ── */
+    .lang-flag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--white);
+      border: 1px solid rgba(26,74,46,0.12);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text-secondary);
+      margin: 3px;
+      box-shadow: 0 1px 4px rgba(26,74,46,0.06);
+    }
+
+    /* ── VOICE BTN ── */
+    .voice-btn {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--forest-green);
+      color: var(--white);
+      border: none; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; font-size: 26px;
+      box-shadow: 0 4px 20px rgba(26,74,46,0.40);
+      transition: all 0.2s;
+      margin: 0 auto 24px;
+    }
+    .voice-btn:hover { transform: scale(1.06); }
+    .voice-btn-label { font-size: 10px; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<nav class="landing-nav" id="landing-nav" role="navigation" aria-label="Main navigation">
+  <div class="container nav-inner">
+
+    <a href="index.html" class="nav-logo" aria-label="AgriSync OS Home">
+      <img src="assets/images/logo.png" alt="AgriSync OS Logo" class="nav-logo-img" />
+      <div class="nav-logo-text">
+        <div class="nav-logo-name">Agri<span>Sync</span> OS</div>
+        <div class="nav-logo-tagline">From Farm. To Factory. Smarter.</div>
+      </div>
+    </a>
+
+    <div class="nav-links" id="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#roles">For You</a>
+      <a href="#ai-features">AI Features</a>
+      <a href="#stats">Impact</a>
+    </div>
+
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn-signin">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+      </a>
+      <a href="register.html" class="nav-btn-start">
+        Get Started <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section class="hero" id="hero" aria-label="Hero">
+  <div class="hero-grid"></div>
+
+  <div class="container" style="position:relative;z-index:2;width:100%">
+    <div class="hero-inner">
+
+      <!-- LEFT: Text Content -->
+      <div class="hero-content">
+
+        <div class="hero-eyebrow" data-aos="fade-down" data-aos-duration="600">
+          <i class="fa-solid fa-seedling"></i>
+          India's First AI Agricultural Procurement OS
+        </div>
+
+        <h1 class="hero-title" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
+          From <span class="accent-gold">Farm.</span><br>
+          To <span class="accent-gold">Factory.</span><br>
+          <span class="accent-green">Smarter.</span>
+        </h1>
+
+        <p class="hero-desc" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
+          AI-powered agricultural procurement connecting farmers, factories,
+          logistics providers and government across India — in your language,
+          with real-time intelligence.
+        </p>
+
+        <div class="hero-cta" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300">
+          <a href="register.html" class="hero-cta-primary">
+            <i class="fa-solid fa-seedling"></i> Get Started Free
+          </a>
+          <a href="#how-it-works" class="hero-cta-secondary">
+            <i class="fa-solid fa-play-circle"></i> See How It Works
+          </a>
+        </div>
+
+        <div class="hero-stats" data-aos="fade-up" data-aos-duration="700" data-aos-delay="400">
+          <div>
+            <div class="hero-stat-value">10K+</div>
+            <div class="hero-stat-label">Farmers</div>
+          </div>
+          <div>
+            <div class="hero-stat-value">500+</div>
+            <div class="hero-stat-label">Factories</div>
+          </div>
+          <div>
+            <div class="hero-stat-value">₹50Cr+</div>
+            <div class="hero-stat-label">Procurement</div>
+          </div>
+          <div>
+            <div class="hero-stat-value">9</div>
+            <div class="hero-stat-label">Languages</div>
+          </div>
+        </div>
+
+      </div><!-- /hero-content -->
+
+      <!-- RIGHT: Logo Panel -->
+      <div class="hero-logo-panel" data-aos="fade-left" data-aos-duration="800" data-aos-delay="200">
+
+        <div class="hero-logo-wrap">
+          <div class="hero-logo-glow"></div>
+          <img src="assets/images/logo.png" alt="AgriSync OS" class="hero-logo-img" />
+
+          <!-- Floating Cards -->
+          <div class="float-card fc-1">
+            <div class="float-card-icon">🤖</div>
+            <div>
+              <div class="float-card-label">AI Recommendation</div>
+              <div class="float-card-value">Best price: ₹28/kg</div>
+            </div>
+          </div>
+
+          <div class="float-card fc-2">
+            <div class="float-card-icon">🚚</div>
+            <div>
+              <div class="float-card-label">Live Delivery</div>
+              <div class="float-card-value">500 kg · 12 km away</div>
+            </div>
+          </div>
+
+          <div class="float-card fc-3">
+            <div class="float-card-icon">🌧️</div>
+            <div>
+              <div class="float-card-label">Weather Alert</div>
+              <div class="float-card-value">Harvest tomatoes today</div>
+            </div>
+          </div>
+
+        </div><!-- /hero-logo-wrap -->
+      </div><!-- /hero-logo-panel -->
+
+    </div><!-- /hero-inner -->
+  </div><!-- /container -->
+
+  <div class="hero-scroll">
+    <i class="fa-solid fa-chevron-down"></i>
+    <span>Scroll to explore</span>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════════ -->
+<section class="section" id="how-it-works" aria-label="How AgriSync Works">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-eyebrow">The Process</span>
+      <h2 class="section-title">How AgriSync OS Works</h2>
+      <p class="section-desc">
+        A seamless end-to-end supply chain — from the farmer's field
+        to the factory floor, powered by AI and real-time data.
+      </p>
+    </div>
+
+    <div class="workflow-wrap" data-aos="fade-up" data-aos-delay="100">
+
+      <div class="workflow-step">
+        <div class="wf-icon" style="background:rgba(26,74,46,0.10)">🌾</div>
+        <div class="wf-title">Farmer Lists Crop</div>
+        <div class="wf-desc">Add crop details, quantity, price and location</div>
+      </div>
+
+      <div class="workflow-step">
+        <div class="wf-icon" style="background:rgba(201,162,39,0.12)">🤖</div>
+        <div class="wf-title">AI Matches</div>
+        <div class="wf-desc">AI finds best factory buyers by price, distance & reliability</div>
+      </div>
+
+      <div class="workflow-step">
+        <div class="wf-icon" style="background:rgba(76,140,138,0.12)">🏭</div>
+        <div class="wf-title">Factory Orders</div>
+        <div class="wf-desc">Factory sends procurement request, farmer accepts</div>
+      </div>
+
+      <div class="workflow-step">
+        <div class="wf-icon" style="background:rgba(201,107,75,0.12)">🚚</div>
+        <div class="wf-title">Logistics Delivers</div>
+        <div class="wf-desc">Truck assigned, route optimized, real-time tracking</div>
+      </div>
+
+      <div class="workflow-step">
+        <div class="wf-icon" style="background:rgba(121,85,72,0.12)">📊</div>
+        <div class="wf-title">Government Monitors</div>
+        <div class="wf-desc">Analytics, surplus/shortage alerts, policy insights</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     USER ROLES
+══════════════════════════════════════════ -->
+<section class="section section-alt" id="roles" aria-label="User Roles">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-eyebrow">Built For Everyone</span>
+      <h2 class="section-title">One Platform. Every Role.</h2>
+      <p class="section-desc">
+        AgriSync OS serves every stakeholder in India's agricultural
+        supply chain with a tailored, role-specific experience.
+      </p>
+    </div>
+
+    <div class="roles-grid">
+
+      <div class="role-card" data-aos="fade-up" data-aos-delay="0" onclick="location.href='register.html'">
+        <div class="role-icon" style="background:rgba(26,74,46,0.10)">👨‍🌾</div>
+        <div class="role-title">Farmer</div>
+        <p class="role-desc">List crops, find buyers, get AI price forecasts, weather alerts and voice assistance — in your language.</p>
+        <div>
+          <span class="role-pill"><i class="fa-solid fa-microphone"></i> Voice</span>
+          <span class="role-pill"><i class="fa-solid fa-cloud-sun"></i> Weather AI</span>
+          <span class="role-pill"><i class="fa-solid fa-store"></i> Find Buyers</span>
+        </div>
+      </div>
+
+      <div class="role-card" data-aos="fade-up" data-aos-delay="80" onclick="location.href='register.html'">
+        <div class="role-icon" style="background:rgba(76,140,138,0.10)">🏭</div>
+        <div class="role-title">Factory / Buyer</div>
+        <p class="role-desc">Discover verified farmers, get AI procurement recommendations, manage orders and track supplier reliability.</p>
+        <div>
+          <span class="role-pill"><i class="fa-solid fa-robot"></i> AI Matching</span>
+          <span class="role-pill"><i class="fa-solid fa-star"></i> Reliability Score</span>
+        </div>
+      </div>
+
+      <div class="role-card" data-aos="fade-up" data-aos-delay="160" onclick="location.href='register.html'">
+        <div class="role-icon" style="background:rgba(201,107,75,0.10)">🚚</div>
+        <div class="role-title">Logistics Provider</div>
+        <p class="role-desc">Manage trucks, drivers and deliveries. Get optimized routes, live order assignments and status updates.</p>
+        <div>
+          <span class="role-pill"><i class="fa-solid fa-route"></i> Route Optimization</span>
+          <span class="role-pill"><i class="fa-solid fa-truck"></i> Fleet</span>
+        </div>
+      </div>
+
+      <div class="role-card" data-aos="fade-up" data-aos-delay="240" onclick="location.href='register.html'">
+        <div class="role-icon" style="background:rgba(201,162,39,0.10)">🏢</div>
+        <div class="role-title">Government / FPO</div>
+        <p class="role-desc">Monitor production, detect surplus and shortage zones, access district-level analytics and generate reports.</p>
+        <div>
+          <span class="role-pill"><i class="fa-solid fa-chart-bar"></i> Analytics</span>
+          <span class="role-pill"><i class="fa-solid fa-triangle-exclamation"></i> Alerts</span>
+        </div>
+      </div>
+
+      <div class="role-card" data-aos="fade-up" data-aos-delay="320" onclick="location.href='register.html'">
+        <div class="role-icon" style="background:rgba(121,85,72,0.10)">👨‍💼</div>
+        <div class="role-title">Platform Admin</div>
+        <p class="role-desc">Full platform oversight — manage users, monitor activity, configure settings and ensure platform health.</p>
+        <div>
+          <span class="role-pill"><i class="fa-solid fa-users"></i> User Mgmt</span>
+          <span class="role-pill"><i class="fa-solid fa-shield"></i> Security</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     AI FEATURES
+══════════════════════════════════════════ -->
+<section class="section" id="ai-features" aria-label="AI Features">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-eyebrow">Artificial Intelligence</span>
+      <h2 class="section-title">AI That Works For Farmers</h2>
+      <p class="section-desc">
+        Transparent, explainable AI recommendations — not a black box.
+        Every suggestion comes with a clear reason.
+      </p>
+    </div>
+
+    <div class="features-grid">
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="feature-icon"><i class="fa-solid fa-handshake"></i></div>
+        <div class="feature-title">Smart Procurement Matching</div>
+        <p class="feature-desc">AI scores every farmer-factory pair using distance, price, quality, quantity and reliability — and explains the score.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="feature-title">Price Forecasting</div>
+        <p class="feature-desc">Seasonal price trend analysis helps farmers decide the best time to sell and factories plan procurement budgets.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="feature-icon"><i class="fa-solid fa-star"></i></div>
+        <div class="feature-title">Supplier Reliability Score</div>
+        <p class="feature-desc">Every farmer gets a 0–100 reliability score based on delivery history, quality, timeliness and consistency.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="240">
+        <div class="feature-icon"><i class="fa-solid fa-calendar-check"></i></div>
+        <div class="feature-title">Harvest Prediction</div>
+        <p class="feature-desc">Predict harvest windows based on crop type and sowing date so factories can plan procurement in advance.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="320">
+        <div class="feature-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="feature-title">Surplus & Shortage Detection</div>
+        <p class="feature-desc">Real-time analysis of supply vs demand across districts to alert government and FPOs before crises occur.</p>
+      </div>
+
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon"><i class="fa-solid fa-route"></i></div>
+        <div class="feature-title">Route Optimization</div>
+        <p class="feature-desc">Google Maps integration calculates the fastest, most cost-effective delivery routes for logistics providers.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     WEATHER INTELLIGENCE
+══════════════════════════════════════════ -->
+<section class="section section-alt" id="weather" aria-label="Weather Intelligence">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
+
+      <div data-aos="fade-right">
+        <span class="section-eyebrow">Weather Intelligence</span>
+        <h2 class="section-title" style="text-align:left">Farm Smarter With Real-Time Weather</h2>
+        <p class="section-desc" style="text-align:left;margin-bottom:28px">
+          Hyperlocal weather data from OpenWeather API, translated into
+          actionable farming recommendations — in your language.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:42px;height:42px;border-radius:12px;background:rgba(26,74,46,0.10);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌡️</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;margin-bottom:3px;color:var(--text-primary)">Temperature & Humidity</div>
+              <div style="font-size:13px;color:var(--text-muted)">Real-time conditions with feels-like temperature</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:42px;height:42px;border-radius:12px;background:rgba(76,140,138,0.10);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌧️</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;margin-bottom:3px;color:var(--text-primary)">Rain Alerts</div>
+              <div style="font-size:13px;color:var(--text-muted)">Advance warning to protect and harvest crops</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:42px;height:42px;border-radius:12px;background:rgba(201,162,39,0.10);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌱</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;margin-bottom:3px;color:var(--text-primary)">Farming Recommendations</div>
+              <div style="font-size:13px;color:var(--text-muted)">AI-generated advice based on current conditions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-aos="fade-left" data-aos-delay="150">
+        <div class="weather-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div class="weather-temp">28°C</div>
+              <div class="weather-condition">⛅ Partly Cloudy</div>
+              <div class="weather-location"><i class="fa-solid fa-location-dot"></i> Hyderabad, IN</div>
+            </div>
+            <div style="text-align:right;color:rgba(255,255,255,0.65);font-size:13px">
+              <div>🌅 06:12 AM</div>
+              <div style="margin-top:4px">🌇 06:48 PM</div>
+            </div>
+          </div>
+          <div class="weather-details">
+            <div style="text-align:center"><div class="weather-detail-val">72%</div><div class="weather-detail-label">Humidity</div></div>
+            <div style="text-align:center"><div class="weather-detail-val">14 km/h</div><div class="weather-detail-label">Wind</div></div>
+            <div style="text-align:center"><div class="weather-detail-val">30%</div><div class="weather-detail-label">Rain</div></div>
+          </div>
+          <div class="weather-rec">
+            <span style="font-size:20px">🌱</span>
+            <div>
+              <div style="font-weight:700;margin-bottom:3px">Good farming conditions</div>
+              <div style="font-size:12px;opacity:0.85">Ideal for field operations. Moderate humidity is good for most crops.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     VOICE & LANGUAGE
+══════════════════════════════════════════ -->
+<section class="section" id="voice" aria-label="Voice and Language">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
+
+      <div data-aos="fade-right" style="text-align:center">
+        <div style="background:linear-gradient(135deg,rgba(26,74,46,0.05),rgba(45,122,79,0.08));border-radius:20px;padding:40px;border:1.5px solid rgba(26,74,46,0.10)">
+          <button class="voice-btn" aria-label="Voice demo">
+            <i class="fa-solid fa-microphone"></i>
+            <span class="voice-btn-label">Tap & Speak</span>
+          </button>
+          <div style="background:var(--white);border-radius:12px;padding:16px;border:1px solid rgba(26,74,46,0.10);font-size:13px;text-align:left">
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Farmer says:</div>
+            <div style="font-style:italic;color:var(--text-primary);margin-bottom:12px">"I want to sell 500 kilograms of tomatoes"</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">AgriSync understands:</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <span style="background:rgba(26,74,46,0.10);color:var(--forest-green);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600">🍅 Tomato</span>
+              <span style="background:rgba(76,140,138,0.10);color:#2d7a7a;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600">500 kg</span>
+              <span style="background:rgba(201,162,39,0.12);color:#8a6e10;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600">Ready to list</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-aos="fade-left" data-aos-delay="150">
+        <span class="section-eyebrow">Multilingual & Voice</span>
+        <h2 class="section-title" style="text-align:left">Speak Your Language. We Understand.</h2>
+        <p class="section-desc" style="text-align:left;margin-bottom:24px">
+          AgriSync OS supports 9 Indian languages with full voice input and text-to-speech —
+          so every farmer can use it, regardless of literacy or technical skill.
+        </p>
+        <div style="margin-bottom:28px">
+          <span class="lang-flag">🇮🇳 हिन्दी</span>
+          <span class="lang-flag">🇮🇳 తెలుగు</span>
+          <span class="lang-flag">🇮🇳 தமிழ்</span>
+          <span class="lang-flag">🇮🇳 ಕನ್ನಡ</span>
+          <span class="lang-flag">🇮🇳 മലയാളം</span>
+          <span class="lang-flag">🇮🇳 मराठी</span>
+          <span class="lang-flag">🇮🇳 বাংলা</span>
+          <span class="lang-flag">🇮🇳 ਪੰਜਾਬੀ</span>
+          <span class="lang-flag">🇬🇧 English</span>
+        </div>
+        <a href="register.html" class="hero-cta-primary" style="display:inline-flex">
+          <i class="fa-solid fa-globe"></i> Start in Your Language
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PLATFORM STATISTICS
+══════════════════════════════════════════ -->
+<section class="section section-alt" id="stats" aria-label="Platform Statistics">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-eyebrow">Platform Impact</span>
+      <h2 class="section-title">Numbers That Matter</h2>
+      <p class="section-desc">Real impact across India's agricultural ecosystem.</p>
+    </div>
+
+    <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+      <div class="stat-item">
+        <div class="stat-num">10,000+</div>
+        <div class="stat-lbl">Registered Farmers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">500+</div>
+        <div class="stat-lbl">Factory Partners</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">₹50 Cr+</div>
+        <div class="stat-lbl">Procurement Value</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">18</div>
+        <div class="stat-lbl">States Covered</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CALL TO ACTION
+══════════════════════════════════════════ -->
+<section class="cta-section" aria-label="Call to Action">
+  <div class="container" style="position:relative;z-index:1">
+    <div data-aos="fade-up">
+
+      <img src="assets/images/logo.png" alt="AgriSync OS"
+           style="height:90px;width:auto;object-fit:contain;margin:0 auto 24px;display:block;
+                  filter:drop-shadow(0 4px 16px rgba(0,0,0,0.30))" />
+
+      <h2 style="font-size:clamp(26px,3.5vw,42px);font-weight:900;color:var(--white);
+                 margin-bottom:16px;letter-spacing:-1px">
+        Ready to Transform Your<br>Agricultural Business?
+      </h2>
+      <p style="font-size:16px;color:rgba(255,255,255,0.65);margin-bottom:40px;
+                max-width:500px;margin-left:auto;margin-right:auto;line-height:1.75">
+        Join thousands of farmers, factories and logistics providers
+        already using AgriSync OS to build a smarter supply chain.
+      </p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a href="register.html" class="hero-cta-primary">
+          <i class="fa-solid fa-seedling"></i> Create Free Account
+        </a>
+        <a href="login.html" class="hero-cta-secondary">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <img src="assets/images/logo.png" alt="AgriSync OS"
+               style="height:44px;width:auto;object-fit:contain;filter:brightness(0.9)" />
+          <div>
+            <div class="footer-brand-name">AgriSync OS</div>
+            <div class="footer-tagline">From Farm. To Factory. Smarter.</div>
+          </div>
+        </div>
+        <p class="footer-desc">
+          AI-powered agricultural procurement and supply-chain intelligence
+          for India's farming ecosystem.
+        </p>
+      </div>
+
+      <div>
+        <div class="footer-heading">Platform</div>
+        <div class="footer-links">
+          <a href="register.html">For Farmers</a>
+          <a href="register.html">For Factories</a>
+          <a href="register.html">For Logistics</a>
+          <a href="register.html">For Government</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-heading">Features</div>
+        <div class="footer-links">
+          <a href="#ai-features">AI Recommendations</a>
+          <a href="#weather">Weather Intelligence</a>
+          <a href="#voice">Voice Support</a>
+          <a href="#roles">Role Dashboards</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-heading">Support</div>
+        <div class="footer-links">
+          <a href="#">Documentation</a>
+          <a href="#">API Reference</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2025 AgriSync OS. Built for India's farmers.</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span>🇮🇳 Made in India</span>
+        <span style="opacity:0.3">·</span>
+        <span>Powered by Firebase + AI</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { initLandingNav } from './js/navigation.js';
+
+  AOS.init({ duration: 700, once: true, offset: 60 });
+  initLandingNav();
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Navbar scroll class
+  const nav = document.getElementById('landing-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+</script>
+
+</body>
+</html>

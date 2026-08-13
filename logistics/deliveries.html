@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deliveries — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚚</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🚚</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Logistics Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">L</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Logistics</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="deliveries.html" class="nav-item active"><i class="fa-solid fa-truck"></i><span>Deliveries</span></a>
+      <a href="routes.html" class="nav-item"><i class="fa-solid fa-route"></i><span>Routes</span></a>
+      <a href="trucks.html" class="nav-item"><i class="fa-solid fa-truck-moving"></i><span>Trucks</span></a>
+      <a href="drivers.html" class="nav-item"><i class="fa-solid fa-id-card"></i><span>Drivers</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Deliveries</div>
+          <div class="topbar-subtitle">Manage all delivery assignments</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🚚 Deliveries</h1>
+        <p class="page-desc">Track and update all delivery statuses in real-time.</p>
+      </div>
+
+      <!-- Status Filter -->
+      <div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-6);flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm status-tab" data-status="">All</button>
+        <button class="btn btn-ghost btn-sm status-tab" data-status="pending">⏳ Pending</button>
+        <button class="btn btn-ghost btn-sm status-tab" data-status="assigned">📋 Assigned</button>
+        <button class="btn btn-ghost btn-sm status-tab" data-status="in_transit">🚚 In Transit</button>
+        <button class="btn btn-ghost btn-sm status-tab" data-status="delivered">✅ Delivered</button>
+        <button class="btn btn-ghost btn-sm status-tab" data-status="completed">🎉 Completed</button>
+      </div>
+
+      <div id="deliveries-table">
+        <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-8)">
+          <div class="spinner"></div>
+          <span class="text-muted">Loading deliveries...</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Status Update Modal -->
+<div class="modal-overlay" id="status-modal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <div class="modal-title">Update Delivery Status</div>
+      <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="update-delivery-id" />
+      <div class="form-group">
+        <label class="form-label">New Status</label>
+        <select id="new-status" class="form-control">
+          <option value="assigned">📋 Assigned</option>
+          <option value="pickup_started">🚗 Pickup Started</option>
+          <option value="picked_up">📦 Picked Up</option>
+          <option value="in_transit">🚚 In Transit</option>
+          <option value="delivered">✅ Delivered</option>
+          <option value="completed">🎉 Completed</option>
+          <option value="cancelled">❌ Cancelled</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('status-modal')">Cancel</button>
+      <button class="btn btn-primary" id="update-status-btn">
+        <i class="fa-solid fa-check"></i> Update Status
+      </button>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="deliveries.html" class="mobile-nav-item active"><i class="fa-solid fa-truck"></i><span>Deliveries</span></a>
+    <a href="trucks.html" class="mobile-nav-item"><i class="fa-solid fa-truck-moving"></i><span>Trucks</span></a>
+    <a href="drivers.html" class="mobile-nav-item"><i class="fa-solid fa-id-card"></i><span>Drivers</span></a>
+    <a href="routes.html" class="mobile-nav-item"><i class="fa-solid fa-route"></i><span>Routes</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast, openModal, closeModal, formatDate } from '../js/navigation.js';
+  import { listenDeliveries, updateDeliveryStatus, renderDeliveryRow, getStatusConfig } from '../js/logistics.js';
+
+  const { user, profile } = await requireAuth('logistics');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Logistics';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'L').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+  window.closeModal = closeModal;
+
+  let allDeliveries = [];
+  let currentFilter = '';
+
+  listenDeliveries(user.uid, (deliveries) => {
+    allDeliveries = deliveries;
+    renderDeliveries(deliveries);
+  });
+
+  function renderDeliveries(deliveries) {
+    const filtered = currentFilter ? deliveries.filter(d => d.status === currentFilter) : deliveries;
+    const table = document.getElementById('deliveries-table');
+
+    if (!filtered.length) {
+      table.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">🚚</div>
+        <div class="empty-title">No deliveries found</div>
+        <p class="empty-desc">Deliveries will appear here once orders are assigned to you.</p>
+      </div>`;
+      return;
+    }
+
+    table.innerHTML = `<div class="table-wrapper"><table>
+      <thead><tr>
+        <th>Delivery ID</th><th>Pickup</th><th>Destination</th>
+        <th>Status</th><th>Date</th><th>Actions</th>
+      </tr></thead>
+      <tbody>${filtered.map(d => renderDeliveryRow(d)).join('')}</tbody>
+    </table></div>`;
+  }
+
+  // Status filter tabs
+  document.querySelectorAll('.status-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.status-tab').forEach(b => b.className = 'btn btn-ghost btn-sm status-tab');
+      btn.className = 'btn btn-primary btn-sm status-tab';
+      currentFilter = btn.dataset.status;
+      renderDeliveries(allDeliveries);
+    });
+  });
+
+  // Status update
+  window.openStatusUpdate = (id, currentStatus) => {
+    document.getElementById('update-delivery-id').value = id;
+    document.getElementById('new-status').value = currentStatus;
+    openModal('status-modal');
+  };
+
+  document.getElementById('update-status-btn').addEventListener('click', async () => {
+    const id     = document.getElementById('update-delivery-id').value;
+    const status = document.getElementById('new-status').value;
+    const btn    = document.getElementById('update-status-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner spinner-sm"></div>';
+    await updateDeliveryStatus(id, status);
+    closeModal('status-modal');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Update Status';
+  });
+
+  window.openDeliveryDetail = (id) => {
+    const d = allDeliveries.find(x => x.id === id);
+    if (!d) return;
+    showToast(`Delivery #${id.slice(-6).toUpperCase()} — ${getStatusConfig(d.status).label}`, 'info');
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Buyers — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item active"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Find Buyers</div>
+          <div class="topbar-subtitle">Discover factories looking for your crops</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🏭 Find Buyers</h1>
+        <p class="page-desc">Discover factories and buyers looking for your crops.</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-6);flex-wrap:wrap">
+        <div class="input-group" style="flex:1;min-width:200px">
+          <i class="fa-solid fa-magnifying-glass input-icon"></i>
+          <input type="text" id="search-buyers" class="form-control" placeholder="Search factories..." />
+        </div>
+        <select id="filter-state" class="form-control" style="width:auto;min-width:160px">
+          <option value="">All States</option>
+          <option>Andhra Pradesh</option><option>Telangana</option>
+          <option>Tamil Nadu</option><option>Karnataka</option>
+          <option>Maharashtra</option><option>Gujarat</option>
+        </select>
+      </div>
+
+      <!-- Buyers Grid -->
+      <div id="buyers-grid" class="grid-3" style="gap:var(--sp-5)">
+        <div style="grid-column:1/-1;display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-8)">
+          <div class="spinner"></div>
+          <span class="text-muted">Finding buyers near you...</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="buyers.html" class="mobile-nav-item active"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast } from '../js/navigation.js';
+  import { getDocs, collection } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+  import { db } from '../js/firebase.js';
+  import { getUserLocation } from '../js/weather.js';
+  import { calculateDistance } from '../js/maps.js';
+  import { calculateReliabilityScore } from '../js/ai.js';
+
+  AOS.init({ duration: 600, once: true });
+  const { user, profile } = await requireAuth('farmer');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+
+  let allBuyers = [];
+  let farmerLat = 17.385, farmerLng = 78.487;
+
+  try {
+    const loc = await getUserLocation();
+    farmerLat = loc.lat; farmerLng = loc.lon;
+  } catch {}
+
+  // Load factories
+  const snap = await getDocs(collection(db, 'factories'));
+  allBuyers = snap.docs.map(d => {
+    const f = d.data();
+    const lat = f.latitude  || (farmerLat + (Math.random()-0.5)*0.3);
+    const lng = f.longitude || (farmerLng + (Math.random()-0.5)*0.3);
+    return {
+      id: d.id, ...f,
+      displayName: f.companyName || f.name || 'Factory',
+      distance: calculateDistance(farmerLat, farmerLng, lat, lng),
+      lat, lng,
+    };
+  }).sort((a,b) => a.distance - b.distance);
+
+  // Add demo buyers if none registered
+  if (!allBuyers.length) {
+    allBuyers = [
+      { id:'demo1', displayName:'Green Valley Foods', state:'Telangana', district:'Hyderabad', distance:12, crops:'Tomato, Onion', active:true },
+      { id:'demo2', displayName:'Agro Fresh Pvt Ltd', state:'Andhra Pradesh', district:'Guntur', distance:28, crops:'Chilli, Tomato', active:true },
+      { id:'demo3', displayName:'Nature\'s Best Processing', state:'Karnataka', district:'Kolar', distance:45, crops:'Tomato, Potato', active:true },
+      { id:'demo4', displayName:'Sunrise Agro Industries', state:'Maharashtra', district:'Nashik', distance:67, crops:'Onion, Grapes', active:true },
+    ];
+  }
+
+  renderBuyers(allBuyers);
+
+  function renderBuyers(buyers) {
+    const grid = document.getElementById('buyers-grid');
+    if (!buyers.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1">
+        <div class="empty-state">
+          <div class="empty-icon">🏭</div>
+          <div class="empty-title">No buyers found</div>
+          <p class="empty-desc">Try adjusting your search filters.</p>
+        </div>
+      </div>`;
+      return;
+    }
+    grid.innerHTML = buyers.map((b, i) => {
+      const score = b.totalOrders ? calculateReliabilityScore(b).score : 75 + Math.floor(Math.random()*20);
+      const stars = Math.round(score / 20);
+      return `
+        <div class="card" data-aos="fade-up" data-aos-delay="${i*60}">
+          <div style="display:flex;gap:var(--sp-3);align-items:flex-start;margin-bottom:var(--sp-4)">
+            <div style="width:48px;height:48px;border-radius:var(--radius-md);
+                        background:rgba(76,140,138,0.10);display:flex;align-items:center;
+                        justify-content:center;font-size:24px;flex-shrink:0">🏭</div>
+            <div style="flex:1">
+              <div style="font-weight:700;font-size:15px">${b.displayName}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${b.district||''}, ${b.state||''}</div>
+              <div style="color:var(--harvest-gold);font-size:13px;margin-top:2px">
+                ${'★'.repeat(stars)}${'☆'.repeat(5-stars)}
+                <span style="font-size:11px;color:var(--text-muted);margin-left:4px">${score}/100</span>
+              </div>
+            </div>
+            <div style="text-align:right;font-size:12px;color:var(--text-muted)">
+              ${b.distance} km
+            </div>
+          </div>
+          ${b.crops ? `<div style="margin-bottom:var(--sp-3)">
+            ${b.crops.split(',').map(c => `<span class="tag" style="margin:2px">${c.trim()}</span>`).join('')}
+          </div>` : ''}
+          <div style="display:flex;gap:var(--sp-2)">
+            <a href="maps.html" class="btn btn-sm btn-ghost" style="flex:1">
+              <i class="fa-solid fa-map-pin"></i> View Map
+            </a>
+            <a href="add-crop.html" class="btn btn-sm btn-primary" style="flex:1">
+              <i class="fa-solid fa-seedling"></i> List Crop
+            </a>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // Search & filter
+  function applyFilters() {
+    const q     = document.getElementById('search-buyers').value.toLowerCase();
+    const state = document.getElementById('filter-state').value;
+    renderBuyers(allBuyers.filter(b =>
+      (!q     || b.displayName?.toLowerCase().includes(q)) &&
+      (!state || b.state === state)
+    ));
+  }
+  document.getElementById('search-buyers').addEventListener('input', applyFilters);
+  document.getElementById('filter-state').addEventListener('change', applyFilters);
+</script>
+</body>
+</html>

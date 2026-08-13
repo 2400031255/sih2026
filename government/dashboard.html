@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Government Dashboard — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🏢</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Government Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">G</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Government / FPO</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Analytics</div>
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
+      </a>
+      <a href="production.html" class="nav-item">
+        <i class="fa-solid fa-seedling"></i><span>Production</span>
+      </a>
+      <a href="shortages.html" class="nav-item">
+        <i class="fa-solid fa-triangle-exclamation"></i><span>Shortages</span>
+      </a>
+      <a href="surplus.html" class="nav-item">
+        <i class="fa-solid fa-arrow-up"></i><span>Surplus</span>
+      </a>
+      <a href="analytics.html" class="nav-item">
+        <i class="fa-solid fa-chart-bar"></i><span>Analytics</span>
+      </a>
+      <a href="reports.html" class="nav-item">
+        <i class="fa-solid fa-file-lines"></i><span>Reports</span>
+      </a>
+      <a href="#" class="nav-item" id="notif-nav-btn">
+        <i class="fa-solid fa-bell"></i><span>Notifications</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" class="nav-item" id="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Government Analytics</div>
+          <div class="topbar-subtitle" id="topbar-date">Loading...</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" id="notif-btn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-dot" style="display:none"></span>
+        </button>
+        <a href="#" class="topbar-btn"><i class="fa-solid fa-user-circle"></i></a>
+      </div>
+    </header>
+
+    <div class="notif-panel" id="notif-panel">
+      <div class="notif-panel-header">
+        <div class="notif-panel-title">🔔 Notifications</div>
+        <button class="btn btn-sm btn-ghost" id="mark-all-read">Mark all read</button>
+      </div>
+      <div class="notif-list" id="notif-list"></div>
+    </div>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">
+          Agricultural Intelligence Dashboard 📊
+        </h1>
+        <p class="page-desc">
+          Real-time production, procurement and supply chain analytics across India.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-farmers">—</div>
+            <div class="stat-label">Total Farmers</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="stat-icon blue"><i class="fa-solid fa-industry"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-factories">—</div>
+            <div class="stat-label">Total Factories</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="160">
+          <div class="stat-icon gold"><i class="fa-solid fa-box"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-orders">—</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="240">
+          <div class="stat-icon terra"><i class="fa-solid fa-truck"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-deliveries">—</div>
+            <div class="stat-label">Total Deliveries</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="dashboard-grid-3" style="margin-bottom:var(--sp-6)">
+
+        <!-- Crop Production Chart -->
+        <div class="card" data-aos="fade-up" style="grid-column:span 2">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-chart-bar"></i> Crop Production by Type
+            </div>
+            <span class="badge badge-green">Live Data</span>
+          </div>
+          <div class="chart-wrapper" style="height:280px">
+            <canvas id="production-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Supply Distribution -->
+        <div class="card" data-aos="fade-up">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-chart-pie"></i> Supply Distribution
+            </div>
+          </div>
+          <div class="chart-wrapper" style="height:280px">
+            <canvas id="supply-chart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Order Trend + Surplus/Shortage -->
+      <div class="dashboard-grid">
+
+        <!-- Order Trend -->
+        <div class="card" data-aos="fade-up">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-chart-line"></i> Order & Delivery Trends
+            </div>
+            <span class="text-muted text-sm">Last 6 months</span>
+          </div>
+          <div class="chart-wrapper" style="height:260px">
+            <canvas id="trend-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Surplus / Shortage -->
+        <div class="card" data-aos="fade-up">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-triangle-exclamation"></i> Surplus & Shortage
+            </div>
+            <a href="shortages.html" class="btn btn-sm btn-ghost">Details</a>
+          </div>
+          <div id="surplus-shortage-list">
+            <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+              <div class="spinner spinner-sm"></div>
+              <span class="text-muted text-sm">Analyzing supply vs demand...</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- District Production Table -->
+      <div class="card" data-aos="fade-up" style="margin-top:var(--sp-6)">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fa-solid fa-map-location-dot"></i> Top Producing Districts
+          </div>
+          <a href="reports.html" class="btn btn-sm btn-primary">
+            <i class="fa-solid fa-file-lines"></i> Export Report
+          </a>
+        </div>
+        <div id="district-table">
+          <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+            <div class="spinner spinner-sm"></div>
+            <span class="text-muted text-sm">Loading district data...</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item active"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></a>
+    <a href="production.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Production</span></a>
+    <a href="shortages.html" class="mobile-nav-item"><i class="fa-solid fa-triangle-exclamation"></i><span>Alerts</span></a>
+    <a href="analytics.html" class="mobile-nav-item"><i class="fa-solid fa-chart-bar"></i><span>Analytics</span></a>
+    <a href="reports.html" class="mobile-nav-item"><i class="fa-solid fa-file-lines"></i><span>Reports</span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI } from '../js/navigation.js';
+  import { getPlatformStats, getCropProductionData, getOrderTrendData,
+           getDistrictData, getSurplusShortageData,
+           initCropProductionChart, initOrderTrendChart, initSurplusChart } from '../js/government.js';
+  import { initNotifications, markAllRead } from '../js/notifications.js';
+
+  AOS.init({ duration: 600, once: true });
+  const { user, profile } = await requireAuth('government');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Government';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'G').charAt(0).toUpperCase();
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-IN', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
+  initDashboardUI();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+
+  // Platform stats
+  const stats = await getPlatformStats();
+  document.getElementById('stat-farmers').textContent    = stats.totalFarmers.toLocaleString('en-IN');
+  document.getElementById('stat-factories').textContent  = stats.totalFactories.toLocaleString('en-IN');
+  document.getElementById('stat-orders').textContent     = stats.totalOrders.toLocaleString('en-IN');
+  document.getElementById('stat-deliveries').textContent = stats.totalDeliveries.toLocaleString('en-IN');
+
+  // Charts
+  const [prodData, trendData, surplusData] = await Promise.all([
+    getCropProductionData(),
+    getOrderTrendData(),
+    getSurplusShortageData(),
+  ]);
+
+  initCropProductionChart('production-chart', prodData);
+  initOrderTrendChart('trend-chart', trendData);
+  initSurplusChart('supply-chart', surplusData);
+
+  // Surplus/Shortage list
+  const ssList = document.getElementById('surplus-shortage-list');
+  ssList.innerHTML = surplusData.map(d => `
+    <div style="display:flex;align-items:center;justify-content:space-between;
+                padding:var(--sp-3) 0;border-bottom:var(--border)">
+      <div style="font-weight:600;font-size:14px">${d.crop}</div>
+      <div style="display:flex;align-items:center;gap:var(--sp-3)">
+        <div style="font-size:12px;color:var(--text-muted)">
+          S: ${d.supply.toLocaleString('en-IN')} kg · D: ${d.demand.toLocaleString('en-IN')} kg
+        </div>
+        <span class="badge ${d.status==='surplus'?'badge-blue':d.status==='shortage'?'badge-red':'badge-green'}">
+          ${d.status==='surplus'?'↑ Surplus':d.status==='shortage'?'↓ Shortage':'✓ Balanced'}
+        </span>
+      </div>
+    </div>
+  `).join('');
+
+  // District table
+  const districts = await getDistrictData();
+  document.getElementById('district-table').innerHTML = `
+    <div class="table-wrapper"><table>
+      <thead><tr><th>District</th><th>State</th><th>Main Crop</th><th>Production (kg)</th><th>Share</th></tr></thead>
+      <tbody>
+        ${districts.map(d => {
+          const max = districts[0].production;
+          const pct = Math.round((d.production / max) * 100);
+          return `<tr>
+            <td><strong>${d.district}</strong></td>
+            <td>${d.state}</td>
+            <td>${d.crop}</td>
+            <td>${d.production.toLocaleString('en-IN')}</td>
+            <td style="min-width:120px">
+              <div class="progress">
+                <div class="progress-bar" style="width:${pct}%"></div>
+              </div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${pct}%</div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table></div>`;
+
+  initNotifications(user.uid);
+  document.getElementById('mark-all-read')?.addEventListener('click', () => markAllRead(user.uid));
+</script>
+</body>
+</html>

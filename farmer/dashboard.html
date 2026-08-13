@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmer Dashboard — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<!-- ── SIDEBAR OVERLAY (mobile) ─────────────────────────── -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- ── APP SHELL ─────────────────────────────────────────── -->
+<div class="app-shell">
+
+  <!-- ── SIDEBAR ──────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Farmer navigation">
+
+    <!-- Brand -->
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+
+    <!-- User Info -->
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fa-solid fa-house"></i>
+        <span data-i18n="nav.dashboard">Dashboard</span>
+      </a>
+
+      <a href="crops.html" class="nav-item">
+        <i class="fa-solid fa-seedling"></i>
+        <span data-i18n="nav.crops">My Crops</span>
+      </a>
+
+      <a href="add-crop.html" class="nav-item">
+        <i class="fa-solid fa-plus-circle"></i>
+        <span>Add Crop</span>
+      </a>
+
+      <a href="buyers.html" class="nav-item">
+        <i class="fa-solid fa-store"></i>
+        <span data-i18n="nav.buyers">Buyers</span>
+      </a>
+
+      <a href="orders.html" class="nav-item">
+        <i class="fa-solid fa-box"></i>
+        <span data-i18n="nav.orders">Orders</span>
+        <span class="nav-badge" data-notif style="display:none">0</span>
+      </a>
+
+      <div class="nav-section-label">Tools</div>
+
+      <a href="weather.html" class="nav-item">
+        <i class="fa-solid fa-cloud-sun"></i>
+        <span data-i18n="nav.weather">Weather</span>
+      </a>
+
+      <a href="maps.html" class="nav-item">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span data-i18n="nav.maps">Maps</span>
+      </a>
+
+      <a href="voice.html" class="nav-item">
+        <i class="fa-solid fa-microphone"></i>
+        <span>Voice Assistant</span>
+      </a>
+
+      <a href="#" class="nav-item" id="notif-nav-btn">
+        <i class="fa-solid fa-bell"></i>
+        <span data-i18n="nav.notifications">Notifications</span>
+        <span class="nav-badge" data-notif style="display:none">0</span>
+      </a>
+
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item">
+        <i class="fa-solid fa-user-circle"></i>
+        <span data-i18n="nav.profile">Profile</span>
+      </a>
+      <a href="#" class="nav-item" id="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span data-i18n="nav.logout">Logout</span>
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar" role="banner">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <div class="topbar-title" data-i18n="nav.dashboard">Dashboard</div>
+          <div class="topbar-subtitle" id="topbar-date">Loading...</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <!-- Search -->
+        <div class="topbar-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search crops, buyers..." aria-label="Search" />
+        </div>
+        <!-- Weather quick -->
+        <div id="topbar-weather" style="display:flex;align-items:center;gap:6px;
+             font-size:13px;font-weight:600;color:var(--text-primary);cursor:pointer"
+             onclick="window.location.href='weather.html'" title="View weather">
+          <span id="topbar-weather-icon">⛅</span>
+          <span id="topbar-weather-temp">--°C</span>
+        </div>
+        <!-- Notifications -->
+        <button class="topbar-btn" id="notif-btn" aria-label="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-dot" style="display:none"></span>
+        </button>
+        <!-- Profile -->
+        <a href="profile.html" class="topbar-btn" aria-label="Profile">
+          <i class="fa-solid fa-user-circle"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Notification Panel -->
+    <div class="notif-panel" id="notif-panel" role="dialog" aria-label="Notifications">
+      <div class="notif-panel-header">
+        <div class="notif-panel-title">🔔 Notifications</div>
+        <button class="btn btn-sm btn-ghost" id="mark-all-read">Mark all read</button>
+      </div>
+      <div class="notif-list" id="notif-list">
+        <div class="empty-state" style="padding:32px 20px">
+          <div class="empty-icon">🔔</div>
+          <div class="empty-title">No notifications</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE CONTENT ────────────────────────────────────── -->
+    <main class="page-content" id="page-content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">
+          <span data-i18n="dash.welcome">Welcome back</span>,
+          <span id="farmer-name" style="color:var(--forest-green)">Farmer</span> 👋
+        </h1>
+        <p class="page-desc" id="page-desc">Here's what's happening on your farm today.</p>
+      </div>
+
+      <!-- ── STATS GRID ──────────────────────────────────────── -->
+      <div class="stats-grid" id="stats-grid">
+
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="stat-icon green"><i class="fa-solid fa-seedling"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-crops">—</div>
+            <div class="stat-label">Active Crops</div>
+            <div class="stat-change up" id="stat-crops-change">
+              <i class="fa-solid fa-arrow-up"></i> Listed
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="stat-icon gold"><i class="fa-solid fa-box"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-orders">—</div>
+            <div class="stat-label">Active Orders</div>
+            <div class="stat-change up" id="stat-orders-change">
+              <i class="fa-solid fa-arrow-up"></i> In progress
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="160">
+          <div class="stat-icon blue"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-earnings">—</div>
+            <div class="stat-label">Total Earnings</div>
+            <div class="stat-change up">
+              <i class="fa-solid fa-arrow-up"></i> This season
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="240">
+          <div class="stat-icon terra"><i class="fa-solid fa-star"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-reliability">—</div>
+            <div class="stat-label">Reliability Score</div>
+            <div class="stat-change up">
+              <i class="fa-solid fa-shield"></i> Verified
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── MAIN DASHBOARD GRID ─────────────────────────────── -->
+      <div class="dashboard-grid">
+
+        <!-- LEFT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+
+          <!-- Weather Widget -->
+          <div id="weather-container" data-aos="fade-up">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-4)">
+              <h3 style="font-size:var(--fs-md);font-weight:var(--fw-bold)">
+                <i class="fa-solid fa-cloud-sun" style="color:var(--natural-blue)"></i>
+                Today's Weather
+              </h3>
+              <a href="weather.html" class="btn btn-sm btn-ghost">
+                Full Forecast <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+            <div id="weather-widget">
+              <div class="weather-card">
+                <div style="display:flex;align-items:center;gap:var(--sp-3)">
+                  <div class="spinner spinner-sm" style="border-top-color:rgba(255,255,255,0.8)"></div>
+                  <span style="color:rgba(255,255,255,0.7);font-size:13px">Loading weather...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- My Crops -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-seedling"></i>
+                My Crops
+              </div>
+              <a href="add-crop.html" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-plus"></i> Add Crop
+              </a>
+            </div>
+            <div id="crops-list">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading crops...</span>
+              </div>
+            </div>
+            <div style="padding:var(--sp-3) 0 0;border-top:var(--border);margin-top:var(--sp-3)">
+              <a href="crops.html" class="btn btn-ghost btn-sm btn-block">
+                View All Crops <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-box"></i>
+                Recent Orders
+              </div>
+              <a href="orders.html" class="btn btn-sm btn-ghost">View All</a>
+            </div>
+            <div id="orders-list">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading orders...</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /left column -->
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+
+          <!-- Voice Assistant -->
+          <div class="card" data-aos="fade-up" style="text-align:center">
+            <div class="card-title" style="justify-content:center;margin-bottom:var(--sp-5)">
+              <i class="fa-solid fa-microphone"></i>
+              Voice Assistant
+            </div>
+            <button class="voice-btn" id="voice-btn" style="margin:0 auto var(--sp-4)"
+                    aria-label="Voice assistant">
+              <i class="fa-solid fa-microphone"></i>
+              <span class="voice-btn-label" data-i18n="voice.tap">Tap &amp; Speak</span>
+            </button>
+            <div id="voice-result" style="min-height:48px;background:rgba(36,92,58,0.04);
+                 border-radius:var(--radius-md);padding:var(--sp-3);font-size:13px;
+                 color:var(--text-muted);border:var(--border)">
+              Say: "I want to sell 500 kg of tomatoes"
+            </div>
+            <a href="voice.html" class="btn btn-ghost btn-sm btn-block" style="margin-top:var(--sp-3)">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              Full Voice Assistant
+            </a>
+          </div>
+
+          <!-- Incoming Buyer Requests -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-inbox"></i>
+                Buyer Requests
+              </div>
+              <span class="badge badge-gold" id="requests-count" style="display:none">0</span>
+            </div>
+            <div id="requests-list">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading requests...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Market Price -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-chart-line"></i>
+                Market Prices
+              </div>
+              <span class="badge badge-green">Live</span>
+            </div>
+            <div id="market-prices">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div><!-- /right column -->
+
+      </div><!-- /dashboard-grid -->
+
+    </main><!-- /page-content -->
+
+  </div><!-- /main-content -->
+
+</div><!-- /app-shell -->
+
+<!-- ── MOBILE BOTTOM NAV ──────────────────────────────────── -->
+<nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item active">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="crops.html" class="mobile-nav-item">
+      <i class="fa-solid fa-seedling"></i>
+      <span>Crops</span>
+    </a>
+    <a href="add-crop.html" class="mobile-nav-item">
+      <i class="fa-solid fa-plus-circle"></i>
+      <span>Add</span>
+    </a>
+    <a href="orders.html" class="mobile-nav-item">
+      <i class="fa-solid fa-box"></i>
+      <span>Orders</span>
+    </a>
+    <a href="profile.html" class="mobile-nav-item">
+      <i class="fa-solid fa-user"></i>
+      <span>Profile</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ── SCRIPTS ───────────────────────────────────────────── -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast, formatCurrency, timeAgo, renderEmpty } from '../js/navigation.js';
+  import { fetchWeather, getUserLocation, renderWeatherCard } from '../js/weather.js';
+  import { listenFarmerCrops, listenFarmerOrders, listenIncomingRequests,
+           acceptRequest, rejectRequest, renderCropCard, renderOrderRow, getCropEmoji } from '../js/farmer.js';
+  import { initNotifications, markAllRead } from '../js/notifications.js';
+  import { initVoiceButton, parseCropFromSpeech } from '../js/voice.js';
+  import { calculateReliabilityScore } from '../js/ai.js';
+
+  AOS.init({ duration: 600, once: true, offset: 40 });
+
+  // ── AUTH GUARD ─────────────────────────────────────────
+  const { user, profile } = await requireAuth('farmer');
+
+  // ── POPULATE USER INFO ─────────────────────────────────
+  document.getElementById('farmer-name').textContent = profile.name?.split(' ')[0] || 'Farmer';
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name || 'F').charAt(0).toUpperCase();
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-IN', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
+
+  // ── INIT UI ────────────────────────────────────────────
+  initDashboardUI();
+
+  // ── LOGOUT ─────────────────────────────────────────────
+  document.getElementById('logout-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (confirm('Are you sure you want to sign out?')) logoutUser();
+  });
+
+  // ── WEATHER ────────────────────────────────────────────
+  try {
+    const loc = await getUserLocation();
+    const weather = await fetchWeather(loc.lat, loc.lon);
+    renderWeatherCard('weather-widget', weather);
+    document.getElementById('topbar-weather-icon').textContent = weather.icon;
+    document.getElementById('topbar-weather-temp').textContent = `${weather.temp}°C`;
+  } catch {
+    document.getElementById('weather-widget').innerHTML = `
+      <div class="alert alert-info">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Enable location to see weather. <a href="weather.html" style="color:var(--natural-blue)">Open Weather</a></span>
+      </div>`;
+  }
+
+  // ── CROPS ──────────────────────────────────────────────
+  listenFarmerCrops(user.uid, (crops) => {
+    const active = crops.filter(c => c.status === 'available');
+    document.getElementById('stat-crops').textContent = active.length;
+
+    const list = document.getElementById('crops-list');
+    if (!crops.length) {
+      list.innerHTML = `
+        <div class="empty-state" style="padding:var(--sp-8)">
+          <div class="empty-icon">🌱</div>
+          <div class="empty-title">No crops yet</div>
+          <p class="empty-desc">Add your first crop to start finding buyers.</p>
+          <a href="add-crop.html" class="btn btn-primary btn-sm" style="margin-top:var(--sp-3)">
+            <i class="fa-solid fa-plus"></i> Add Crop
+          </a>
+        </div>`;
+      return;
+    }
+    // Show latest 3 crops as compact rows
+    list.innerHTML = crops.slice(0, 3).map(c => `
+      <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) 0;border-bottom:var(--border)">
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);
+                    background:rgba(36,92,58,0.08);display:flex;align-items:center;
+                    justify-content:center;font-size:20px;flex-shrink:0">
+          ${getCropEmoji(c.cropName)}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:14px">${c.cropName}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${c.quantity} ${c.unit} · ₹${c.expectedPrice}/kg</div>
+        </div>
+        <span class="badge ${c.status === 'available' ? 'badge-green' : 'badge-gold'}">${c.status}</span>
+      </div>
+    `).join('');
+  });
+
+  // ── ORDERS ─────────────────────────────────────────────
+  listenFarmerOrders(user.uid, (orders) => {
+    const active = orders.filter(o => !['completed','cancelled'].includes(o.status));
+    document.getElementById('stat-orders').textContent = active.length;
+    const total = orders.filter(o => o.status === 'completed')
+                        .reduce((s, o) => s + (o.totalValue || 0), 0);
+    document.getElementById('stat-earnings').textContent = formatCurrency(total);
+
+    const list = document.getElementById('orders-list');
+    if (!orders.length) {
+      list.innerHTML = `<div class="empty-state" style="padding:var(--sp-6)">
+        <div class="empty-icon">📦</div>
+        <div class="empty-title">No orders yet</div>
+      </div>`;
+      return;
+    }
+    list.innerHTML = `<div class="table-wrapper"><table>
+      <thead><tr><th>Crop</th><th>Qty</th><th>Value</th><th>Status</th></tr></thead>
+      <tbody>${orders.slice(0,4).map(o => renderOrderRow(o)).join('')}</tbody>
+    </table></div>`;
+  });
+
+  // ── RELIABILITY SCORE ──────────────────────────────────
+  const { score } = calculateReliabilityScore(profile);
+  document.getElementById('stat-reliability').textContent = `${score}/100`;
+
+  // ── INCOMING REQUESTS ──────────────────────────────────
+  listenIncomingRequests(user.uid, (requests) => {
+    const badge = document.getElementById('requests-count');
+    badge.textContent = requests.length;
+    badge.style.display = requests.length ? 'inline-flex' : 'none';
+
+    const list = document.getElementById('requests-list');
+    if (!requests.length) {
+      list.innerHTML = `<div class="empty-state" style="padding:var(--sp-6)">
+        <div class="empty-icon">📬</div>
+        <div class="empty-title">No pending requests</div>
+        <p class="empty-desc">Buyer requests will appear here.</p>
+      </div>`;
+      return;
+    }
+    list.innerHTML = requests.map(r => `
+      <div style="padding:var(--sp-4) 0;border-bottom:var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--sp-2)">
+          <div>
+            <div style="font-weight:600;font-size:14px">🏭 Factory Request</div>
+            <div style="font-size:12px;color:var(--text-muted)">${r.cropName} · ${r.quantity} kg · ₹${r.offeredPrice}/kg</div>
+          </div>
+          <span class="badge badge-gold">Pending</span>
+        </div>
+        ${r.message ? `<div style="font-size:12px;color:var(--text-muted);margin-bottom:var(--sp-2)">"${r.message}"</div>` : ''}
+        <div style="display:flex;gap:var(--sp-2)">
+          <button class="btn btn-sm btn-primary" onclick="handleAccept('${r.id}')">
+            <i class="fa-solid fa-check"></i> Accept
+          </button>
+          <button class="btn btn-sm btn-danger" onclick="handleReject('${r.id}','${r.factoryId}','${r.cropName}')">
+            <i class="fa-solid fa-xmark"></i> Decline
+          </button>
+        </div>
+      </div>
+    `).join('');
+  });
+
+  // ── MARKET PRICES (mock) ───────────────────────────────
+  const prices = [
+    { crop: '🍅 Tomato',  price: 28, change: +3, trend: 'up' },
+    { crop: '🧅 Onion',   price: 22, change: -2, trend: 'down' },
+    { crop: '🥔 Potato',  price: 18, change: +1, trend: 'up' },
+    { crop: '🌾 Rice',    price: 35, change: 0,  trend: 'stable' },
+  ];
+  document.getElementById('market-prices').innerHTML = prices.map(p => `
+    <div style="display:flex;align-items:center;justify-content:space-between;
+                padding:var(--sp-3) 0;border-bottom:var(--border)">
+      <div style="font-weight:500;font-size:14px">${p.crop}</div>
+      <div style="display:flex;align-items:center;gap:var(--sp-3)">
+        <span style="font-weight:700;font-size:15px">₹${p.price}/kg</span>
+        <span style="font-size:12px;font-weight:600;color:${p.trend==='up'?'var(--success)':p.trend==='down'?'var(--danger)':'var(--text-muted)'}">
+          ${p.trend==='up'?'↑':p.trend==='down'?'↓':'→'} ${Math.abs(p.change)}
+        </span>
+      </div>
+    </div>
+  `).join('');
+
+  // ── VOICE ASSISTANT ────────────────────────────────────
+  initVoiceButton('voice-btn', (text) => {
+    const parsed = parseCropFromSpeech(text);
+    const result = document.getElementById('voice-result');
+    if (parsed.cropName || parsed.quantity) {
+      result.innerHTML = `
+        <div style="font-weight:600;color:var(--text-primary);margin-bottom:var(--sp-2)">Understood:</div>
+        ${parsed.cropName ? `<span class="badge badge-green">${getCropEmoji(parsed.cropName)} ${parsed.cropName}</span> ` : ''}
+        ${parsed.quantity ? `<span class="badge badge-blue">${parsed.quantity} ${parsed.unit||'kg'}</span> ` : ''}
+        ${parsed.expectedPrice ? `<span class="badge badge-gold">₹${parsed.expectedPrice}/kg</span>` : ''}
+        <div style="margin-top:var(--sp-3)">
+          <a href="add-crop.html?crop=${encodeURIComponent(parsed.cropName||'')}&qty=${parsed.quantity||''}&price=${parsed.expectedPrice||''}"
+             class="btn btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Add This Crop
+          </a>
+        </div>`;
+    } else {
+      result.textContent = `Heard: "${text}" — Try saying a crop name and quantity.`;
+    }
+  });
+
+  // ── NOTIFICATIONS ──────────────────────────────────────
+  initNotifications(user.uid);
+  document.getElementById('mark-all-read')?.addEventListener('click', () => markAllRead(user.uid));
+
+  // ── GLOBAL HANDLERS ────────────────────────────────────
+  window.handleAccept = (id) => acceptRequest(id, user.uid);
+  window.handleReject = (id, fid, crop) => rejectRequest(id, fid, crop);
+  window.viewOrder    = (id) => window.location.href = `orders.html?id=${id}`;
+</script>
+
+</body>
+</html>

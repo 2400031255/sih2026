@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💼</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">⚙️</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Admin Panel</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">A</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Admin</div>
+        <div class="sidebar-user-role" style="color:var(--harvest-gold)">Super Admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+      </a>
+      <a href="users.html" class="nav-item">
+        <i class="fa-solid fa-users"></i><span>All Users</span>
+      </a>
+      <a href="farmers.html" class="nav-item">
+        <i class="fa-solid fa-seedling"></i><span>Farmers</span>
+      </a>
+      <a href="factories.html" class="nav-item">
+        <i class="fa-solid fa-industry"></i><span>Factories</span>
+      </a>
+      <a href="logistics.html" class="nav-item">
+        <i class="fa-solid fa-truck"></i><span>Logistics</span>
+      </a>
+      <div class="nav-section-label">System</div>
+      <a href="settings.html" class="nav-item">
+        <i class="fa-solid fa-gear"></i><span>Settings</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" class="nav-item" id="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Admin Dashboard</div>
+          <div class="topbar-subtitle" id="topbar-date">Loading...</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="user-search" placeholder="Search users..." />
+        </div>
+        <a href="#" class="topbar-btn"><i class="fa-solid fa-user-circle"></i></a>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">Platform Administration ⚙️</h1>
+        <p class="page-desc">Monitor and manage the entire AgriSync OS platform.</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-total-users">—</div>
+            <div class="stat-label">Total Users</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="stat-icon gold"><i class="fa-solid fa-box"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-total-orders">—</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="160">
+          <div class="stat-icon blue"><i class="fa-solid fa-seedling"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-total-crops">—</div>
+            <div class="stat-label">Total Crops</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="240">
+          <div class="stat-icon terra"><i class="fa-solid fa-truck"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-total-deliveries">—</div>
+            <div class="stat-label">Total Deliveries</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Filter Tabs -->
+      <div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-5);flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm role-tab" data-role="">All Users</button>
+        <button class="btn btn-ghost btn-sm role-tab" data-role="farmer">👨🌾 Farmers</button>
+        <button class="btn btn-ghost btn-sm role-tab" data-role="factory">🏭 Factories</button>
+        <button class="btn btn-ghost btn-sm role-tab" data-role="logistics">🚚 Logistics</button>
+        <button class="btn btn-ghost btn-sm role-tab" data-role="government">🏢 Government</button>
+        <button class="btn btn-ghost btn-sm role-tab" data-role="admin">👨💼 Admin</button>
+      </div>
+
+      <!-- Users Table -->
+      <div class="card" data-aos="fade-up">
+        <div class="card-header">
+          <div class="card-title"><i class="fa-solid fa-users"></i> User Management</div>
+          <span class="text-muted text-sm" id="users-count">Loading...</span>
+        </div>
+        <div id="users-table">
+          <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-6)">
+            <div class="spinner"></div>
+            <span class="text-muted">Loading users...</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item active"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+    <a href="users.html" class="mobile-nav-item"><i class="fa-solid fa-users"></i><span>Users</span></a>
+    <a href="farmers.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Farmers</span></a>
+    <a href="factories.html" class="mobile-nav-item"><i class="fa-solid fa-industry"></i><span>Factories</span></a>
+    <a href="settings.html" class="mobile-nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast } from '../js/navigation.js';
+  import { getAllUsers, toggleUserStatus, renderUserRow } from '../js/admin.js';
+  import { getPlatformStats } from '../js/government.js';
+
+  AOS.init({ duration: 600, once: true });
+  const { user, profile } = await requireAuth('admin');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Admin';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'A').charAt(0).toUpperCase();
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-IN', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
+  initDashboardUI();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+
+  // Platform stats
+  const stats = await getPlatformStats();
+  document.getElementById('stat-total-orders').textContent     = stats.totalOrders.toLocaleString('en-IN');
+  document.getElementById('stat-total-crops').textContent      = stats.totalCrops.toLocaleString('en-IN');
+  document.getElementById('stat-total-deliveries').textContent = stats.totalDeliveries.toLocaleString('en-IN');
+
+  // Load users
+  let allUsers = [];
+  let currentRole = '';
+
+  async function loadUsers(role = '') {
+    const table = document.getElementById('users-table');
+    table.innerHTML = `<div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-6)">
+      <div class="spinner spinner-sm"></div><span class="text-muted">Loading...</span></div>`;
+
+    allUsers = await getAllUsers(role || null);
+    document.getElementById('stat-total-users').textContent = allUsers.length;
+    document.getElementById('users-count').textContent = `${allUsers.length} users`;
+    renderUsers(allUsers);
+  }
+
+  function renderUsers(users) {
+    const table = document.getElementById('users-table');
+    if (!users.length) {
+      table.innerHTML = `<div class="empty-state" style="padding:var(--sp-8)">
+        <div class="empty-icon">👥</div>
+        <div class="empty-title">No users found</div>
+      </div>`;
+      return;
+    }
+    table.innerHTML = `<div class="table-wrapper"><table>
+      <thead><tr><th>User</th><th>Role</th><th>State</th><th>District</th><th>Joined</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>${users.map(u => renderUserRow(u)).join('')}</tbody>
+    </table></div>`;
+  }
+
+  // Role tabs
+  document.querySelectorAll('.role-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.role-tab').forEach(b => {
+        b.className = 'btn btn-ghost btn-sm role-tab';
+      });
+      btn.className = 'btn btn-primary btn-sm role-tab';
+      currentRole = btn.dataset.role;
+      loadUsers(currentRole);
+    });
+  });
+
+  // Search
+  document.getElementById('user-search').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    const filtered = allUsers.filter(u =>
+      u.name?.toLowerCase().includes(q) ||
+      u.email?.toLowerCase().includes(q) ||
+      u.district?.toLowerCase().includes(q)
+    );
+    renderUsers(filtered);
+  });
+
+  // Toggle user status
+  window.toggleUser = async (id, active) => {
+    if (!confirm(`${active ? 'Deactivate' : 'Activate'} this user?`)) return;
+    await toggleUserStatus(id, active);
+    loadUsers(currentRole);
+  };
+
+  loadUsers();
+</script>
+</body>
+</html>

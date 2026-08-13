@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maps — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    #map { width:100%; height:480px; border-radius:var(--radius-lg); border:var(--border); }
+  </style>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item active"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Maps</div>
+          <div class="topbar-subtitle">Find nearby factories and markets</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🗺️ Nearby Buyers Map</h1>
+        <p class="page-desc">See factories and markets near your farm location.</p>
+      </div>
+
+      <!-- Legend -->
+      <div style="display:flex;gap:var(--sp-4);margin-bottom:var(--sp-4);flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:var(--sp-2);font-size:13px">
+          <div style="width:14px;height:14px;border-radius:50%;background:#245C3A"></div>
+          <span>Your Farm</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--sp-2);font-size:13px">
+          <div style="width:14px;height:14px;border-radius:50%;background:#D5A928"></div>
+          <span>Nearby Factory</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--sp-2);font-size:13px">
+          <div style="width:14px;height:14px;border-radius:50%;background:#4C8C8A"></div>
+          <span>Market</span>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div id="map">
+        <div class="map-placeholder">
+          <div style="font-size:48px">🗺️</div>
+          <div style="font-weight:600;color:var(--text-primary)">Loading map...</div>
+          <div style="font-size:13px;color:var(--text-muted)">Please allow location access</div>
+        </div>
+      </div>
+
+      <!-- Nearby Factories List -->
+      <div class="card" style="margin-top:var(--sp-6)">
+        <div class="card-header">
+          <div class="card-title"><i class="fa-solid fa-industry"></i> Nearby Factories</div>
+          <span class="text-muted text-sm" id="factory-count">Loading...</span>
+        </div>
+        <div id="factory-list">
+          <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+            <div class="spinner spinner-sm"></div>
+            <span class="text-muted text-sm">Finding nearby factories...</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="maps.html" class="mobile-nav-item active"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast } from '../js/navigation.js';
+  import { initFarmerMap, loadGoogleMaps, calculateDistance } from '../js/maps.js';
+  import { getUserLocation } from '../js/weather.js';
+  import { getDocs, collection } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+  import { db } from '../js/firebase.js';
+
+  const { user, profile } = await requireAuth('farmer');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+
+  try {
+    const loc = await getUserLocation();
+
+    // Load factories from Firestore
+    const snap = await getDocs(collection(db, 'factories'));
+    const factories = snap.docs.map(d => {
+      const f = d.data();
+      return {
+        id: d.id, name: f.name || f.companyName || 'Factory',
+        lat: f.latitude  || (loc.lat + (Math.random()-0.5)*0.2),
+        lng: f.longitude || (loc.lon + (Math.random()-0.5)*0.2),
+        crop: 'Tomato, Onion',
+        distance: calculateDistance(loc.lat, loc.lon,
+          f.latitude  || loc.lat + (Math.random()-0.5)*0.2,
+          f.longitude || loc.lon + (Math.random()-0.5)*0.2),
+      };
+    });
+
+    // Init map
+    await initFarmerMap('map', loc.lat, loc.lon, factories);
+
+    // Factory list
+    document.getElementById('factory-count').textContent = `${factories.length} found`;
+    if (!factories.length) {
+      document.getElementById('factory-list').innerHTML = `
+        <div class="empty-state" style="padding:var(--sp-6)">
+          <div class="empty-icon">🏭</div>
+          <div class="empty-title">No factories registered yet</div>
+          <p class="empty-desc">Factories will appear here once they register on AgriSync OS.</p>
+        </div>`;
+    } else {
+      document.getElementById('factory-list').innerHTML = factories
+        .sort((a,b) => a.distance - b.distance)
+        .map(f => `
+          <div style="display:flex;align-items:center;gap:var(--sp-4);
+                      padding:var(--sp-4) 0;border-bottom:var(--border)">
+            <div style="width:44px;height:44px;border-radius:var(--radius-md);
+                        background:rgba(76,140,138,0.10);display:flex;align-items:center;
+                        justify-content:center;font-size:22px;flex-shrink:0">🏭</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:14px">${f.name}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${f.crop}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:700;color:var(--forest-green)">${f.distance} km</div>
+              <a href="buyers.html" class="btn btn-sm btn-primary" style="margin-top:4px">
+                Contact
+              </a>
+            </div>
+          </div>`).join('');
+    }
+
+  } catch (err) {
+    document.getElementById('map').innerHTML = `
+      <div class="map-placeholder">
+        <div style="font-size:48px">📍</div>
+        <div style="font-weight:600;color:var(--text-primary)">Location access required</div>
+        <div style="font-size:13px;color:var(--text-muted);text-align:center;max-width:260px">
+          Please allow location permission in your browser to see the map.
+        </div>
+      </div>`;
+    document.getElementById('factory-count').textContent = 'Location needed';
+    document.getElementById('factory-list').innerHTML = `
+      <div class="alert alert-warning" style="margin:var(--sp-4)">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Enable location access to find nearby factories.</span>
+      </div>`;
+  }
+</script>
+</body>
+</html>

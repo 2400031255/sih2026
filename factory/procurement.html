@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Procurement — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🏭</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Factory Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">F</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Factory</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="procurement.html" class="nav-item active"><i class="fa-solid fa-cart-shopping"></i><span>Procurement</span></a>
+      <a href="farmers.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Farmers</span></a>
+      <a href="requests.html" class="nav-item"><i class="fa-solid fa-paper-plane"></i><span>My Requests</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="ai-insights.html" class="nav-item"><i class="fa-solid fa-robot"></i><span>AI Insights</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Procurement</div>
+          <div class="topbar-subtitle">Browse and request available crops</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🛒 Crop Procurement</h1>
+        <p class="page-desc">Browse available crops from verified farmers and send procurement requests.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="card" style="margin-bottom:var(--sp-6)">
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:var(--sp-3);align-items:end">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Search Crop</label>
+            <div class="input-group">
+              <i class="fa-solid fa-magnifying-glass input-icon"></i>
+              <input type="text" id="search-crop" class="form-control" placeholder="Tomato, Onion..." />
+            </div>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Min Quantity (kg)</label>
+            <input type="number" id="filter-qty" class="form-control" placeholder="100" />
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Max Price (₹/kg)</label>
+            <input type="number" id="filter-price" class="form-control" placeholder="50" />
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Quality Grade</label>
+            <select id="filter-quality" class="form-control">
+              <option value="">All Grades</option>
+              <option value="A">Grade A</option>
+              <option value="B">Grade B</option>
+              <option value="C">Grade C</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="search-btn" style="height:48px">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+          </button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-4)">
+        <div style="font-size:13px;color:var(--text-muted)" id="results-count">Loading...</div>
+        <div style="display:flex;gap:var(--sp-2)">
+          <button class="btn btn-sm btn-ghost" id="sort-price">
+            <i class="fa-solid fa-sort"></i> Sort by Price
+          </button>
+          <button class="btn btn-sm btn-ghost" id="sort-dist">
+            <i class="fa-solid fa-location-dot"></i> Sort by Distance
+          </button>
+        </div>
+      </div>
+
+      <div id="crops-table">
+        <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-8)">
+          <div class="spinner"></div>
+          <span class="text-muted">Loading available crops...</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Request Modal -->
+<div class="modal-overlay" id="request-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📤 Send Procurement Request</div>
+      <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="req-crop-id" />
+      <input type="hidden" id="req-farmer-id" />
+      <div class="form-group">
+        <label class="form-label">Crop</label>
+        <input type="text" id="req-crop-name" class="form-control" readonly
+               style="background:rgba(36,92,58,0.04)" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Quantity (kg) *</label>
+          <input type="number" id="req-qty" class="form-control" placeholder="500" min="1" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Offered Price (₹/kg) *</label>
+          <input type="number" id="req-price" class="form-control" placeholder="28" min="1" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Required By Date</label>
+        <input type="date" id="req-date" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message to Farmer (optional)</label>
+        <textarea id="req-message" class="form-control" rows="3"
+                  placeholder="Any specific requirements, quality standards..."></textarea>
+      </div>
+      <div id="req-total" style="background:rgba(36,92,58,0.06);border-radius:var(--radius-md);
+           padding:var(--sp-3);font-size:13px;color:var(--text-secondary)">
+        Total value will appear here
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('request-modal')">Cancel</button>
+      <button class="btn btn-primary" id="send-request-btn">
+        <i class="fa-solid fa-paper-plane"></i> Send Request
+      </button>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="procurement.html" class="mobile-nav-item active"><i class="fa-solid fa-cart-shopping"></i><span>Procure</span></a>
+    <a href="farmers.html" class="mobile-nav-item"><i class="fa-solid fa-users"></i><span>Farmers</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="ai-insights.html" class="mobile-nav-item"><i class="fa-solid fa-robot"></i><span>AI</span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast, openModal, closeModal, formatCurrency } from '../js/navigation.js';
+  import { searchCrops, createProcurementRequest, renderCropListingRow } from '../js/factory.js';
+  import { getUserLocation } from '../js/weather.js';
+
+  AOS.init({ duration: 600, once: true });
+  const { user, profile } = await requireAuth('factory');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Factory';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+  window.closeModal = closeModal;
+
+  let factoryLat = 17.385, factoryLng = 78.487;
+  try { const loc = await getUserLocation(); factoryLat = loc.lat; factoryLng = loc.lon; } catch {}
+
+  let allCrops = [];
+  let sortBy = 'price';
+
+  async function doSearch() {
+    const btn = document.getElementById('search-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner spinner-sm"></div>';
+
+    allCrops = await searchCrops({
+      cropName: document.getElementById('search-crop').value,
+      minQty:   document.getElementById('filter-qty').value,
+      maxPrice: document.getElementById('filter-price').value,
+    });
+
+    const quality = document.getElementById('filter-quality').value;
+    if (quality) allCrops = allCrops.filter(c => c.quality === quality);
+
+    renderTable();
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Search';
+  }
+
+  function renderTable() {
+    const sorted = [...allCrops].sort((a,b) =>
+      sortBy === 'price' ? a.expectedPrice - b.expectedPrice : 0
+    );
+    document.getElementById('results-count').textContent = `${sorted.length} crops found`;
+
+    if (!sorted.length) {
+      document.getElementById('crops-table').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🌱</div>
+          <div class="empty-title">No crops found</div>
+          <p class="empty-desc">Try adjusting your search filters.</p>
+        </div>`;
+      return;
+    }
+    document.getElementById('crops-table').innerHTML = `
+      <div class="table-wrapper"><table>
+        <thead><tr>
+          <th>Crop</th><th>Quantity</th><th>Price/kg</th>
+          <th>Grade</th><th>Distance</th><th>Harvest Date</th><th>Action</th>
+        </tr></thead>
+        <tbody>${sorted.map(c => renderCropListingRow(c, factoryLat, factoryLng)).join('')}</tbody>
+      </table></div>`;
+  }
+
+  doSearch();
+  document.getElementById('search-btn').addEventListener('click', doSearch);
+  document.getElementById('search-crop').addEventListener('keydown', e => { if (e.key==='Enter') doSearch(); });
+  document.getElementById('sort-price').addEventListener('click', () => { sortBy='price'; renderTable(); });
+
+  // Request modal
+  window.openRequestModal = (cropId, farmerId, cropName, qty, price) => {
+    document.getElementById('req-crop-id').value   = cropId;
+    document.getElementById('req-farmer-id').value = farmerId;
+    document.getElementById('req-crop-name').value = cropName;
+    document.getElementById('req-qty').value        = qty;
+    document.getElementById('req-price').value      = price;
+    updateTotal();
+    openModal('request-modal');
+  };
+
+  function updateTotal() {
+    const qty   = parseFloat(document.getElementById('req-qty').value)   || 0;
+    const price = parseFloat(document.getElementById('req-price').value) || 0;
+    document.getElementById('req-total').innerHTML = qty && price
+      ? `<strong>Estimated Total:</strong> ${formatCurrency(qty * price)} (${qty} kg × ₹${price}/kg)`
+      : 'Enter quantity and price to see total';
+  }
+  document.getElementById('req-qty').addEventListener('input', updateTotal);
+  document.getElementById('req-price').addEventListener('input', updateTotal);
+
+  document.getElementById('send-request-btn').addEventListener('click', async () => {
+    const qty   = document.getElementById('req-qty').value;
+    const price = document.getElementById('req-price').value;
+    if (!qty || !price) { showToast('Please enter quantity and price.', 'error'); return; }
+
+    const btn = document.getElementById('send-request-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner spinner-sm"></div> Sending...';
+
+    const result = await createProcurementRequest(user.uid, {
+      farmerId:     document.getElementById('req-farmer-id').value,
+      cropId:       document.getElementById('req-crop-id').value,
+      cropName:     document.getElementById('req-crop-name').value,
+      quantity:     qty, offeredPrice: price,
+      requiredBy:   document.getElementById('req-date').value,
+      message:      document.getElementById('req-message').value,
+    });
+
+    if (result.success) closeModal('request-modal');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Request';
+  });
+</script>
+</body>
+</html>

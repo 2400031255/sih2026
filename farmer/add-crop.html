@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Crop — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    .image-upload-area {
+      border: 2px dashed rgba(36,92,58,0.25);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-8);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--trans);
+      background: rgba(36,92,58,0.02);
+    }
+    .image-upload-area:hover, .image-upload-area.dragover {
+      border-color: var(--forest-green);
+      background: rgba(36,92,58,0.05);
+    }
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-3);
+      margin-top: var(--sp-4);
+    }
+    .image-preview-item {
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+      background: rgba(36,92,58,0.06);
+    }
+    .image-preview-item img { width:100%; height:100%; object-fit:cover; }
+    .image-preview-remove {
+      position: absolute; top: 4px; right: 4px;
+      width: 22px; height: 22px;
+      background: rgba(192,57,43,0.85);
+      color: white; border: none; border-radius: 50%;
+      cursor: pointer; font-size: 11px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .upload-progress {
+      height: 4px;
+      background: rgba(36,92,58,0.10);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-top: var(--sp-3);
+      display: none;
+    }
+    .upload-progress-bar {
+      height: 100%;
+      background: var(--forest-green);
+      border-radius: var(--radius-full);
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- Sidebar (same as dashboard) -->
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item active"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <div class="nav-section-label">Tools</div>
+      <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Add Crop</div>
+          <div class="topbar-subtitle">List your crop to find buyers</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <a href="dashboard.html" class="btn btn-ghost btn-sm">
+          <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div style="max-width:720px;margin:0 auto">
+
+        <div class="page-header">
+          <h1 class="page-title">🌱 Add New Crop</h1>
+          <p class="page-desc">Fill in the details below to list your crop and start receiving buyer requests.</p>
+        </div>
+
+        <!-- Voice Fill Hint -->
+        <div class="alert alert-info" style="margin-bottom:var(--sp-6)">
+          <i class="fa-solid fa-microphone"></i>
+          <span>
+            <strong>Voice tip:</strong> Go to
+            <a href="voice.html" style="color:var(--natural-blue)">Voice Assistant</a>
+            to fill this form by speaking.
+          </span>
+        </div>
+
+        <form id="add-crop-form" novalidate>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-info-circle"></i> Crop Details</div>
+            </div>
+
+            <!-- Crop Name + Quality -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="crop-name">
+                  <i class="fa-solid fa-seedling"></i> Crop Name *
+                </label>
+                <select id="crop-name" class="form-control" required>
+                  <option value="">Select crop...</option>
+                  <option>Tomato</option><option>Potato</option><option>Onion</option>
+                  <option>Rice</option><option>Wheat</option><option>Maize</option>
+                  <option>Cotton</option><option>Sugarcane</option><option>Soybean</option>
+                  <option>Groundnut</option><option>Mustard</option><option>Sunflower</option>
+                  <option>Chilli</option><option>Brinjal</option><option>Cabbage</option>
+                  <option>Cauliflower</option><option>Spinach</option><option>Carrot</option>
+                  <option>Radish</option><option>Mango</option><option>Banana</option>
+                  <option>Grapes</option><option>Pomegranate</option><option>Orange</option>
+                  <option>Turmeric</option><option>Ginger</option><option>Garlic</option>
+                  <option value="other">Other (type below)</option>
+                </select>
+              </div>
+              <div class="form-group" id="custom-crop-group" style="display:none">
+                <label class="form-label" for="crop-name-custom">
+                  <i class="fa-solid fa-pen"></i> Custom Crop Name *
+                </label>
+                <input type="text" id="crop-name-custom" class="form-control" placeholder="Enter crop name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="crop-quality">
+                  <i class="fa-solid fa-star"></i> Quality Grade *
+                </label>
+                <select id="crop-quality" class="form-control" required>
+                  <option value="A">Grade A — Premium</option>
+                  <option value="B" selected>Grade B — Good</option>
+                  <option value="C">Grade C — Average</option>
+                  <option value="D">Grade D — Below Average</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Quantity + Unit + Price -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="crop-qty">
+                  <i class="fa-solid fa-weight-scale"></i> Quantity *
+                </label>
+                <div class="input-group">
+                  <i class="fa-solid fa-weight-scale input-icon"></i>
+                  <input type="number" id="crop-qty" class="form-control"
+                         placeholder="500" min="1" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="crop-unit">
+                  <i class="fa-solid fa-ruler"></i> Unit
+                </label>
+                <select id="crop-unit" class="form-control">
+                  <option value="kg">Kilogram (kg)</option>
+                  <option value="quintal">Quintal</option>
+                  <option value="ton">Ton</option>
+                  <option value="litre">Litre</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="crop-price">
+                  <i class="fa-solid fa-indian-rupee-sign"></i> Expected Price (₹/kg) *
+                </label>
+                <div class="input-group">
+                  <i class="fa-solid fa-indian-rupee-sign input-icon"></i>
+                  <input type="number" id="crop-price" class="form-control"
+                         placeholder="28" min="1" required />
+                  <span class="input-suffix">/kg</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Harvest Date + Description -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="crop-harvest">
+                  <i class="fa-solid fa-calendar"></i> Harvest Date *
+                </label>
+                <input type="date" id="crop-harvest" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="crop-desc">
+                  <i class="fa-solid fa-comment"></i> Description (optional)
+                </label>
+                <input type="text" id="crop-desc" class="form-control"
+                       placeholder="Any additional details..." />
+              </div>
+            </div>
+
+          </div><!-- /card -->
+
+          <!-- Images Card -->
+          <div class="card" style="margin-top:var(--sp-5)">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-images"></i> Crop Images</div>
+              <span class="text-muted text-sm">Up to 3 images</span>
+            </div>
+            <div class="image-upload-area" id="upload-area" onclick="document.getElementById('crop-images').click()">
+              <div style="font-size:40px;margin-bottom:var(--sp-3)">📷</div>
+              <div style="font-weight:600;margin-bottom:var(--sp-2)">Click to upload crop photos</div>
+              <div style="font-size:13px;color:var(--text-muted)">JPG, PNG up to 5MB each · Max 3 images</div>
+            </div>
+            <input type="file" id="crop-images" accept="image/*" multiple style="display:none" />
+            <div class="upload-progress" id="upload-progress">
+              <div class="upload-progress-bar" id="upload-bar"></div>
+            </div>
+            <div class="image-preview-grid" id="image-previews"></div>
+          </div>
+
+          <!-- Location Card -->
+          <div class="card" style="margin-top:var(--sp-5)">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-location-dot"></i> Farm Location</div>
+              <button type="button" class="btn btn-sm btn-outline" id="detect-location">
+                <i class="fa-solid fa-crosshairs"></i> Detect My Location
+              </button>
+            </div>
+            <div id="location-status" class="alert alert-info" style="display:none">
+              <i class="fa-solid fa-location-dot"></i>
+              <span id="location-text">Detecting location...</span>
+            </div>
+            <input type="hidden" id="crop-lat" />
+            <input type="hidden" id="crop-lng" />
+          </div>
+
+          <!-- Submit -->
+          <div style="display:flex;gap:var(--sp-3);margin-top:var(--sp-6)">
+            <a href="crops.html" class="btn btn-ghost btn-lg">
+              <i class="fa-solid fa-xmark"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-primary btn-lg" id="submit-btn" style="flex:1">
+              <i class="fa-solid fa-seedling"></i>
+              List My Crop
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item active"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="profile.html" class="mobile-nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast } from '../js/navigation.js';
+  import { addCrop } from '../js/farmer.js';
+  import { getUserLocation } from '../js/weather.js';
+
+  const { user, profile } = await requireAuth('farmer');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+
+  // Pre-fill from voice params
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('crop'))  document.getElementById('crop-name').value  = params.get('crop');
+  if (params.get('qty'))   document.getElementById('crop-qty').value   = params.get('qty');
+  if (params.get('price')) document.getElementById('crop-price').value = params.get('price');
+
+  // Custom crop toggle
+  document.getElementById('crop-name').addEventListener('change', function() {
+    document.getElementById('custom-crop-group').style.display = this.value === 'other' ? 'block' : 'none';
+  });
+
+  // Image preview
+  let selectedFiles = [];
+  document.getElementById('crop-images').addEventListener('change', function() {
+    selectedFiles = Array.from(this.files).slice(0, 3);
+    const grid = document.getElementById('image-previews');
+    grid.innerHTML = selectedFiles.map((f, i) => {
+      const url = URL.createObjectURL(f);
+      return `<div class="image-preview-item">
+        <img src="${url}" alt="Preview ${i+1}" />
+        <button class="image-preview-remove" onclick="removeImage(${i})">✕</button>
+      </div>`;
+    }).join('');
+  });
+  window.removeImage = (i) => {
+    selectedFiles.splice(i, 1);
+    document.getElementById('crop-images').dispatchEvent(new Event('change'));
+  };
+
+  // Drag & drop
+  const area = document.getElementById('upload-area');
+  area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
+  area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+  area.addEventListener('drop', e => {
+    e.preventDefault(); area.classList.remove('dragover');
+    const dt = new DataTransfer();
+    Array.from(e.dataTransfer.files).slice(0,3).forEach(f => dt.items.add(f));
+    document.getElementById('crop-images').files = dt.files;
+    document.getElementById('crop-images').dispatchEvent(new Event('change'));
+  });
+
+  // Detect location
+  document.getElementById('detect-location').addEventListener('click', async () => {
+    const status = document.getElementById('location-status');
+    const text   = document.getElementById('location-text');
+    status.style.display = 'flex';
+    text.textContent = 'Detecting location...';
+    try {
+      const loc = await getUserLocation();
+      document.getElementById('crop-lat').value = loc.lat;
+      document.getElementById('crop-lng').value = loc.lon;
+      text.textContent = `Location detected: ${loc.lat.toFixed(4)}, ${loc.lon.toFixed(4)}`;
+      status.className = 'alert alert-success';
+    } catch {
+      text.textContent = 'Location permission denied. You can still submit without location.';
+      status.className = 'alert alert-warning';
+    }
+  });
+
+  // Form submit
+  document.getElementById('add-crop-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const cropNameEl = document.getElementById('crop-name');
+    const cropName = cropNameEl.value === 'other'
+      ? document.getElementById('crop-name-custom').value.trim()
+      : cropNameEl.value;
+
+    if (!cropName) { showToast('Please select or enter a crop name.', 'error'); return; }
+    const qty   = document.getElementById('crop-qty').value;
+    const price = document.getElementById('crop-price').value;
+    const harvest = document.getElementById('crop-harvest').value;
+    if (!qty || !price || !harvest) { showToast('Please fill all required fields.', 'error'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner spinner-sm"></div> Uploading...';
+
+    const result = await addCrop(user.uid, {
+      cropName, quantity: qty, unit: document.getElementById('crop-unit').value,
+      harvestDate: harvest, expectedPrice: price,
+      quality: document.getElementById('crop-quality').value,
+      description: document.getElementById('crop-desc').value,
+      latitude:  parseFloat(document.getElementById('crop-lat').value) || null,
+      longitude: parseFloat(document.getElementById('crop-lng').value) || null,
+    }, selectedFiles);
+
+    if (result.success) {
+      setTimeout(() => window.location.href = 'crops.html', 1000);
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-seedling"></i> List My Crop';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item active"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">My Profile</div>
+          <div class="topbar-subtitle">Manage your account settings</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div style="max-width:720px;margin:0 auto">
+
+        <!-- Profile Header -->
+        <div class="card" style="margin-bottom:var(--sp-6)">
+          <div style="display:flex;align-items:center;gap:var(--sp-6)">
+            <div id="profile-avatar-big"
+                 style="width:80px;height:80px;border-radius:50%;background:var(--forest-green);
+                        color:var(--white);display:flex;align-items:center;justify-content:center;
+                        font-size:32px;font-weight:700;flex-shrink:0">R</div>
+            <div style="flex:1">
+              <div style="font-size:var(--fs-xl);font-weight:var(--fw-black)" id="profile-name">Loading...</div>
+              <div style="font-size:13px;color:var(--text-muted)" id="profile-email">—</div>
+              <div style="display:flex;gap:var(--sp-3);margin-top:var(--sp-3);flex-wrap:wrap">
+                <span class="badge badge-green">👨🌾 Farmer</span>
+                <span class="badge badge-blue" id="profile-state-badge">—</span>
+              </div>
+            </div>
+            <!-- Reliability Ring -->
+            <div style="text-align:center">
+              <div class="reliability-ring">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                  <circle class="reliability-ring-bg" cx="50" cy="50" r="42"/>
+                  <circle class="reliability-ring-fill" id="reliability-circle"
+                          cx="50" cy="50" r="42"
+                          stroke-dasharray="264"
+                          stroke-dashoffset="264"/>
+                </svg>
+                <div class="reliability-score">
+                  <div class="reliability-num" id="reliability-num">—</div>
+                  <div class="reliability-label">Score</div>
+                </div>
+              </div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Reliability</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Profile Form -->
+        <div class="card" style="margin-bottom:var(--sp-6)">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-pen"></i> Edit Profile</div>
+          </div>
+          <form id="profile-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-user"></i> Full Name</label>
+                <input type="text" id="edit-name" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-phone"></i> Mobile</label>
+                <input type="tel" id="edit-mobile" class="form-control" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-map"></i> State</label>
+                <select id="edit-state" class="form-control">
+                  <option value="">Select State</option>
+                  <option>Andhra Pradesh</option><option>Telangana</option>
+                  <option>Tamil Nadu</option><option>Karnataka</option>
+                  <option>Kerala</option><option>Maharashtra</option>
+                  <option>Gujarat</option><option>Rajasthan</option>
+                  <option>Madhya Pradesh</option><option>Uttar Pradesh</option>
+                  <option>Bihar</option><option>West Bengal</option>
+                  <option>Punjab</option><option>Haryana</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-location-dot"></i> District</label>
+                <input type="text" id="edit-district" class="form-control" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-house"></i> Village / Address</label>
+              <input type="text" id="edit-village" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary" id="save-profile-btn">
+              <i class="fa-solid fa-floppy-disk"></i> Save Changes
+            </button>
+          </form>
+        </div>
+
+        <!-- Language Preference -->
+        <div class="card" style="margin-bottom:var(--sp-6)">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-globe"></i> Language Preference</div>
+          </div>
+          <div class="lang-grid" id="lang-grid">
+            <div class="lang-option" data-lang="en"><div class="lang-native">English</div><div class="lang-english">English</div></div>
+            <div class="lang-option" data-lang="hi"><div class="lang-native">हिन्दी</div><div class="lang-english">Hindi</div></div>
+            <div class="lang-option" data-lang="te"><div class="lang-native">తెలుగు</div><div class="lang-english">Telugu</div></div>
+            <div class="lang-option" data-lang="ta"><div class="lang-native">தமிழ்</div><div class="lang-english">Tamil</div></div>
+            <div class="lang-option" data-lang="kn"><div class="lang-native">ಕನ್ನಡ</div><div class="lang-english">Kannada</div></div>
+            <div class="lang-option" data-lang="ml"><div class="lang-native">മലയാളം</div><div class="lang-english">Malayalam</div></div>
+            <div class="lang-option" data-lang="mr"><div class="lang-native">मराठी</div><div class="lang-english">Marathi</div></div>
+            <div class="lang-option" data-lang="bn"><div class="lang-native">বাংলা</div><div class="lang-english">Bengali</div></div>
+            <div class="lang-option" data-lang="pa"><div class="lang-native">ਪੰਜਾਬੀ</div><div class="lang-english">Punjabi</div></div>
+          </div>
+        </div>
+
+        <!-- Reliability Breakdown -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-star"></i> Reliability Breakdown</div>
+          </div>
+          <div id="reliability-breakdown">
+            <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+              <div class="spinner spinner-sm"></div>
+              <span class="text-muted text-sm">Calculating...</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="profile.html" class="mobile-nav-item active"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast } from '../js/navigation.js';
+  import { setLanguage, getLang } from '../js/language.js';
+  import { calculateReliabilityScore } from '../js/ai.js';
+  import { doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+  import { db } from '../js/firebase.js';
+
+  const { user, profile } = await requireAuth('farmer');
+  initDashboardUI();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+
+  // Populate profile
+  const initial = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('sidebar-avatar').textContent    = initial;
+  document.getElementById('profile-avatar-big').textContent = initial;
+  document.getElementById('sidebar-name').textContent      = profile.name || 'Farmer';
+  document.getElementById('profile-name').textContent      = profile.name || '—';
+  document.getElementById('profile-email').textContent     = profile.email || '—';
+  document.getElementById('profile-state-badge').textContent = profile.state || 'India';
+
+  // Fill form
+  document.getElementById('edit-name').value     = profile.name     || '';
+  document.getElementById('edit-mobile').value   = profile.mobile   || '';
+  document.getElementById('edit-state').value    = profile.state    || '';
+  document.getElementById('edit-district').value = profile.district || '';
+  document.getElementById('edit-village').value  = profile.village  || '';
+
+  // Reliability score
+  const { score, breakdown } = calculateReliabilityScore(profile);
+  document.getElementById('reliability-num').textContent = score;
+  const circumference = 2 * Math.PI * 42;
+  const offset = circumference - (score / 100) * circumference;
+  document.getElementById('reliability-circle').style.strokeDashoffset = offset;
+
+  document.getElementById('reliability-breakdown').innerHTML = [
+    { label:'Delivery Rate',  val:breakdown.delivery },
+    { label:'Timeliness',     val:breakdown.timeliness },
+    { label:'Quality',        val:breakdown.quality },
+    { label:'Consistency',    val:breakdown.consistency },
+  ].map(item => `
+    <div style="margin-bottom:var(--sp-4)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:var(--sp-2)">
+        <span style="font-size:13px;font-weight:500">${item.label}</span>
+        <span style="font-size:13px;font-weight:700;color:var(--forest-green)">${item.val}%</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" style="width:${item.val}%"></div>
+      </div>
+    </div>`).join('');
+
+  // Language selector
+  const currentLang = getLang();
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    if (opt.dataset.lang === currentLang) opt.classList.add('selected');
+    opt.addEventListener('click', async () => {
+      document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      const lang = opt.dataset.lang;
+      setLanguage(lang);
+      await updateDoc(doc(db, 'users', user.uid), { language: lang, updatedAt: serverTimestamp() });
+      showToast('Language updated!', 'success');
+    });
+  });
+
+  // Save profile
+  document.getElementById('profile-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('save-profile-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner spinner-sm"></div> Saving...';
+    try {
+      const updates = {
+        name:      document.getElementById('edit-name').value.trim(),
+        mobile:    document.getElementById('edit-mobile').value.trim(),
+        state:     document.getElementById('edit-state').value,
+        district:  document.getElementById('edit-district').value.trim(),
+        village:   document.getElementById('edit-village').value.trim(),
+        updatedAt: serverTimestamp(),
+      };
+      await updateDoc(doc(db, 'users', user.uid), updates);
+      document.getElementById('profile-name').textContent = updates.name;
+      document.getElementById('sidebar-name').textContent = updates.name;
+      showToast('Profile updated successfully!', 'success');
+    } catch {
+      showToast('Update failed. Please try again.', 'error');
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
+  });
+</script>
+</body>
+</html>

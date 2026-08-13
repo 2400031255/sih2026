@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Insights — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🏭</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Factory Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">F</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Factory</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="procurement.html" class="nav-item"><i class="fa-solid fa-cart-shopping"></i><span>Procurement</span></a>
+      <a href="farmers.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Farmers</span></a>
+      <a href="requests.html" class="nav-item"><i class="fa-solid fa-paper-plane"></i><span>My Requests</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="ai-insights.html" class="nav-item active"><i class="fa-solid fa-robot"></i><span>AI Insights</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">AI Insights</div>
+          <div class="topbar-subtitle">Intelligent procurement recommendations</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="badge badge-blue" style="padding:8px 14px">
+          <i class="fa-solid fa-circle-info"></i> Rule-based AI — Not ML
+        </span>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🤖 AI Procurement Intelligence</h1>
+        <p class="page-desc">
+          Transparent, explainable recommendations powered by a rule-based scoring engine.
+          Every suggestion includes a clear explanation.
+        </p>
+      </div>
+
+      <!-- AI Disclaimer -->
+      <div class="alert alert-info" style="margin-bottom:var(--sp-6)">
+        <i class="fa-solid fa-robot"></i>
+        <div>
+          <strong>About this AI system:</strong> AgriSync uses a transparent rule-based scoring engine
+          (not a trained ML model). Scores are calculated using: Reliability (30%), Distance (25%),
+          Price (20%), Quantity match (15%), Quality (10%). All recommendations are labeled
+          "AI-assisted" and include full explanations.
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+
+        <!-- Left: Recommendation Engine -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+
+          <!-- Input Form -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--harvest-gold)"></i>
+                Get Supplier Recommendations
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Crop Required *</label>
+              <select id="ai-crop" class="form-control">
+                <option value="">Select crop...</option>
+                <option>Tomato</option><option>Onion</option><option>Potato</option>
+                <option>Rice</option><option>Wheat</option><option>Maize</option>
+                <option>Cotton</option><option>Chilli</option><option>Sugarcane</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Quantity Needed (kg) *</label>
+                <input type="number" id="ai-qty" class="form-control" placeholder="5000" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Budget (₹/kg) *</label>
+                <input type="number" id="ai-price" class="form-control" placeholder="30" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Required By</label>
+              <input type="date" id="ai-date" class="form-control" />
+            </div>
+            <button class="btn btn-primary btn-block" id="ai-run-btn">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              Run AI Analysis
+            </button>
+          </div>
+
+          <!-- AI Results -->
+          <div id="ai-results-container" style="display:none">
+            <div id="ai-results"></div>
+          </div>
+
+        </div>
+
+        <!-- Right: Price Forecast + Harvest Prediction -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+
+          <!-- Price Forecast -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-chart-line"></i> Price Forecast
+              </div>
+              <span class="badge badge-gold">Seasonal Model</span>
+            </div>
+            <div class="form-group">
+              <select id="forecast-crop" class="form-control">
+                <option value="">Select crop for forecast...</option>
+                <option>Tomato</option><option>Onion</option><option>Potato</option>
+                <option>Rice</option><option>Wheat</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Current Market Price (₹/kg)</label>
+              <input type="number" id="forecast-price" class="form-control" placeholder="28" />
+            </div>
+            <button class="btn btn-outline btn-block" id="forecast-btn">
+              <i class="fa-solid fa-chart-line"></i> Forecast Price
+            </button>
+            <div id="forecast-result" style="margin-top:var(--sp-4)"></div>
+          </div>
+
+          <!-- Harvest Prediction -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-calendar-check"></i> Harvest Window Predictor
+              </div>
+            </div>
+            <div class="form-group">
+              <select id="harvest-crop" class="form-control">
+                <option value="">Select crop...</option>
+                <option>Tomato</option><option>Onion</option><option>Potato</option>
+                <option>Rice</option><option>Wheat</option><option>Maize</option>
+                <option>Cotton</option><option>Chilli</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sowing Date</label>
+              <input type="date" id="sowing-date" class="form-control" />
+            </div>
+            <button class="btn btn-outline btn-block" id="harvest-btn">
+              <i class="fa-solid fa-calendar"></i> Predict Harvest
+            </button>
+            <div id="harvest-result" style="margin-top:var(--sp-4)"></div>
+          </div>
+
+          <!-- Scoring Methodology -->
+          <div class="card" data-aos="fade-up"
+               style="background:linear-gradient(135deg,rgba(36,92,58,0.04),rgba(76,140,138,0.06))">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-scale-balanced"></i> Scoring Methodology
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--sp-4)">
+              How AgriSync AI scores each supplier:
+            </div>
+            ${[
+              { label:'Reliability',    pct:30, color:'var(--forest-green)' },
+              { label:'Distance',       pct:25, color:'var(--natural-blue)' },
+              { label:'Price',          pct:20, color:'var(--harvest-gold)' },
+              { label:'Quantity Match', pct:15, color:'var(--terracotta)' },
+              { label:'Quality Grade',  pct:10, color:'var(--earth-brown)' },
+            ].map(w => `
+              <div style="margin-bottom:var(--sp-3)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:13px;font-weight:500">${w.label}</span>
+                  <span style="font-size:13px;font-weight:700;color:${w.color}">${w.pct}%</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" style="width:${w.pct*3.33}%;background:${w.color}"></div>
+                </div>
+              </div>`).join('')}
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="procurement.html" class="mobile-nav-item"><i class="fa-solid fa-cart-shopping"></i><span>Procure</span></a>
+    <a href="farmers.html" class="mobile-nav-item"><i class="fa-solid fa-users"></i><span>Farmers</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="ai-insights.html" class="mobile-nav-item active"><i class="fa-solid fa-robot"></i><span>AI</span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast, formatCurrency } from '../js/navigation.js';
+  import { searchCrops } from '../js/factory.js';
+  import { recommendSuppliers, renderAIRecommendation, forecastPrice, predictHarvestWindow } from '../js/ai.js';
+  import { getUserLocation } from '../js/weather.js';
+
+  AOS.init({ duration: 600, once: true });
+  const { user, profile } = await requireAuth('factory');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Factory';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+
+  let factoryLat = 17.385, factoryLng = 78.487;
+  try { const loc = await getUserLocation(); factoryLat = loc.lat; factoryLng = loc.lon; } catch {}
+
+  // AI Recommendations
+  document.getElementById('ai-run-btn').addEventListener('click', async () => {
+    const crop  = document.getElementById('ai-crop').value;
+    const qty   = parseFloat(document.getElementById('ai-qty').value);
+    const price = parseFloat(document.getElementById('ai-price').value);
+    if (!crop || !qty || !price) { showToast('Please fill all required fields.', 'error'); return; }
+
+    const btn = document.getElementById('ai-run-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner spinner-sm"></div> Analyzing suppliers...';
+
+    const crops = await searchCrops({ cropName: crop });
+    const farmers = crops.map(c => ({
+      ...c,
+      name: `Farmer ${c.farmerId?.slice(-4)||'XXXX'}`,
+      lat: c.latitude, lng: c.longitude,
+    }));
+
+    const result = recommendSuppliers({
+      requirement: { cropName: crop, quantity: qty, maxPrice: price, factoryLat, factoryLng },
+      farmers, topN: 5,
+    });
+
+    document.getElementById('ai-results-container').style.display = 'block';
+    renderAIRecommendation('ai-results', {
+      ...result,
+      requirement: { cropName: crop, quantity: qty, maxPrice: price },
+    });
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Run AI Analysis';
+    document.getElementById('ai-results-container').scrollIntoView({ behavior:'smooth' });
+  });
+
+  // Price Forecast
+  document.getElementById('forecast-btn').addEventListener('click', () => {
+    const crop  = document.getElementById('forecast-crop').value;
+    const price = parseFloat(document.getElementById('forecast-price').value);
+    if (!crop || !price) { showToast('Please select a crop and enter current price.', 'error'); return; }
+
+    const forecast = forecastPrice(crop, price);
+    const trendColor = forecast.trend === 'up' ? 'var(--success)' : forecast.trend === 'down' ? 'var(--danger)' : 'var(--text-muted)';
+    const trendIcon  = forecast.trend === 'up' ? '↑' : forecast.trend === 'down' ? '↓' : '→';
+
+    document.getElementById('forecast-result').innerHTML = `
+      <div style="background:rgba(36,92,58,0.06);border-radius:var(--radius-md);padding:var(--sp-4)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase">Current</div>
+            <div style="font-size:22px;font-weight:800">₹${forecast.current}/kg</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase">Forecast</div>
+            <div style="font-size:22px;font-weight:800;color:${trendColor}">
+              ${trendIcon} ₹${forecast.forecast}/kg
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);text-align:center">
+          ${forecast.changePct > 0 ? '+' : ''}${forecast.changePct}% change · Confidence: ${forecast.confidence}
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:var(--sp-2);font-style:italic">
+          ⚠️ ${forecast.note}
+        </div>
+      </div>`;
+  });
+
+  // Harvest Prediction
+  document.getElementById('harvest-btn').addEventListener('click', () => {
+    const crop = document.getElementById('harvest-crop').value;
+    const date = document.getElementById('sowing-date').value;
+    if (!crop || !date) { showToast('Please select a crop and sowing date.', 'error'); return; }
+
+    const pred = predictHarvestWindow(crop, date);
+    document.getElementById('harvest-result').innerHTML = `
+      <div style="background:rgba(213,169,40,0.08);border-radius:var(--radius-md);padding:var(--sp-4);
+                  border:1px solid rgba(213,169,40,0.2)">
+        <div style="font-weight:700;margin-bottom:var(--sp-3)">🌾 ${crop} Harvest Prediction</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)">
+          <div>
+            <div style="font-size:11px;color:var(--text-muted)">Harvest Window</div>
+            <div style="font-weight:700">${pred.harvestStart} – ${pred.harvestEnd}</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text-muted)">Days to Harvest</div>
+            <div style="font-weight:700;color:var(--forest-green)">${pred.daysToHarvest} days</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text-muted)">Growth Period</div>
+            <div style="font-weight:700">${pred.growthDays} days</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:var(--sp-3);font-style:italic">
+          Plan your procurement ${Math.max(0, pred.daysToHarvest - 7)} days from now.
+        </div>
+      </div>`;
+  });
+</script>
+</body>
+</html>

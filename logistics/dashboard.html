@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logistics Dashboard — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚚</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🚚</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Logistics Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">L</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Logistics</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fa-solid fa-house"></i><span>Dashboard</span>
+      </a>
+      <a href="deliveries.html" class="nav-item">
+        <i class="fa-solid fa-truck"></i><span>Deliveries</span>
+        <span class="nav-badge" data-notif style="display:none">0</span>
+      </a>
+      <a href="routes.html" class="nav-item">
+        <i class="fa-solid fa-route"></i><span>Routes</span>
+      </a>
+      <div class="nav-section-label">Fleet</div>
+      <a href="trucks.html" class="nav-item">
+        <i class="fa-solid fa-truck-moving"></i><span>Trucks</span>
+      </a>
+      <a href="drivers.html" class="nav-item">
+        <i class="fa-solid fa-id-card"></i><span>Drivers</span>
+      </a>
+      <a href="#" class="nav-item" id="notif-nav-btn">
+        <i class="fa-solid fa-bell"></i><span>Notifications</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Logistics Dashboard</div>
+          <div class="topbar-subtitle" id="topbar-date">Loading...</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" id="notif-btn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-dot" style="display:none"></span>
+        </button>
+        <a href="profile.html" class="topbar-btn"><i class="fa-solid fa-user-circle"></i></a>
+      </div>
+    </header>
+
+    <div class="notif-panel" id="notif-panel">
+      <div class="notif-panel-header">
+        <div class="notif-panel-title">🔔 Notifications</div>
+        <button class="btn btn-sm btn-ghost" id="mark-all-read">Mark all read</button>
+      </div>
+      <div class="notif-list" id="notif-list"></div>
+    </div>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">
+          Welcome, <span id="logistics-name" style="color:var(--terracotta)">Logistics</span> 🚚
+        </h1>
+        <p class="page-desc">Manage your fleet, drivers and deliveries.</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="stat-icon terra"><i class="fa-solid fa-truck"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-active-del">—</div>
+            <div class="stat-label">Active Deliveries</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="stat-icon green"><i class="fa-solid fa-truck-moving"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-trucks">—</div>
+            <div class="stat-label">Available Trucks</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="160">
+          <div class="stat-icon blue"><i class="fa-solid fa-id-card"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-drivers">—</div>
+            <div class="stat-label">Available Drivers</div>
+          </div>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="240">
+          <div class="stat-icon gold"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-completed">—</div>
+            <div class="stat-label">Completed Today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+
+        <!-- Deliveries List -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-truck"></i> Active Deliveries</div>
+              <a href="deliveries.html" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div id="deliveries-list">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading deliveries...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fleet Summary -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+
+          <!-- Add Truck -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-truck-moving"></i> Fleet</div>
+              <button class="btn btn-sm btn-primary" onclick="openModal('add-truck-modal')">
+                <i class="fa-solid fa-plus"></i> Add Truck
+              </button>
+            </div>
+            <div id="trucks-summary">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading fleet...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Driver -->
+          <div class="card" data-aos="fade-up">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-id-card"></i> Drivers</div>
+              <button class="btn btn-sm btn-outline" onclick="openModal('add-driver-modal')">
+                <i class="fa-solid fa-plus"></i> Add Driver
+              </button>
+            </div>
+            <div id="drivers-summary">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading drivers...</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Add Truck Modal -->
+<div class="modal-overlay" id="add-truck-modal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <div class="modal-title">🚛 Add Truck</div>
+      <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Registration Number *</label>
+        <input type="text" id="truck-reg" class="form-control" placeholder="TS 09 AB 1234" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Model</label>
+          <input type="text" id="truck-model" class="form-control" placeholder="Tata 407" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Capacity *</label>
+          <div class="input-group">
+            <input type="number" id="truck-capacity" class="form-control" placeholder="5" />
+            <span class="input-suffix">ton</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-truck-modal')">Cancel</button>
+      <button class="btn btn-primary" id="save-truck-btn">
+        <i class="fa-solid fa-floppy-disk"></i> Save Truck
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Driver Modal -->
+<div class="modal-overlay" id="add-driver-modal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <div class="modal-title">👤 Add Driver</div>
+      <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Driver Name *</label>
+        <input type="text" id="driver-name" class="form-control" placeholder="Suresh Kumar" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Mobile *</label>
+          <input type="tel" id="driver-mobile" class="form-control" placeholder="+91 98765 43210" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">License No.</label>
+          <input type="text" id="driver-license" class="form-control" placeholder="TS0120230012345" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-driver-modal')">Cancel</button>
+      <button class="btn btn-primary" id="save-driver-btn">
+        <i class="fa-solid fa-floppy-disk"></i> Save Driver
+      </button>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="deliveries.html" class="mobile-nav-item"><i class="fa-solid fa-truck"></i><span>Deliveries</span></a>
+    <a href="trucks.html" class="mobile-nav-item"><i class="fa-solid fa-truck-moving"></i><span>Trucks</span></a>
+    <a href="drivers.html" class="mobile-nav-item"><i class="fa-solid fa-id-card"></i><span>Drivers</span></a>
+    <a href="profile.html" class="mobile-nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast, openModal, closeModal } from '../js/navigation.js';
+  import { listenDeliveries, listenTrucks, listenDrivers,
+           addTruck, addDriver, renderDeliveryRow, renderTruckCard, getStatusConfig } from '../js/logistics.js';
+  import { initNotifications, markAllRead } from '../js/notifications.js';
+
+  AOS.init({ duration: 600, once: true });
+  const { user, profile } = await requireAuth('logistics');
+  document.getElementById('logistics-name').textContent = profile.name?.split(' ')[0] || 'Logistics';
+  document.getElementById('sidebar-name').textContent = profile.name || 'Logistics';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'L').charAt(0).toUpperCase();
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-IN', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
+  initDashboardUI();
+  window.openModal  = openModal;
+  window.closeModal = closeModal;
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+
+  // Deliveries
+  listenDeliveries(user.uid, (deliveries) => {
+    const active    = deliveries.filter(d => !['completed','cancelled'].includes(d.status));
+    const completed = deliveries.filter(d => d.status === 'completed');
+    document.getElementById('stat-active-del').textContent  = active.length;
+    document.getElementById('stat-completed').textContent   = completed.length;
+
+    const list = document.getElementById('deliveries-list');
+    if (!active.length) {
+      list.innerHTML = `<div class="empty-state" style="padding:var(--sp-6)">
+        <div class="empty-icon">🚚</div><div class="empty-title">No active deliveries</div>
+      </div>`;
+      return;
+    }
+    list.innerHTML = `<div class="table-wrapper"><table>
+      <thead><tr><th>ID</th><th>Pickup</th><th>Delivery</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>${active.slice(0,6).map(d => renderDeliveryRow(d)).join('')}</tbody>
+    </table></div>`;
+  });
+
+  // Trucks
+  listenTrucks(user.uid, (trucks) => {
+    const available = trucks.filter(t => t.status === 'available');
+    document.getElementById('stat-trucks').textContent = available.length;
+    const list = document.getElementById('trucks-summary');
+    if (!trucks.length) {
+      list.innerHTML = `<div class="empty-state" style="padding:var(--sp-4)">
+        <div class="empty-icon">🚛</div><div class="empty-title">No trucks added</div>
+      </div>`;
+      return;
+    }
+    list.innerHTML = trucks.slice(0,3).map(t => `
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  padding:var(--sp-3) 0;border-bottom:var(--border)">
+        <div>
+          <div style="font-weight:600;font-size:14px">🚛 ${t.registrationNo}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${t.capacity} ton · ${t.model||''}</div>
+        </div>
+        <span class="badge ${t.status==='available'?'badge-green':'badge-gold'}">${t.status}</span>
+      </div>
+    `).join('');
+  });
+
+  // Drivers
+  listenDrivers(user.uid, (drivers) => {
+    const available = drivers.filter(d => d.status === 'available');
+    document.getElementById('stat-drivers').textContent = available.length;
+    const list = document.getElementById('drivers-summary');
+    if (!drivers.length) {
+      list.innerHTML = `<div class="empty-state" style="padding:var(--sp-4)">
+        <div class="empty-icon">👤</div><div class="empty-title">No drivers added</div>
+      </div>`;
+      return;
+    }
+    list.innerHTML = drivers.slice(0,3).map(d => `
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  padding:var(--sp-3) 0;border-bottom:var(--border)">
+        <div>
+          <div style="font-weight:600;font-size:14px">👤 ${d.name}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${d.mobile}</div>
+        </div>
+        <span class="badge ${d.status==='available'?'badge-green':'badge-gold'}">${d.status}</span>
+      </div>
+    `).join('');
+  });
+
+  // Save truck
+  document.getElementById('save-truck-btn').addEventListener('click', async () => {
+    const reg = document.getElementById('truck-reg').value.trim();
+    const cap = document.getElementById('truck-capacity').value;
+    if (!reg || !cap) { showToast('Please fill required fields.', 'error'); return; }
+    const result = await addTruck(user.uid, {
+      registrationNo: reg,
+      model: document.getElementById('truck-model').value,
+      capacity: cap, unit: 'ton',
+    });
+    if (result.success) {
+      closeModal('add-truck-modal');
+      document.getElementById('truck-reg').value = '';
+      document.getElementById('truck-model').value = '';
+      document.getElementById('truck-capacity').value = '';
+    }
+  });
+
+  // Save driver
+  document.getElementById('save-driver-btn').addEventListener('click', async () => {
+    const name   = document.getElementById('driver-name').value.trim();
+    const mobile = document.getElementById('driver-mobile').value.trim();
+    if (!name || !mobile) { showToast('Please fill required fields.', 'error'); return; }
+    const result = await addDriver(user.uid, {
+      name, mobile,
+      licenseNo: document.getElementById('driver-license').value,
+    });
+    if (result.success) {
+      closeModal('add-driver-modal');
+      document.getElementById('driver-name').value = '';
+      document.getElementById('driver-mobile').value = '';
+      document.getElementById('driver-license').value = '';
+    }
+  });
+
+  // Status update handler
+  window.openDeliveryDetail = (id) => window.location.href = `deliveries.html?id=${id}`;
+  window.openStatusUpdate   = (id, status) => window.location.href = `deliveries.html?id=${id}&update=1`;
+
+  initNotifications(user.uid);
+  document.getElementById('mark-all-read')?.addEventListener('click', () => markAllRead(user.uid));
+</script>
+</body>
+</html>

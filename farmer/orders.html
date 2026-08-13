@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item active"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">My Orders</div>
+          <div class="topbar-subtitle">Track all your crop orders</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">📦 My Orders</h1>
+        <p class="page-desc">Track the status of all your crop orders in real-time.</p>
+      </div>
+
+      <!-- Status Filter -->
+      <div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-6);flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm status-filter" data-status="">All Orders</button>
+        <button class="btn btn-ghost btn-sm status-filter" data-status="confirmed">Confirmed</button>
+        <button class="btn btn-ghost btn-sm status-filter" data-status="processing">Processing</button>
+        <button class="btn btn-ghost btn-sm status-filter" data-status="in_transit">In Transit</button>
+        <button class="btn btn-ghost btn-sm status-filter" data-status="delivered">Delivered</button>
+        <button class="btn btn-ghost btn-sm status-filter" data-status="completed">Completed</button>
+        <button class="btn btn-ghost btn-sm status-filter" data-status="cancelled">Cancelled</button>
+      </div>
+
+      <!-- Orders List -->
+      <div id="orders-container">
+        <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-8)">
+          <div class="spinner"></div>
+          <span class="text-muted">Loading orders...</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="order-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Order Details</div>
+      <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="order-detail-body">
+      <!-- Populated by JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('order-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="orders.html" class="mobile-nav-item active"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="profile.html" class="mobile-nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, openModal, closeModal, formatCurrency, formatDate } from '../js/navigation.js';
+  import { listenFarmerOrders } from '../js/farmer.js';
+
+  const { user, profile } = await requireAuth('farmer');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+  window.closeModal = closeModal;
+
+  const statusBadge = {
+    confirmed:  'badge-blue',  processing: 'badge-gold',
+    in_transit: 'badge-terra', delivered:  'badge-green',
+    completed:  'badge-green', cancelled:  'badge-red',
+  };
+
+  let allOrders = [];
+  let currentFilter = '';
+
+  listenFarmerOrders(user.uid, (orders) => {
+    allOrders = orders;
+    renderOrders(orders);
+  });
+
+  function renderOrders(orders) {
+    const container = document.getElementById('orders-container');
+    const filtered = currentFilter ? orders.filter(o => o.status === currentFilter) : orders;
+
+    if (!filtered.length) {
+      container.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <div class="empty-title">No orders found</div>
+        <p class="empty-desc">Orders will appear here once factories accept your crops.</p>
+      </div>`;
+      return;
+    }
+
+    container.innerHTML = `<div class="table-wrapper"><table>
+      <thead><tr>
+        <th>Order ID</th><th>Crop</th><th>Quantity</th>
+        <th>Price/kg</th><th>Total Value</th><th>Status</th><th>Date</th><th>Action</th>
+      </tr></thead>
+      <tbody>${filtered.map(o => `<tr>
+        <td><strong>#${o.id.slice(-6).toUpperCase()}</strong></td>
+        <td>${o.cropName}</td>
+        <td>${o.quantity} ${o.unit||'kg'}</td>
+        <td>₹${o.pricePerUnit}/kg</td>
+        <td>${formatCurrency(o.totalValue)}</td>
+        <td><span class="badge ${statusBadge[o.status]||'badge-blue'}">${o.status}</span></td>
+        <td>${formatDate(o.createdAt)}</td>
+        <td>
+          <button class="btn btn-sm btn-ghost" onclick="viewOrderDetail('${o.id}')">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  }
+
+  // Status filter tabs
+  document.querySelectorAll('.status-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.status-filter').forEach(b => b.className = 'btn btn-ghost btn-sm status-filter');
+      btn.className = 'btn btn-primary btn-sm status-filter';
+      currentFilter = btn.dataset.status;
+      renderOrders(allOrders);
+    });
+  });
+
+  // View order detail
+  window.viewOrderDetail = (id) => {
+    const order = allOrders.find(o => o.id === id);
+    if (!order) return;
+    document.getElementById('order-detail-body').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-5)">
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Order ID</div>
+          <div style="font-weight:700">#${order.id.slice(-6).toUpperCase()}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Status</div>
+          <span class="badge ${statusBadge[order.status]||'badge-blue'}">${order.status}</span>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Crop</div>
+          <div style="font-weight:600">${order.cropName}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Quantity</div>
+          <div style="font-weight:600">${order.quantity} ${order.unit||'kg'}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Price/kg</div>
+          <div style="font-weight:600">₹${order.pricePerUnit}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Total Value</div>
+          <div style="font-weight:700;color:var(--forest-green);font-size:18px">${formatCurrency(order.totalValue)}</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="timeline">
+        <div class="timeline-item ${['confirmed','processing','in_transit','delivered','completed'].includes(order.status)?'completed':''}">
+          <div class="timeline-title">Order Confirmed</div>
+          <div class="timeline-time">${formatDate(order.createdAt)}</div>
+        </div>
+        <div class="timeline-item ${['processing','in_transit','delivered','completed'].includes(order.status)?'completed':''}">
+          <div class="timeline-title">Processing</div>
+          <div class="timeline-desc">Logistics being arranged</div>
+        </div>
+        <div class="timeline-item ${['in_transit','delivered','completed'].includes(order.status)?'active':''}">
+          <div class="timeline-title">In Transit</div>
+          <div class="timeline-desc">Crop being transported</div>
+        </div>
+        <div class="timeline-item ${['delivered','completed'].includes(order.status)?'completed':''}">
+          <div class="timeline-title">Delivered</div>
+          <div class="timeline-desc">Crop delivered to factory</div>
+        </div>
+        <div class="timeline-item ${order.status==='completed'?'completed':''}">
+          <div class="timeline-title">Completed</div>
+          <div class="timeline-desc">Payment processed</div>
+        </div>
+      </div>
+    `;
+    openModal('order-modal');
+  };
+  window.viewOrder = window.viewOrderDetail;
+</script>
+</body>
+</html>

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — AgriSync OS</title>
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <style>
+    :root {
+      --font-base:     'Inter', system-ui, sans-serif;
+      --forest-green:  #1a4a2e;
+      --leaf-green:    #2d7a4f;
+      --gold-light:    #f0c84a;
+      --harvest-gold:  #c9a227;
+      --warm-cream:    #f5f0e8;
+      --charcoal:      #1c2b22;
+      --white:         #ffffff;
+      --text-primary:  #1c2b22;
+      --text-secondary:#4a6355;
+      --text-muted:    #7a9485;
+      --danger:        #c0392b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-base);
+      background: var(--warm-cream);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── LEFT PANEL ── */
+    .auth-left {
+      background: linear-gradient(160deg, #0d2b1a 0%, #1a4a2e 45%, #1e5535 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.14) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(106,171,130,0.08) 0%, transparent 45%);
+      pointer-events: none;
+    }
+    .auth-left-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .auth-left-inner {
+      position: relative; z-index: 1;
+      text-align: center;
+      max-width: 380px;
+    }
+
+    /* Logo on left */
+    .auth-logo-link {
+      display: inline-flex; align-items: center; gap: 12px;
+      text-decoration: none; margin-bottom: 48px;
+    }
+    .auth-logo-img {
+      height: 56px; width: auto; object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25));
+    }
+    .auth-logo-text { text-align: left; }
+    .auth-logo-name {
+      font-size: 22px; font-weight: 900; color: var(--white);
+      letter-spacing: -0.5px; line-height: 1.1;
+    }
+    .auth-logo-name span { color: var(--gold-light); }
+    .auth-logo-sub {
+      font-size: 10px; color: rgba(255,255,255,0.50);
+      font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+    }
+
+    /* Big logo in center */
+    .auth-hero-logo {
+      width: 200px; height: 200px; object-fit: contain;
+      margin: 0 auto 32px;
+      filter: drop-shadow(0 8px 28px rgba(0,0,0,0.30));
+      animation: authLogoFloat 5s ease-in-out infinite;
+    }
+    @keyframes authLogoFloat {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .auth-left-title {
+      font-size: 28px; font-weight: 900; color: var(--white);
+      letter-spacing: -0.8px; margin-bottom: 12px; line-height: 1.15;
+    }
+    .auth-left-desc {
+      font-size: 14px; color: rgba(255,255,255,0.60);
+      line-height: 1.75; margin-bottom: 36px;
+    }
+
+    /* Feature pills */
+    .auth-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .auth-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.80);
+    }
+
+    /* ── RIGHT PANEL ── */
+    .auth-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 48px;
+      background: var(--warm-cream);
+      overflow-y: auto;
+    }
+    .auth-form-box {
+      width: 100%; max-width: 420px;
+    }
+
+    .auth-form-header { margin-bottom: 32px; }
+    .auth-form-title {
+      font-size: 30px; font-weight: 900; color: var(--text-primary);
+      letter-spacing: -1px; margin-bottom: 6px;
+    }
+    .auth-form-sub {
+      font-size: 14px; color: var(--text-muted);
+    }
+
+    /* Form elements */
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .form-label i { color: var(--leaf-green); font-size: 12px; }
+
+    .input-wrap { position: relative; }
+    .input-wrap .input-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 14px; pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      border: 1.5px solid rgba(26,74,46,0.16);
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--text-primary);
+      font-size: 15px;
+      font-family: var(--font-base);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      min-height: 50px;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--leaf-green);
+      box-shadow: 0 0 0 3px rgba(26,74,46,0.09);
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+
+    .pwd-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: 14px;
+      transition: color 0.2s;
+    }
+    .pwd-toggle:hover { color: var(--leaf-green); }
+
+    .forgot-row {
+      display: flex; justify-content: flex-end; margin-bottom: 24px;
+    }
+    .forgot-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 13px; font-weight: 600;
+      color: var(--leaf-green); font-family: var(--font-base);
+      transition: color 0.2s;
+    }
+    .forgot-btn:hover { color: var(--forest-green); }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 16px; font-weight: 700;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--forest-green), var(--leaf-green));
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 18px rgba(26,74,46,0.30);
+      transition: all 0.22s;
+      font-family: var(--font-base);
+      min-height: 52px;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(26,74,46,0.38);
+    }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Divider */
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      color: var(--text-muted); font-size: 13px;
+      margin: 24px 0;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(26,74,46,0.12);
+    }
+
+    /* Register link */
+    .auth-switch {
+      text-align: center; font-size: 14px; color: var(--text-muted);
+    }
+    .auth-switch a {
+      color: var(--leaf-green); font-weight: 700;
+      text-decoration: none; margin-left: 4px;
+    }
+    .auth-switch a:hover { color: var(--forest-green); }
+
+    /* Demo box */
+    .demo-box {
+      margin-top: 24px;
+      padding: 16px 18px;
+      background: rgba(201,162,39,0.07);
+      border: 1px solid rgba(201,162,39,0.22);
+      border-radius: 12px;
+    }
+    .demo-box-title {
+      font-size: 12px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .demo-box-list {
+      font-size: 12px; color: var(--text-muted); line-height: 2;
+    }
+    .demo-row {
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; padding: 2px 0;
+      transition: color 0.15s;
+    }
+    .demo-row:hover { color: var(--forest-green); }
+    .demo-row code {
+      font-family: monospace; font-size: 11px;
+      background: rgba(26,74,46,0.07);
+      padding: 2px 8px; border-radius: 6px;
+      color: var(--forest-green);
+    }
+
+    /* Error alert */
+    .error-alert {
+      display: none;
+      align-items: flex-start; gap: 10px;
+      padding: 14px 16px;
+      background: rgba(192,57,43,0.08);
+      border: 1px solid rgba(192,57,43,0.22);
+      border-left: 4px solid var(--danger);
+      border-radius: 10px;
+      font-size: 13px; color: #8b1a12;
+      margin-bottom: 20px;
+    }
+    .error-alert i { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+
+    /* Spinner */
+    .spinner-sm {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.30);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(28,43,34,0.55);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      opacity: 0; visibility: hidden;
+      transition: all 0.22s;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.18);
+      width: 100%; max-width: 400px;
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.22s;
+    }
+    .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(26,74,46,0.10);
+    }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+    .modal-close {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: none; background: rgba(26,74,46,0.07);
+      color: var(--text-muted); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; transition: all 0.2s;
+    }
+    .modal-close:hover { background: rgba(192,57,43,0.10); color: var(--danger); }
+    .modal-body   { padding: 20px 24px; }
+    .modal-footer {
+      padding: 14px 24px;
+      border-top: 1px solid rgba(26,74,46,0.10);
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .btn-ghost-sm {
+      padding: 9px 18px; border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      background: transparent; color: var(--text-muted);
+      border: 1px solid rgba(26,74,46,0.15);
+      cursor: pointer; font-family: var(--font-base);
+      transition: all 0.2s;
+    }
+    .btn-ghost-sm:hover { background: rgba(26,74,46,0.05); color: var(--text-primary); }
+    .btn-primary-sm {
+      padding: 9px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 700;
+      background: var(--forest-green); color: var(--white);
+      border: none; cursor: pointer; font-family: var(--font-base);
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-primary-sm:hover { background: var(--leaf-green); }
+    .btn-primary-sm:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Toast */
+    #toast-container {
+      position: fixed; top: 20px; right: 20px;
+      z-index: 9999;
+      display: flex; flex-direction: column; gap: 10px;
+      pointer-events: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .auth-left { display: none; }
+      .auth-right { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════
+     LEFT PANEL
+══════════════════════════════════════════ -->
+<div class="auth-left">
+  <div class="auth-left-grid"></div>
+  <div class="auth-left-inner">
+
+    <a href="index.html" class="auth-logo-link">
+      <img src="assets/images/logo.png" alt="AgriSync OS Logo" class="auth-logo-img" />
+      <div class="auth-logo-text">
+        <div class="auth-logo-name">Agri<span>Sync</span> OS</div>
+        <div class="auth-logo-sub">From Farm. To Factory. Smarter.</div>
+      </div>
+    </a>
+
+    <img src="assets/images/logo.png" alt="AgriSync OS" class="auth-hero-logo" />
+
+    <h2 class="auth-left-title">Welcome Back to<br>AgriSync OS</h2>
+    <p class="auth-left-desc">
+      Sign in to access your dashboard and continue
+      building India's smarter agricultural supply chain.
+    </p>
+
+    <div class="auth-pills">
+      <span class="auth-pill">🤖 AI Recommendations</span>
+      <span class="auth-pill">🌧️ Weather Alerts</span>
+      <span class="auth-pill">🎤 Voice Support</span>
+      <span class="auth-pill">🗺️ Live Maps</span>
+      <span class="auth-pill">🌐 9 Languages</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     RIGHT PANEL — FORM
+══════════════════════════════════════════ -->
+<div class="auth-right">
+  <div class="auth-form-box">
+
+    <div class="auth-form-header">
+      <h1 class="auth-form-title">Sign In</h1>
+      <p class="auth-form-sub">Enter your credentials to access your dashboard.</p>
+    </div>
+
+    <!-- Error Alert -->
+    <div id="login-error" class="error-alert">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <span id="login-error-msg"></span>
+    </div>
+
+    <!-- Form -->
+    <form id="login-form" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="email">
+          <i class="fa-solid fa-envelope"></i> Email Address
+        </label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input type="email" id="email" class="form-input"
+                 placeholder="your@email.com" required autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">
+          <i class="fa-solid fa-lock"></i> Password
+        </label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input type="password" id="password" class="form-input"
+                 placeholder="Enter your password" required autocomplete="current-password" />
+          <button type="button" id="toggle-password" class="pwd-toggle" aria-label="Toggle password">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="forgot-row">
+        <button type="button" id="forgot-btn" class="forgot-btn">Forgot Password?</button>
+      </div>
+
+      <button type="submit" class="btn-submit" id="login-btn">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        Sign In
+      </button>
+
+    </form>
+
+    <div class="divider">or</div>
+
+    <div class="auth-switch">
+      Don't have an account?
+      <a href="register.html">Create Account</a>
+    </div>
+
+    <!-- Demo Accounts -->
+    <div class="demo-box">
+      <div class="demo-box-title">🧪 Demo Accounts — click to fill</div>
+      <div class="demo-box-list">
+        <div class="demo-row" onclick="fillDemo('farmer@demo.com')">
+          <span>👨🌾 Farmer</span><code>farmer@demo.com</code>
+        </div>
+        <div class="demo-row" onclick="fillDemo('factory@demo.com')">
+          <span>🏭 Factory</span><code>factory@demo.com</code>
+        </div>
+        <div class="demo-row" onclick="fillDemo('logistics@demo.com')">
+          <span>🚚 Logistics</span><code>logistics@demo.com</code>
+        </div>
+        <div class="demo-row" onclick="fillDemo('govt@demo.com')">
+          <span>🏢 Government</span><code>govt@demo.com</code>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FORGOT PASSWORD MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="forgot-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Reset Password</div>
+      <button class="modal-close" onclick="closeForgotModal()" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px">
+        Enter your email address and we'll send you a password reset link.
+      </p>
+      <div class="form-group">
+        <label class="form-label" for="reset-email">
+          <i class="fa-solid fa-envelope"></i> Email Address
+        </label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input type="email" id="reset-email" class="form-input" placeholder="your@email.com" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost-sm" onclick="closeForgotModal()">Cancel</button>
+      <button class="btn-primary-sm" id="reset-btn">
+        <i class="fa-solid fa-paper-plane"></i> Send Reset Link
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script type="module">
+  import { loginUser, resetPassword } from './js/auth.js';
+  import { showToast } from './js/navigation.js';
+
+  const form      = document.getElementById('login-form');
+  const loginBtn  = document.getElementById('login-btn');
+  const errorBox  = document.getElementById('login-error');
+  const errorMsg  = document.getElementById('login-error-msg');
+  const pwdInput  = document.getElementById('password');
+  const togglePwd = document.getElementById('toggle-password');
+  const forgotBtn = document.getElementById('forgot-btn');
+  const resetBtn  = document.getElementById('reset-btn');
+
+  // Toggle password visibility
+  togglePwd.addEventListener('click', () => {
+    const isText = pwdInput.type === 'text';
+    pwdInput.type = isText ? 'password' : 'text';
+    togglePwd.querySelector('i').className = isText ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+  });
+
+  // Open forgot modal
+  forgotBtn.addEventListener('click', () => {
+    document.getElementById('forgot-modal').classList.add('active');
+  });
+
+  // Login submit
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.style.display = 'none';
+
+    const email    = document.getElementById('email').value.trim();
+    const password = pwdInput.value;
+
+    if (!email || !password) {
+      showErr('Please enter your email and password.');
+      return;
+    }
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<div class="spinner-sm"></div> Signing in...';
+
+    const result = await loginUser(email, password);
+
+    if (result.success) {
+      showToast('Welcome back! Redirecting...', 'success');
+      const routes = {
+        farmer:     'farmer/dashboard.html',
+        factory:    'factory/dashboard.html',
+        logistics:  'logistics/dashboard.html',
+        government: 'government/dashboard.html',
+        admin:      'admin/dashboard.html',
+      };
+      setTimeout(() => {
+        window.location.href = routes[result.profile.role] || 'login.html';
+      }, 800);
+    } else {
+      showErr(result.error);
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+    }
+  });
+
+  // Reset password
+  resetBtn.addEventListener('click', async () => {
+    const email = document.getElementById('reset-email').value.trim();
+    if (!email) { showToast('Please enter your email.', 'error'); return; }
+    resetBtn.disabled = true;
+    const result = await resetPassword(email);
+    if (result.success) {
+      showToast('Reset link sent! Check your email.', 'success');
+      closeForgotModal();
+    } else {
+      showToast(result.error, 'error');
+    }
+    resetBtn.disabled = false;
+  });
+
+  function showErr(msg) {
+    errorMsg.textContent = msg;
+    errorBox.style.display = 'flex';
+  }
+
+  // Expose globals
+  window.closeForgotModal = () => {
+    document.getElementById('forgot-modal').classList.remove('active');
+  };
+  window.fillDemo = (email) => {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = 'demo123';
+    errorBox.style.display = 'none';
+  };
+</script>
+
+</body>
+</html>

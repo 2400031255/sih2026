@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    body { background: var(--bg); }
+    .role-select-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-5);
+    }
+    .role-option {
+      border: 2px solid rgba(36,92,58,0.15);
+      border-radius: var(--radius-md);
+      padding: var(--sp-3) var(--sp-2);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--trans);
+      background: var(--surface);
+    }
+    .role-option:hover { border-color: var(--forest-green); background: rgba(36,92,58,0.04); }
+    .role-option.selected {
+      border-color: var(--forest-green);
+      background: rgba(36,92,58,0.08);
+    }
+    .role-option-icon { font-size: 24px; margin-bottom: 4px; }
+    .role-option-label { font-size: 11px; font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 768px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-visual { display: none; }
+      .auth-form-side { padding: var(--sp-6) var(--sp-4); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="auth-page">
+
+  <!-- ── LEFT VISUAL ──────────────────────────────────────── -->
+  <div class="auth-visual">
+    <div class="auth-visual-pattern"></div>
+    <div class="auth-visual-content">
+
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:var(--sp-3);
+                                   text-decoration:none;margin-bottom:var(--sp-10)">
+        <div style="width:48px;height:48px;background:var(--harvest-gold);border-radius:var(--radius-md);
+                    display:flex;align-items:center;justify-content:center;font-size:24px">🌾</div>
+        <div style="text-align:left">
+          <div style="font-size:var(--fs-xl);font-weight:var(--fw-black);color:var(--white)">AgriSync OS</div>
+          <div style="font-size:var(--fs-xs);color:rgba(255,255,255,0.6)">From Farm. To Factory. Smarter.</div>
+        </div>
+      </a>
+
+      <div class="auth-visual-icon">🚀</div>
+      <h2 class="auth-visual-title">Join AgriSync OS</h2>
+      <p class="auth-visual-desc">
+        Create your free account and connect with India's
+        largest agricultural procurement network.
+      </p>
+
+      <!-- Steps -->
+      <div style="margin-top:var(--sp-8);text-align:left;width:100%;max-width:320px">
+        <div style="display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-4)">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--harvest-gold);
+                      color:var(--charcoal);display:flex;align-items:center;justify-content:center;
+                      font-weight:700;font-size:13px;flex-shrink:0">1</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">Create your account</div>
+        </div>
+        <div style="display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-4)">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);
+                      color:var(--white);display:flex;align-items:center;justify-content:center;
+                      font-weight:700;font-size:13px;flex-shrink:0">2</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">Choose your role</div>
+        </div>
+        <div style="display:flex;gap:var(--sp-3);align-items:center">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);
+                      color:var(--white);display:flex;align-items:center;justify-content:center;
+                      font-weight:700;font-size:13px;flex-shrink:0">3</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">Access your dashboard</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── RIGHT FORM ────────────────────────────────────────── -->
+  <div class="auth-form-side">
+    <div class="auth-form-inner">
+
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-subtitle">Join thousands of farmers and factories on AgriSync OS.</p>
+
+      <!-- Error Alert -->
+      <div id="reg-error" class="alert alert-danger" style="display:none;margin-bottom:var(--sp-5)">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span id="reg-error-msg"></span>
+      </div>
+
+      <form id="register-form" novalidate>
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label class="form-label" for="reg-name">
+            <i class="fa-solid fa-user"></i> Full Name
+          </label>
+          <div class="input-group">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input type="text" id="reg-name" class="form-control"
+                   placeholder="Ramesh Kumar" required autocomplete="name" />
+          </div>
+        </div>
+
+        <!-- Email + Mobile -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="reg-email">
+              <i class="fa-solid fa-envelope"></i> Email
+            </label>
+            <div class="input-group">
+              <i class="fa-solid fa-envelope input-icon"></i>
+              <input type="email" id="reg-email" class="form-control"
+                     placeholder="your@email.com" required autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-mobile">
+              <i class="fa-solid fa-phone"></i> Mobile
+            </label>
+            <div class="input-group">
+              <i class="fa-solid fa-phone input-icon"></i>
+              <input type="tel" id="reg-mobile" class="form-control"
+                     placeholder="+91 98765 43210" autocomplete="tel" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="reg-password">
+            <i class="fa-solid fa-lock"></i> Password
+          </label>
+          <div class="input-group">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" id="reg-password" class="form-control"
+                   placeholder="Minimum 6 characters" required autocomplete="new-password" />
+            <button type="button" id="toggle-reg-pwd"
+                    style="position:absolute;right:14px;background:none;border:none;
+                           cursor:pointer;color:var(--text-muted);font-size:14px"
+                    aria-label="Toggle password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fa-solid fa-id-badge"></i> I am a
+          </label>
+          <div class="role-select-grid" id="role-grid">
+            <div class="role-option" data-role="farmer">
+              <div class="role-option-icon">👨🌾</div>
+              <div class="role-option-label">Farmer</div>
+            </div>
+            <div class="role-option" data-role="factory">
+              <div class="role-option-icon">🏭</div>
+              <div class="role-option-label">Factory</div>
+            </div>
+            <div class="role-option" data-role="logistics">
+              <div class="role-option-icon">🚚</div>
+              <div class="role-option-label">Logistics</div>
+            </div>
+            <div class="role-option" data-role="government">
+              <div class="role-option-icon">🏢</div>
+              <div class="role-option-label">Government</div>
+            </div>
+            <div class="role-option" data-role="admin">
+              <div class="role-option-icon">👨💼</div>
+              <div class="role-option-label">Admin</div>
+            </div>
+          </div>
+          <input type="hidden" id="reg-role" required />
+        </div>
+
+        <!-- State + District -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="reg-state">
+              <i class="fa-solid fa-map"></i> State
+            </label>
+            <select id="reg-state" class="form-control">
+              <option value="">Select State</option>
+              <option>Andhra Pradesh</option><option>Telangana</option>
+              <option>Tamil Nadu</option><option>Karnataka</option>
+              <option>Kerala</option><option>Maharashtra</option>
+              <option>Gujarat</option><option>Rajasthan</option>
+              <option>Madhya Pradesh</option><option>Uttar Pradesh</option>
+              <option>Bihar</option><option>West Bengal</option>
+              <option>Punjab</option><option>Haryana</option>
+              <option>Odisha</option><option>Assam</option>
+              <option>Jharkhand</option><option>Chhattisgarh</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-district">
+              <i class="fa-solid fa-location-dot"></i> District
+            </label>
+            <input type="text" id="reg-district" class="form-control" placeholder="Your district" />
+          </div>
+        </div>
+
+        <!-- Village -->
+        <div class="form-group">
+          <label class="form-label" for="reg-village">
+            <i class="fa-solid fa-house"></i> Village / Address
+          </label>
+          <input type="text" id="reg-village" class="form-control" placeholder="Village or full address" />
+        </div>
+
+        <!-- Language -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fa-solid fa-globe"></i> Preferred Language
+          </label>
+          <div class="lang-grid" id="lang-grid">
+            <div class="lang-option selected" data-lang="en">
+              <div class="lang-native">English</div>
+              <div class="lang-english">English</div>
+            </div>
+            <div class="lang-option" data-lang="hi">
+              <div class="lang-native">हिन्दी</div>
+              <div class="lang-english">Hindi</div>
+            </div>
+            <div class="lang-option" data-lang="te">
+              <div class="lang-native">తెలుగు</div>
+              <div class="lang-english">Telugu</div>
+            </div>
+            <div class="lang-option" data-lang="ta">
+              <div class="lang-native">தமிழ்</div>
+              <div class="lang-english">Tamil</div>
+            </div>
+            <div class="lang-option" data-lang="kn">
+              <div class="lang-native">ಕನ್ನಡ</div>
+              <div class="lang-english">Kannada</div>
+            </div>
+            <div class="lang-option" data-lang="ml">
+              <div class="lang-native">മലയാളം</div>
+              <div class="lang-english">Malayalam</div>
+            </div>
+            <div class="lang-option" data-lang="mr">
+              <div class="lang-native">मराठी</div>
+              <div class="lang-english">Marathi</div>
+            </div>
+            <div class="lang-option" data-lang="bn">
+              <div class="lang-native">বাংলা</div>
+              <div class="lang-english">Bengali</div>
+            </div>
+            <div class="lang-option" data-lang="pa">
+              <div class="lang-native">ਪੰਜਾਬੀ</div>
+              <div class="lang-english">Punjabi</div>
+            </div>
+          </div>
+          <input type="hidden" id="reg-lang" value="en" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="reg-btn">
+          <i class="fa-solid fa-user-plus"></i>
+          Create Account
+        </button>
+
+      </form>
+
+      <div style="text-align:center;margin-top:var(--sp-5);font-size:var(--fs-sm);color:var(--text-muted)">
+        Already have an account?
+        <a href="login.html" style="color:var(--forest-green);font-weight:var(--fw-semi);margin-left:4px">
+          Sign In
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /auth-page -->
+
+<!-- ── SCRIPTS ───────────────────────────────────────────── -->
+<script type="module">
+  import { registerUser } from './js/auth.js';
+  import { showToast } from './js/navigation.js';
+
+  let selectedRole = '';
+  let selectedLang = 'en';
+
+  // Role selection
+  document.querySelectorAll('.role-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.role-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedRole = opt.dataset.role;
+      document.getElementById('reg-role').value = selectedRole;
+    });
+  });
+
+  // Language selection
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedLang = opt.dataset.lang;
+      document.getElementById('reg-lang').value = selectedLang;
+    });
+  });
+
+  // Toggle password
+  document.getElementById('toggle-reg-pwd').addEventListener('click', () => {
+    const pwd = document.getElementById('reg-password');
+    const icon = document.querySelector('#toggle-reg-pwd i');
+    const isText = pwd.type === 'text';
+    pwd.type = isText ? 'password' : 'text';
+    icon.className = isText ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+  });
+
+  // Form submit
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const errorBox = document.getElementById('reg-error');
+    const errorMsg = document.getElementById('reg-error-msg');
+    errorBox.style.display = 'none';
+
+    const name     = document.getElementById('reg-name').value.trim();
+    const email    = document.getElementById('reg-email').value.trim();
+    const mobile   = document.getElementById('reg-mobile').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const state    = document.getElementById('reg-state').value;
+    const district = document.getElementById('reg-district').value.trim();
+    const village  = document.getElementById('reg-village').value.trim();
+
+    // Validation
+    if (!name)          { showError('Please enter your full name.'); return; }
+    if (!email)         { showError('Please enter your email address.'); return; }
+    if (!password || password.length < 6) { showError('Password must be at least 6 characters.'); return; }
+    if (!selectedRole)  { showError('Please select your role.'); return; }
+
+    const btn = document.getElementById('reg-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner spinner-sm"></div> Creating account...';
+
+    const result = await registerUser({
+      name, email, mobile, password,
+      role: selectedRole, state, district, village,
+      language: selectedLang,
+    });
+
+    if (result.success) {
+      showToast('Account created! Redirecting to your dashboard...', 'success');
+      const routes = {
+        farmer: '/farmer/dashboard.html', factory: '/factory/dashboard.html',
+        logistics: '/logistics/dashboard.html', government: '/government/dashboard.html',
+        admin: '/admin/dashboard.html',
+      };
+      setTimeout(() => { window.location.href = routes[selectedRole] || '/login.html'; }, 1200);
+    } else {
+      showError(result.error);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Create Account';
+    }
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorBox.style.display = 'flex';
+    }
+  });
+</script>
+
+</body>
+</html>

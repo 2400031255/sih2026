@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌤️</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="weather.html" class="nav-item active"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Weather Intelligence</div>
+          <div class="topbar-subtitle">Real-time farming weather insights</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-outline btn-sm" id="refresh-btn">
+          <i class="fa-solid fa-rotate"></i> Refresh
+        </button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🌤️ Weather Intelligence</h1>
+        <p class="page-desc">Hyperlocal weather with AI-powered farming recommendations.</p>
+      </div>
+
+      <div id="location-alert" class="alert alert-info" style="margin-bottom:var(--sp-6)">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Detecting your location...</span>
+      </div>
+
+      <div class="dashboard-grid">
+
+        <!-- Left Column -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+
+          <!-- Main Weather -->
+          <div id="main-weather">
+            <div class="weather-card">
+              <div style="display:flex;align-items:center;gap:var(--sp-3)">
+                <div class="spinner" style="border-top-color:rgba(255,255,255,0.8)"></div>
+                <span style="color:rgba(255,255,255,0.7)">Loading weather...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hourly Forecast -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-clock"></i> Hourly Forecast</div>
+            </div>
+            <div id="hourly-forecast"
+                 style="display:flex;gap:var(--sp-3);overflow-x:auto;padding-bottom:var(--sp-2)">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Farming Tips -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-lightbulb" style="color:var(--harvest-gold)"></i>
+                Today's Farming Recommendation
+              </div>
+              <button class="btn btn-sm btn-ghost" id="speak-tips">
+                <i class="fa-solid fa-volume-high"></i> Listen
+              </button>
+            </div>
+            <div id="farming-tips">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Generating recommendations...</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column -->
+        <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
+
+          <!-- Weather Details -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-info-circle"></i> Weather Details</div>
+            </div>
+            <div id="weather-details">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4)">
+                <div class="spinner spinner-sm"></div>
+                <span class="text-muted text-sm">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Crop-Specific Advice -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-seedling"></i> Crop-Specific Advice</div>
+            </div>
+            <div class="form-group" style="margin-bottom:var(--sp-4)">
+              <select id="crop-select" class="form-control">
+                <option value="">Select your crop...</option>
+                <option>Tomato</option><option>Onion</option><option>Potato</option>
+                <option>Rice</option><option>Wheat</option><option>Maize</option>
+                <option>Cotton</option><option>Chilli</option><option>Brinjal</option>
+              </select>
+            </div>
+            <div id="crop-advice">
+              <div class="empty-state" style="padding:var(--sp-6)">
+                <div class="empty-icon">🌱</div>
+                <div class="empty-title">Select a crop</div>
+                <p class="empty-desc">Get weather-based advice for your specific crop.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="weather.html" class="mobile-nav-item active"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast } from '../js/navigation.js';
+  import { fetchWeather, fetchForecast, getUserLocation, renderWeatherCard } from '../js/weather.js';
+  import { speak } from '../js/voice.js';
+
+  const { user, profile } = await requireAuth('farmer');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+
+  let currentWeather = null;
+
+  async function loadWeather() {
+    const alertEl = document.getElementById('location-alert');
+    try {
+      const loc = await getUserLocation();
+      alertEl.className = 'alert alert-success';
+      alertEl.innerHTML = `<i class="fa-solid fa-location-dot"></i>
+        <span>Location detected. Showing weather for your area.</span>`;
+
+      const [weather, forecast] = await Promise.all([
+        fetchWeather(loc.lat, loc.lon),
+        fetchForecast(loc.lat, loc.lon),
+      ]);
+      currentWeather = weather;
+
+      renderWeatherCard('main-weather', weather);
+
+      // Hourly forecast
+      document.getElementById('hourly-forecast').innerHTML = forecast.map(f => `
+        <div style="flex-shrink:0;text-align:center;padding:var(--sp-3) var(--sp-4);
+                    background:rgba(36,92,58,0.04);border-radius:var(--radius-md);min-width:80px">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:var(--sp-2)">${f.time}</div>
+          <div style="font-size:24px;margin-bottom:var(--sp-2)">${f.icon}</div>
+          <div style="font-weight:700;font-size:15px">${f.temp}°C</div>
+          <div style="font-size:11px;color:var(--text-muted)">${f.condition}</div>
+        </div>
+      `).join('');
+
+      // Farming tips
+      const rec = weather.recommendation;
+      document.getElementById('farming-tips').innerHTML = `
+        <div style="display:flex;gap:var(--sp-3);align-items:flex-start;
+                    padding:var(--sp-4);background:rgba(36,92,58,0.05);border-radius:var(--radius-md)">
+          <span style="font-size:28px">${rec.icon}</span>
+          <div>
+            <div style="font-weight:700;font-size:15px;margin-bottom:var(--sp-2)">${rec.title}</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">${rec.text}</div>
+          </div>
+        </div>`;
+
+      // Weather details
+      document.getElementById('weather-details').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)">
+          ${[
+            { icon:'🌡️', label:'Feels Like',  val:`${weather.feelsLike}°C` },
+            { icon:'💧', label:'Humidity',    val:`${weather.humidity}%` },
+            { icon:'💨', label:'Wind Speed',  val:`${weather.windSpeed} km/h` },
+            { icon:'🌧️', label:'Rain Chance', val:`${weather.rainChance}%` },
+            { icon:'🌅', label:'Sunrise',     val:weather.sunrise },
+            { icon:'🌇', label:'Sunset',      val:weather.sunset },
+          ].map(d => `
+            <div style="padding:var(--sp-3);background:rgba(36,92,58,0.04);border-radius:var(--radius-md)">
+              <div style="font-size:20px;margin-bottom:4px">${d.icon}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${d.label}</div>
+              <div style="font-weight:700;font-size:16px">${d.val}</div>
+            </div>`).join('')}
+        </div>`;
+
+      if (weather.isMock) showToast('Demo weather shown. Add OpenWeather API key for live data.', 'info');
+
+    } catch {
+      alertEl.className = 'alert alert-warning';
+      alertEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Location access denied. Enable location permission and refresh.</span>`;
+      document.getElementById('main-weather').innerHTML = `
+        <div class="alert alert-warning">
+          <i class="fa-solid fa-cloud-slash"></i>
+          <span>Could not load weather. Please enable location access.</span>
+        </div>`;
+    }
+  }
+
+  loadWeather();
+  document.getElementById('refresh-btn').addEventListener('click', loadWeather);
+
+  document.getElementById('speak-tips').addEventListener('click', () => {
+    if (currentWeather) speak(`${currentWeather.recommendation.title}. ${currentWeather.recommendation.text}`);
+  });
+
+  const cropAdvice = {
+    Tomato:  { rain:'Harvest mature tomatoes before rain. Watch for blight.', hot:'Water twice daily. Mulch soil.', normal:'Good conditions. Monitor for pests.' },
+    Onion:   { rain:'Ensure good drainage. Avoid waterlogging.', hot:'Reduce irrigation. Bulbs may split.', normal:'Ideal for bulb development.' },
+    Potato:  { rain:'Watch for late blight. Ensure drainage.', hot:'Irrigate in evening. Avoid heat stress.', normal:'Good conditions for tuber growth.' },
+    Rice:    { rain:'Excellent conditions. Monitor for flooding.', hot:'Maintain water level in paddies.', normal:'Maintain 5cm water level.' },
+    Wheat:   { rain:'Watch for rust diseases.', hot:'Irrigate if soil is dry.', normal:'Good conditions for grain development.' },
+    Maize:   { rain:'Ensure drainage. Watch for fungal diseases.', hot:'Irrigate regularly. Mulch soil.', normal:'Good conditions for growth.' },
+    Cotton:  { rain:'Avoid waterlogging. Check for boll rot.', hot:'Irrigate at critical stages.', normal:'Good conditions for boll development.' },
+    Chilli:  { rain:'Harvest ripe chillies. Watch for anthracnose.', hot:'Shade young plants. Water regularly.', normal:'Good conditions. Monitor for pests.' },
+    Brinjal: { rain:'Ensure drainage. Watch for fungal issues.', hot:'Water regularly. Mulch soil.', normal:'Good conditions for fruit set.' },
+  };
+
+  document.getElementById('crop-select').addEventListener('change', function() {
+    const crop = this.value;
+    const advice = cropAdvice[crop];
+    if (!advice) return;
+    const condition = !currentWeather ? 'normal'
+      : currentWeather.rainChance > 50 ? 'rain'
+      : currentWeather.temp > 35 ? 'hot' : 'normal';
+    const text = advice[condition];
+    document.getElementById('crop-advice').innerHTML = `
+      <div style="padding:var(--sp-4);background:rgba(36,92,58,0.06);border-radius:var(--radius-md)">
+        <div style="font-weight:700;margin-bottom:var(--sp-2)">🌱 ${crop} — Today's Advice</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">${text}</div>
+        <button class="btn btn-sm btn-ghost" style="margin-top:var(--sp-3)"
+                onclick="window.__speak('${text}')">
+          <i class="fa-solid fa-volume-high"></i> Listen
+        </button>
+      </div>`;
+  });
+
+  window.__speak = speak;
+</script>
+</body>
+</html>

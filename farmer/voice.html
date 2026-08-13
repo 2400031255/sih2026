@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voice Assistant — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    .voice-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-12) var(--sp-6);
+      text-align: center;
+    }
+    .voice-wave {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 40px;
+      margin: var(--sp-5) 0;
+    }
+    .voice-wave span {
+      display: block;
+      width: 4px;
+      border-radius: 2px;
+      background: var(--forest-green);
+      animation: wave 1s ease-in-out infinite;
+    }
+    .voice-wave span:nth-child(1) { height: 10px; animation-delay: 0s; }
+    .voice-wave span:nth-child(2) { height: 20px; animation-delay: 0.1s; }
+    .voice-wave span:nth-child(3) { height: 30px; animation-delay: 0.2s; }
+    .voice-wave span:nth-child(4) { height: 20px; animation-delay: 0.3s; }
+    .voice-wave span:nth-child(5) { height: 10px; animation-delay: 0.4s; }
+    .voice-wave.hidden { display: none; }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(1); }
+      50%       { transform: scaleY(2); }
+    }
+    .command-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      background: rgba(36,92,58,0.08);
+      border: 1px solid rgba(36,92,58,0.15);
+      border-radius: var(--radius-full);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--forest-green);
+      cursor: pointer;
+      transition: all var(--trans);
+      margin: 4px;
+    }
+    .command-chip:hover {
+      background: var(--forest-green);
+      color: var(--white);
+    }
+  </style>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item active"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Voice Assistant</div>
+          <div class="topbar-subtitle">Speak to manage your farm</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div style="max-width:680px;margin:0 auto">
+
+        <!-- Voice Card -->
+        <div class="card" style="margin-bottom:var(--sp-6)">
+          <div class="voice-center">
+
+            <div style="font-size:14px;color:var(--text-muted);margin-bottom:var(--sp-6);
+                        font-weight:500;text-transform:uppercase;letter-spacing:0.8px">
+              AgriSync Voice Assistant
+            </div>
+
+            <!-- Big Voice Button -->
+            <button class="voice-btn" id="main-voice-btn"
+                    style="width:100px;height:100px;font-size:36px"
+                    aria-label="Start voice input">
+              <i class="fa-solid fa-microphone"></i>
+              <span class="voice-btn-label" style="font-size:11px">Tap &amp; Speak</span>
+            </button>
+
+            <!-- Wave animation -->
+            <div class="voice-wave hidden" id="voice-wave">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- Status text -->
+            <div id="voice-status" style="font-size:15px;color:var(--text-muted);
+                 font-weight:500;margin-top:var(--sp-4)">
+              Tap the button and speak
+            </div>
+
+            <!-- Transcript -->
+            <div id="voice-transcript"
+                 style="margin-top:var(--sp-5);padding:var(--sp-4);
+                        background:rgba(36,92,58,0.04);border-radius:var(--radius-md);
+                        border:var(--border);width:100%;min-height:60px;
+                        font-size:15px;color:var(--text-primary);font-style:italic;
+                        text-align:left">
+              Your speech will appear here...
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Parsed Result -->
+        <div id="parsed-result" style="display:none" class="card" style="margin-bottom:var(--sp-6)">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--harvest-gold)"></i>
+              AgriSync Understood
+            </div>
+          </div>
+          <div id="parsed-content"></div>
+        </div>
+
+        <!-- Sample Commands -->
+        <div class="card" style="margin-bottom:var(--sp-6)">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-comment-dots"></i> Try These Commands</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;padding:var(--sp-2) 0">
+            <span class="command-chip" onclick="tryCommand(this.textContent)">
+              🍅 I want to sell 500 kg of tomatoes
+            </span>
+            <span class="command-chip" onclick="tryCommand(this.textContent)">
+              🧅 Sell 200 kg onion at 22 rupees
+            </span>
+            <span class="command-chip" onclick="tryCommand(this.textContent)">
+              🥔 I have 1000 kilograms of potato
+            </span>
+            <span class="command-chip" onclick="tryCommand(this.textContent)">
+              🌾 500 kg wheat at 35 rupees per kg
+            </span>
+          </div>
+        </div>
+
+        <!-- Language Info -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-globe"></i> Voice Language</div>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--sp-4)">
+            Voice recognition uses your selected language preference.
+            Change it in your profile settings.
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--sp-2)">
+            <span class="badge badge-green">🇮🇳 Hindi</span>
+            <span class="badge badge-blue">🇮🇳 Telugu</span>
+            <span class="badge badge-gold">🇮🇳 Tamil</span>
+            <span class="badge badge-green">🇮🇳 Kannada</span>
+            <span class="badge badge-blue">🇮🇳 Malayalam</span>
+            <span class="badge badge-gold">🇮🇳 Marathi</span>
+            <span class="badge badge-green">🇮🇳 Bengali</span>
+            <span class="badge badge-blue">🇮🇳 Punjabi</span>
+            <span class="badge badge-brown">🇬🇧 English</span>
+          </div>
+          <div id="voice-unsupported" class="alert alert-warning" style="display:none;margin-top:var(--sp-4)">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Voice recognition is not supported on this browser. Please use Chrome or Edge.</span>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="voice.html" class="mobile-nav-item active"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast } from '../js/navigation.js';
+  import { isVoiceSupported, startListening, parseCropFromSpeech, speak } from '../js/voice.js';
+  import { getCropEmoji } from '../js/farmer.js';
+
+  const { user, profile } = await requireAuth('farmer');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+
+  if (!isVoiceSupported()) {
+    document.getElementById('voice-unsupported').style.display = 'flex';
+    document.getElementById('main-voice-btn').disabled = true;
+    document.getElementById('main-voice-btn').style.opacity = '0.5';
+  }
+
+  let recognition = null;
+  let listening = false;
+  const btn      = document.getElementById('main-voice-btn');
+  const wave     = document.getElementById('voice-wave');
+  const status   = document.getElementById('voice-status');
+  const transcript = document.getElementById('voice-transcript');
+
+  btn.addEventListener('click', () => {
+    if (listening) {
+      recognition?.stop();
+      return;
+    }
+    listening = true;
+    btn.classList.add('listening');
+    wave.classList.remove('hidden');
+    status.textContent = 'Listening... speak now';
+    transcript.textContent = '';
+
+    recognition = startListening({
+      onResult: ({ final, interim }) => {
+        transcript.textContent = final || interim || '';
+        if (final) handleFinalResult(final);
+      },
+      onError: (msg) => {
+        showToast(msg, 'error');
+        resetVoice();
+      },
+      onEnd: resetVoice,
+    });
+  });
+
+  function resetVoice() {
+    listening = false;
+    btn.classList.remove('listening');
+    wave.classList.add('hidden');
+    status.textContent = 'Tap the button and speak';
+  }
+
+  function handleFinalResult(text) {
+    const parsed = parseCropFromSpeech(text);
+    const resultEl = document.getElementById('parsed-result');
+    const contentEl = document.getElementById('parsed-content');
+
+    if (parsed.cropName || parsed.quantity) {
+      resultEl.style.display = 'block';
+      contentEl.innerHTML = `
+        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-4)">
+          ${parsed.cropName ? `
+            <div style="padding:var(--sp-3) var(--sp-4);background:rgba(36,92,58,0.08);
+                        border-radius:var(--radius-md);text-align:center">
+              <div style="font-size:28px">${getCropEmoji(parsed.cropName)}</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Crop</div>
+              <div style="font-weight:700">${parsed.cropName}</div>
+            </div>` : ''}
+          ${parsed.quantity ? `
+            <div style="padding:var(--sp-3) var(--sp-4);background:rgba(76,140,138,0.08);
+                        border-radius:var(--radius-md);text-align:center">
+              <div style="font-size:28px">⚖️</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Quantity</div>
+              <div style="font-weight:700">${parsed.quantity} ${parsed.unit||'kg'}</div>
+            </div>` : ''}
+          ${parsed.expectedPrice ? `
+            <div style="padding:var(--sp-3) var(--sp-4);background:rgba(213,169,40,0.08);
+                        border-radius:var(--radius-md);text-align:center">
+              <div style="font-size:28px">💰</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Price</div>
+              <div style="font-weight:700">₹${parsed.expectedPrice}/kg</div>
+            </div>` : ''}
+        </div>
+        <a href="add-crop.html?crop=${encodeURIComponent(parsed.cropName||'')}&qty=${parsed.quantity||''}&price=${parsed.expectedPrice||''}"
+           class="btn btn-primary">
+          <i class="fa-solid fa-plus"></i> Add This Crop
+        </a>`;
+      speak(`I understood. ${parsed.cropName ? parsed.cropName + '.' : ''} ${parsed.quantity ? parsed.quantity + ' kilograms.' : ''} Tap Add This Crop to continue.`);
+    } else {
+      resultEl.style.display = 'none';
+      showToast('Could not understand. Try saying a crop name and quantity.', 'info');
+    }
+  }
+
+  window.tryCommand = (text) => {
+    transcript.textContent = text;
+    handleFinalResult(text);
+  };
+</script>
+</body>
+</html>

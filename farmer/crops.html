@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Crops — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🌾</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Farmer Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">R</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Farmer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a href="crops.html" class="nav-item active"><i class="fa-solid fa-seedling"></i><span>My Crops</span></a>
+      <a href="add-crop.html" class="nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add Crop</span></a>
+      <a href="buyers.html" class="nav-item"><i class="fa-solid fa-store"></i><span>Buyers</span></a>
+      <a href="orders.html" class="nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+      <div class="nav-section-label">Tools</div>
+      <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i><span>Weather</span></a>
+      <a href="maps.html" class="nav-item"><i class="fa-solid fa-map-location-dot"></i><span>Maps</span></a>
+      <a href="voice.html" class="nav-item"><i class="fa-solid fa-microphone"></i><span>Voice</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">My Crops</div>
+          <div class="topbar-subtitle">Manage your crop listings</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <a href="add-crop.html" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-plus"></i> Add Crop
+        </a>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- Filter Bar -->
+      <div style="display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-6);flex-wrap:wrap">
+        <div class="input-group" style="flex:1;min-width:200px">
+          <i class="fa-solid fa-magnifying-glass input-icon"></i>
+          <input type="text" id="search-crops" class="form-control" placeholder="Search crops..." />
+        </div>
+        <select id="filter-status" class="form-control" style="width:auto;min-width:140px">
+          <option value="">All Status</option>
+          <option value="available">Available</option>
+          <option value="sold">Sold</option>
+          <option value="expired">Expired</option>
+        </select>
+        <select id="filter-quality" class="form-control" style="width:auto;min-width:130px">
+          <option value="">All Grades</option>
+          <option value="A">Grade A</option>
+          <option value="B">Grade B</option>
+          <option value="C">Grade C</option>
+        </select>
+      </div>
+
+      <!-- Crops Grid -->
+      <div id="crops-grid" class="grid-3" style="gap:var(--sp-5)">
+        <div style="grid-column:1/-1;display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-8)">
+          <div class="spinner"></div>
+          <span class="text-muted">Loading your crops...</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <div class="modal-title">Delete Crop</div>
+      <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--text-secondary)">
+        Are you sure you want to delete <strong id="delete-crop-name"></strong>?
+        This action cannot be undone.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn btn-danger" id="confirm-delete-btn">
+        <i class="fa-solid fa-trash"></i> Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="crops.html" class="mobile-nav-item active"><i class="fa-solid fa-seedling"></i><span>Crops</span></a>
+    <a href="add-crop.html" class="mobile-nav-item"><i class="fa-solid fa-plus-circle"></i><span>Add</span></a>
+    <a href="orders.html" class="mobile-nav-item"><i class="fa-solid fa-box"></i><span>Orders</span></a>
+    <a href="profile.html" class="mobile-nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast, openModal, closeModal } from '../js/navigation.js';
+  import { listenFarmerCrops, deleteCrop, renderCropCard } from '../js/farmer.js';
+
+  AOS.init({ duration: 600, once: true });
+  const { user, profile } = await requireAuth('farmer');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Farmer';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'F').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+  window.closeModal = closeModal;
+
+  let allCrops = [];
+  let deleteCropId = null;
+
+  listenFarmerCrops(user.uid, (crops) => {
+    allCrops = crops;
+    renderCrops(crops);
+  });
+
+  function renderCrops(crops) {
+    const grid = document.getElementById('crops-grid');
+    if (!crops.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1">
+        <div class="empty-state">
+          <div class="empty-icon">🌱</div>
+          <div class="empty-title">No crops found</div>
+          <p class="empty-desc">Add your first crop to start finding buyers.</p>
+          <a href="add-crop.html" class="btn btn-primary" style="margin-top:var(--sp-4)">
+            <i class="fa-solid fa-plus"></i> Add Crop
+          </a>
+        </div>
+      </div>`;
+      return;
+    }
+    grid.innerHTML = crops.map(c => renderCropCard(c)).join('');
+  }
+
+  // Search & filter
+  function applyFilters() {
+    const search  = document.getElementById('search-crops').value.toLowerCase();
+    const status  = document.getElementById('filter-status').value;
+    const quality = document.getElementById('filter-quality').value;
+    const filtered = allCrops.filter(c =>
+      (!search  || c.cropName?.toLowerCase().includes(search)) &&
+      (!status  || c.status === status) &&
+      (!quality || c.quality === quality)
+    );
+    renderCrops(filtered);
+  }
+
+  document.getElementById('search-crops').addEventListener('input', applyFilters);
+  document.getElementById('filter-status').addEventListener('change', applyFilters);
+  document.getElementById('filter-quality').addEventListener('change', applyFilters);
+
+  // Delete handlers
+  window.editCrop = (id) => window.location.href = `add-crop.html?edit=${id}`;
+  window.viewCropBuyers = (id) => window.location.href = `buyers.html?crop=${id}`;
+  window.deleteCropConfirm = (id, name) => {
+    deleteCropId = id;
+    document.getElementById('delete-crop-name').textContent = name;
+    openModal('delete-modal');
+  };
+
+  document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+    if (!deleteCropId) return;
+    await deleteCrop(deleteCropId);
+    closeModal('delete-modal');
+    deleteCropId = null;
+  });
+</script>
+</body>
+</html>

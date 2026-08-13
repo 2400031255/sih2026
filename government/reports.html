@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports — AgriSync OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <div class="sidebar-logo">🏢</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Government Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">G</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">Government / FPO</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></a>
+      <a href="production.html" class="nav-item"><i class="fa-solid fa-seedling"></i><span>Production</span></a>
+      <a href="shortages.html" class="nav-item"><i class="fa-solid fa-triangle-exclamation"></i><span>Shortages</span></a>
+      <a href="surplus.html" class="nav-item"><i class="fa-solid fa-arrow-up"></i><span>Surplus</span></a>
+      <a href="analytics.html" class="nav-item"><i class="fa-solid fa-chart-bar"></i><span>Analytics</span></a>
+      <a href="reports.html" class="nav-item active"><i class="fa-solid fa-file-lines"></i><span>Reports</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" class="nav-item" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="topbar-title">Reports</div>
+          <div class="topbar-subtitle">Generate and export platform reports</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">📋 Platform Reports</h1>
+        <p class="page-desc">Generate, view and print comprehensive agricultural reports.</p>
+      </div>
+
+      <!-- Report Cards -->
+      <div class="grid-3" style="gap:var(--sp-5);margin-bottom:var(--sp-8)">
+
+        <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('orders')">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">📦</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:var(--sp-2)">Orders Report</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--sp-4)">
+            All procurement orders with status, value and dates.
+          </p>
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fa-solid fa-file-lines"></i> Generate
+          </button>
+        </div>
+
+        <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('crops')">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">🌾</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:var(--sp-2)">Crop Production Report</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--sp-4)">
+            All crop listings with quantity, quality and pricing.
+          </p>
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fa-solid fa-file-lines"></i> Generate
+          </button>
+        </div>
+
+        <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('farmers')">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">👨🌾</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:var(--sp-2)">Farmer Report</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--sp-4)">
+            Registered farmers with location and activity data.
+          </p>
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fa-solid fa-file-lines"></i> Generate
+          </button>
+        </div>
+
+        <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('deliveries')">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">🚚</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:var(--sp-2)">Delivery Report</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--sp-4)">
+            All deliveries with status, routes and completion data.
+          </p>
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fa-solid fa-file-lines"></i> Generate
+          </button>
+        </div>
+
+        <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('surplus')">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">📊</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:var(--sp-2)">Surplus & Shortage</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--sp-4)">
+            Supply vs demand analysis by crop and district.
+          </p>
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fa-solid fa-file-lines"></i> Generate
+          </button>
+        </div>
+
+        <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('platform')">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">🌐</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:var(--sp-2)">Platform Summary</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--sp-4)">
+            Complete platform statistics and KPI summary.
+          </p>
+          <button class="btn btn-primary btn-sm btn-block">
+            <i class="fa-solid fa-file-lines"></i> Generate
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Generated Report Preview -->
+      <div id="report-preview" style="display:none">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title" id="report-title">
+              <i class="fa-solid fa-file-lines"></i> Report Preview
+            </div>
+            <div style="display:flex;gap:var(--sp-2)">
+              <button class="btn btn-sm btn-outline" id="print-btn">
+                <i class="fa-solid fa-print"></i> Print
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="document.getElementById('report-preview').style.display='none'">
+                <i class="fa-solid fa-xmark"></i> Close
+              </button>
+            </div>
+          </div>
+          <div id="report-content"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <div class="mobile-nav-items">
+    <a href="dashboard.html" class="mobile-nav-item"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></a>
+    <a href="production.html" class="mobile-nav-item"><i class="fa-solid fa-seedling"></i><span>Production</span></a>
+    <a href="shortages.html" class="mobile-nav-item"><i class="fa-solid fa-triangle-exclamation"></i><span>Alerts</span></a>
+    <a href="analytics.html" class="mobile-nav-item"><i class="fa-solid fa-chart-bar"></i><span>Analytics</span></a>
+    <a href="reports.html" class="mobile-nav-item active"><i class="fa-solid fa-file-lines"></i><span>Reports</span></a>
+  </div>
+</nav>
+
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI, showToast, formatCurrency, formatDate } from '../js/navigation.js';
+  import { getPlatformStats, getCropProductionData, getSurplusShortageData } from '../js/government.js';
+  import { printReport, renderOrderReportTable, renderCropReportTable } from '../js/reports.js';
+  import { getDocs, collection, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+  import { db } from '../js/firebase.js';
+
+  const { user, profile } = await requireAuth('government');
+  document.getElementById('sidebar-name').textContent = profile.name || 'Government';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'G').charAt(0).toUpperCase();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+  initDashboardUI();
+
+  window.generateReport = async (type) => {
+    const preview = document.getElementById('report-preview');
+    const content = document.getElementById('report-content');
+    const title   = document.getElementById('report-title');
+
+    content.innerHTML = `<div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-6)">
+      <div class="spinner"></div><span class="text-muted">Generating report...</span></div>`;
+    preview.style.display = 'block';
+    preview.scrollIntoView({ behavior:'smooth' });
+
+    try {
+      let html = '', reportTitle = '';
+
+      if (type === 'orders') {
+        reportTitle = 'Orders Report';
+        const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt','desc'), limit(100)));
+        const orders = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+        html = renderOrderReportTable(orders);
+        title.innerHTML = `<i class="fa-solid fa-box"></i> Orders Report (${orders.length} records)`;
+
+      } else if (type === 'crops') {
+        reportTitle = 'Crop Production Report';
+        const snap = await getDocs(query(collection(db, 'crops'), orderBy('createdAt','desc'), limit(100)));
+        const crops = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+        html = renderCropReportTable(crops);
+        title.innerHTML = `<i class="fa-solid fa-seedling"></i> Crop Report (${crops.length} records)`;
+
+      } else if (type === 'farmers') {
+        reportTitle = 'Farmer Report';
+        const snap = await getDocs(collection(db, 'farmers'));
+        const farmers = snap.docs.map(d => d.data());
+        html = `<div class="table-wrapper"><table>
+          <thead><tr><th>Name</th><th>Email</th><th>State</th><th>District</th><th>Total Orders</th></tr></thead>
+          <tbody>${farmers.map(f => `<tr>
+            <td>${f.name||'—'}</td><td>${f.email||'—'}</td>
+            <td>${f.state||'—'}</td><td>${f.district||'—'}</td>
+            <td>${f.totalOrders||0}</td>
+          </tr>`).join('')}</tbody>
+        </table></div>`;
+        title.innerHTML = `<i class="fa-solid fa-users"></i> Farmer Report (${farmers.length} records)`;
+
+      } else if (type === 'surplus') {
+        reportTitle = 'Surplus & Shortage Report';
+        const data = await getSurplusShortageData();
+        html = `<div class="table-wrapper"><table>
+          <thead><tr><th>Crop</th><th>Supply (kg)</th><th>Demand (kg)</th><th>Surplus</th><th>Shortage</th><th>Status</th></tr></thead>
+          <tbody>${data.map(d => `<tr>
+            <td><strong>${d.crop}</strong></td>
+            <td>${d.supply.toLocaleString('en-IN')}</td>
+            <td>${d.demand.toLocaleString('en-IN')}</td>
+            <td style="color:var(--natural-blue)">${d.surplus.toLocaleString('en-IN')}</td>
+            <td style="color:var(--danger)">${d.shortage.toLocaleString('en-IN')}</td>
+            <td><span class="badge ${d.status==='surplus'?'badge-blue':d.status==='shortage'?'badge-red':'badge-green'}">${d.status}</span></td>
+          </tr>`).join('')}</tbody>
+        </table></div>`;
+        title.innerHTML = `<i class="fa-solid fa-chart-bar"></i> Surplus & Shortage Report`;
+
+      } else if (type === 'platform') {
+        reportTitle = 'Platform Summary';
+        const stats = await getPlatformStats();
+        html = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5);padding:var(--sp-4)">
+          ${Object.entries(stats).map(([k,v]) => `
+            <div style="text-align:center;padding:var(--sp-5);background:rgba(36,92,58,0.04);border-radius:var(--radius-md)">
+              <div style="font-size:28px;font-weight:800;color:var(--forest-green)">${v.toLocaleString('en-IN')}</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">${k.replace(/([A-Z])/g,' $1').trim()}</div>
+            </div>`).join('')}
+        </div>`;
+        title.innerHTML = `<i class="fa-solid fa-globe"></i> Platform Summary Report`;
+      }
+
+      content.innerHTML = html;
+
+      // Print button
+      document.getElementById('print-btn').onclick = () => printReport(reportTitle, html);
+
+    } catch (err) {
+      content.innerHTML = `<div class="alert alert-danger" style="margin:var(--sp-4)">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span>Failed to generate report. Please try again.</span>
+      </div>`;
+    }
+  };
+</script>
+</body>
+</html>
