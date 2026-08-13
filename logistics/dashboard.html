@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Logistics Dashboard — AgriSync OS</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚚</text></svg>" />
+  <link rel="icon" type="image/png" href="../assets/images/logo.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/dashboard.css" />
   <link rel="stylesheet" href="../css/components.css" />
@@ -19,7 +18,7 @@
 <div class="app-shell">
   <aside class="sidebar" id="sidebar">
     <a href="../index.html" class="sidebar-brand">
-      <div class="sidebar-logo">🚚</div>
+      <img src="../assets/images/logo.png" alt="AgriSync OS" style="height:36px;width:36px;object-fit:contain;border-radius:8px;flex-shrink:0" />
       <div class="sidebar-brand-text">
         <div class="sidebar-brand-name">AgriSync OS</div>
         <div class="sidebar-brand-tag">Logistics Portal</div>
@@ -99,28 +98,28 @@
 
       <!-- Stats -->
       <div class="stats-grid">
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-card">
           <div class="stat-icon terra"><i class="fa-solid fa-truck"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-active-del">—</div>
             <div class="stat-label">Active Deliveries</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="stat-card">
           <div class="stat-icon green"><i class="fa-solid fa-truck-moving"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-trucks">—</div>
             <div class="stat-label">Available Trucks</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="stat-card">
           <div class="stat-icon blue"><i class="fa-solid fa-id-card"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-drivers">—</div>
             <div class="stat-label">Available Drivers</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="240">
+        <div class="stat-card">
           <div class="stat-icon gold"><i class="fa-solid fa-circle-check"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-completed">—</div>
@@ -134,7 +133,7 @@
 
         <!-- Deliveries List -->
         <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
-          <div class="card" data-aos="fade-up">
+          <div class="card">
             <div class="card-header">
               <div class="card-title"><i class="fa-solid fa-truck"></i> Active Deliveries</div>
               <a href="deliveries.html" class="btn btn-sm btn-primary">View All</a>
@@ -152,7 +151,7 @@
         <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
 
           <!-- Add Truck -->
-          <div class="card" data-aos="fade-up">
+          <div class="card">
             <div class="card-header">
               <div class="card-title"><i class="fa-solid fa-truck-moving"></i> Fleet</div>
               <button class="btn btn-sm btn-primary" onclick="openModal('add-truck-modal')">
@@ -168,7 +167,7 @@
           </div>
 
           <!-- Add Driver -->
-          <div class="card" data-aos="fade-up">
+          <div class="card">
             <div class="card-header">
               <div class="card-title"><i class="fa-solid fa-id-card"></i> Drivers</div>
               <button class="btn btn-sm btn-outline" onclick="openModal('add-driver-modal')">
@@ -266,7 +265,6 @@
   </div>
 </nav>
 
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
   import { initDashboardUI, showToast, openModal, closeModal } from '../js/navigation.js';
@@ -274,7 +272,6 @@
            addTruck, addDriver, renderDeliveryRow, renderTruckCard, getStatusConfig } from '../js/logistics.js';
   import { initNotifications, markAllRead } from '../js/notifications.js';
 
-  AOS.init({ duration: 600, once: true });
   const { user, profile } = await requireAuth('logistics');
   document.getElementById('logistics-name').textContent = profile.name?.split(' ')[0] || 'Logistics';
   document.getElementById('sidebar-name').textContent = profile.name || 'Logistics';

@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Factory Dashboard — AgriSync OS</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>" />
+  <link rel="icon" type="image/png" href="../assets/images/logo.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/dashboard.css" />
   <link rel="stylesheet" href="../css/components.css" />
@@ -21,7 +20,7 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <a href="../index.html" class="sidebar-brand">
-      <div class="sidebar-logo">🏭</div>
+      <img src="../assets/images/logo.png" alt="AgriSync OS" style="height:36px;width:36px;object-fit:contain;border-radius:8px;flex-shrink:0" />
       <div class="sidebar-brand-text">
         <div class="sidebar-brand-name">AgriSync OS</div>
         <div class="sidebar-brand-tag">Factory Portal</div>
@@ -112,28 +111,28 @@
 
       <!-- Stats -->
       <div class="stats-grid">
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-card">
           <div class="stat-icon blue"><i class="fa-solid fa-seedling"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-available">—</div>
             <div class="stat-label">Available Crops</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="stat-card">
           <div class="stat-icon green"><i class="fa-solid fa-paper-plane"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-requests">—</div>
             <div class="stat-label">Sent Requests</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="stat-card">
           <div class="stat-icon gold"><i class="fa-solid fa-box"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-orders">—</div>
             <div class="stat-label">Active Orders</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="240">
+        <div class="stat-card">
           <div class="stat-icon terra"><i class="fa-solid fa-indian-rupee-sign"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-value">—</div>
@@ -148,7 +147,7 @@
         <!-- LEFT: Available Crops -->
         <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
 
-          <div class="card" data-aos="fade-up">
+          <div class="card">
             <div class="card-header">
               <div class="card-title">
                 <i class="fa-solid fa-seedling"></i> Available Crops
@@ -180,7 +179,7 @@
           </div>
 
           <!-- Recent Orders -->
-          <div class="card" data-aos="fade-up">
+          <div class="card">
             <div class="card-header">
               <div class="card-title"><i class="fa-solid fa-box"></i> Recent Orders</div>
               <a href="orders.html" class="btn btn-sm btn-ghost">View All</a>
@@ -199,7 +198,7 @@
         <div style="display:flex;flex-direction:column;gap:var(--sp-6)">
 
           <!-- AI Quick Recommendation -->
-          <div class="card" data-aos="fade-up" style="background:linear-gradient(135deg,rgba(36,92,58,0.04),rgba(76,140,138,0.06))">
+          <div class="card" style="background:linear-gradient(135deg,rgba(36,92,58,0.04),rgba(76,140,138,0.06))">
             <div class="card-header">
               <div class="card-title">
                 <i class="fa-solid fa-robot" style="color:var(--natural-blue)"></i>
@@ -235,7 +234,7 @@
           </div>
 
           <!-- Pending Requests -->
-          <div class="card" data-aos="fade-up">
+          <div class="card">
             <div class="card-header">
               <div class="card-title"><i class="fa-solid fa-clock"></i> Pending Requests</div>
               <a href="requests.html" class="btn btn-sm btn-ghost">View All</a>
@@ -308,7 +307,6 @@
   </div>
 </nav>
 
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
   import { initDashboardUI, showToast, openModal, closeModal, formatCurrency } from '../js/navigation.js';
@@ -318,7 +316,6 @@
   import { recommendSuppliers, renderAIRecommendation } from '../js/ai.js';
   import { getUserLocation } from '../js/weather.js';
 
-  AOS.init({ duration: 600, once: true });
   const { user, profile } = await requireAuth('factory');
   document.getElementById('factory-name').textContent = profile.name?.split(' ')[0] || 'Factory';
   document.getElementById('sidebar-name').textContent = profile.name || 'Factory';

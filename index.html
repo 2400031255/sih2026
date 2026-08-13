@@ -13,13 +13,10 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />  
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-  <!-- AOS Animations -->
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 
   <!-- AgriSync Styles -->
   <link rel="stylesheet" href="css/style.css" />
@@ -351,42 +348,6 @@
       50%       { transform: translateY(-12px); }
     }
 
-    /* ── FLOATING INFO CARDS ── */
-    .float-card {
-      position: absolute;
-      background: rgba(255,255,255,0.10);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.16);
-      border-radius: 14px;
-      padding: 12px 16px;
-      color: var(--white);
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 3;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.20);
-    }
-    .float-card-icon { font-size: 20px; }
-    .float-card-label { font-size: 10px; opacity: 0.65; margin-bottom: 2px; }
-    .float-card-value { font-size: 13px; font-weight: 700; }
-    .float-card.fc-1 {
-      top: -20px; right: 10px;
-      animation: fc1float 4s ease-in-out infinite;
-    }
-    .float-card.fc-2 {
-      bottom: -10px; right: 20px;
-      animation: fc1float 4s ease-in-out infinite 1.5s;
-    }
-    .float-card.fc-3 {
-      top: 42%; left: -10px;
-      animation: fc1float 4s ease-in-out infinite 3s;
-    }
-    @keyframes fc1float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-8px); }
-    }
 
     /* ── SCROLL HINT ── */
     .hero-scroll {
@@ -710,24 +671,24 @@
       <!-- LEFT: Text Content -->
       <div class="hero-content">
 
-        <div class="hero-eyebrow" data-aos="fade-down" data-aos-duration="600">
+        <div class="hero-eyebrow">
           <i class="fa-solid fa-seedling"></i>
           India's First AI Agricultural Procurement OS
         </div>
 
-        <h1 class="hero-title" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
+        <h1 class="hero-title">
           From <span class="accent-gold">Farm.</span><br>
           To <span class="accent-gold">Factory.</span><br>
           <span class="accent-green">Smarter.</span>
         </h1>
 
-        <p class="hero-desc" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
+        <p class="hero-desc">
           AI-powered agricultural procurement connecting farmers, factories,
           logistics providers and government across India — in your language,
           with real-time intelligence.
         </p>
 
-        <div class="hero-cta" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300">
+        <div class="hero-cta">
           <a href="register.html" class="hero-cta-primary">
             <i class="fa-solid fa-seedling"></i> Get Started Free
           </a>
@@ -736,7 +697,7 @@
           </a>
         </div>
 
-        <div class="hero-stats" data-aos="fade-up" data-aos-duration="700" data-aos-delay="400">
+        <div class="hero-stats">
           <div>
             <div class="hero-stat-value">10K+</div>
             <div class="hero-stat-label">Farmers</div>
@@ -758,7 +719,7 @@
       </div><!-- /hero-content -->
 
       <!-- RIGHT: Logo Panel -->
-      <div class="hero-logo-panel" data-aos="fade-left" data-aos-duration="800" data-aos-delay="200">
+      <div class="hero-logo-panel">
 
         <div class="hero-logo-wrap">
           <div class="hero-logo-glow"></div>
@@ -785,7 +746,7 @@
 <section class="section" id="how-it-works" aria-label="How AgriSync Works">
   <div class="container">
 
-    <div class="section-header" data-aos="fade-up">
+    <div class="section-header">
       <span class="section-eyebrow">The Process</span>
       <h2 class="section-title">How AgriSync OS Works</h2>
       <p class="section-desc">
@@ -794,7 +755,7 @@
       </p>
     </div>
 
-    <div class="workflow-wrap" data-aos="fade-up" data-aos-delay="100">
+    <div class="workflow-wrap">
 
       <div class="workflow-step">
         <div class="wf-icon" style="background:rgba(26,74,46,0.10)">🌾</div>
@@ -836,7 +797,7 @@
 <section class="section section-alt" id="roles" aria-label="User Roles">
   <div class="container">
 
-    <div class="section-header" data-aos="fade-up">
+    <div class="section-header">
       <span class="section-eyebrow">Built For Everyone</span>
       <h2 class="section-title">One Platform. Every Role.</h2>
       <p class="section-desc">
@@ -847,7 +808,7 @@
 
     <div class="roles-grid">
 
-      <div class="role-card" data-aos="fade-up" data-aos-delay="0" onclick="location.href='register.html'">
+      <div class="role-card" onclick="location.href='register.html'">
         <div class="role-icon" style="background:rgba(26,74,46,0.10)">👨‍🌾</div>
         <div class="role-title">Farmer</div>
         <p class="role-desc">List crops, find buyers, get AI price forecasts, weather alerts and voice assistance — in your language.</p>
@@ -858,7 +819,7 @@
         </div>
       </div>
 
-      <div class="role-card" data-aos="fade-up" data-aos-delay="80" onclick="location.href='register.html'">
+      <div class="role-card" onclick="location.href='register.html'">
         <div class="role-icon" style="background:rgba(76,140,138,0.10)">🏭</div>
         <div class="role-title">Factory / Buyer</div>
         <p class="role-desc">Discover verified farmers, get AI procurement recommendations, manage orders and track supplier reliability.</p>
@@ -868,7 +829,7 @@
         </div>
       </div>
 
-      <div class="role-card" data-aos="fade-up" data-aos-delay="160" onclick="location.href='register.html'">
+      <div class="role-card" onclick="location.href='register.html'">
         <div class="role-icon" style="background:rgba(201,107,75,0.10)">🚚</div>
         <div class="role-title">Logistics Provider</div>
         <p class="role-desc">Manage trucks, drivers and deliveries. Get optimized routes, live order assignments and status updates.</p>
@@ -878,7 +839,7 @@
         </div>
       </div>
 
-      <div class="role-card" data-aos="fade-up" data-aos-delay="240" onclick="location.href='register.html'">
+      <div class="role-card" onclick="location.href='register.html'">
         <div class="role-icon" style="background:rgba(201,162,39,0.10)">🏢</div>
         <div class="role-title">Government / FPO</div>
         <p class="role-desc">Monitor production, detect surplus and shortage zones, access district-level analytics and generate reports.</p>
@@ -888,7 +849,7 @@
         </div>
       </div>
 
-      <div class="role-card" data-aos="fade-up" data-aos-delay="320" onclick="location.href='register.html'">
+      <div class="role-card" onclick="location.href='register.html'">
         <div class="role-icon" style="background:rgba(121,85,72,0.10)">👨‍💼</div>
         <div class="role-title">Platform Admin</div>
         <p class="role-desc">Full platform oversight — manage users, monitor activity, configure settings and ensure platform health.</p>
@@ -908,7 +869,7 @@
 <section class="section" id="ai-features" aria-label="AI Features">
   <div class="container">
 
-    <div class="section-header" data-aos="fade-up">
+    <div class="section-header">
       <span class="section-eyebrow">Artificial Intelligence</span>
       <h2 class="section-title">AI That Works For Farmers</h2>
       <p class="section-desc">
@@ -919,37 +880,37 @@
 
     <div class="features-grid">
 
-      <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-handshake"></i></div>
         <div class="feature-title">Smart Procurement Matching</div>
         <p class="feature-desc">AI scores every farmer-factory pair using distance, price, quality, quantity and reliability — and explains the score.</p>
       </div>
 
-      <div class="feature-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
         <div class="feature-title">Price Forecasting</div>
         <p class="feature-desc">Seasonal price trend analysis helps farmers decide the best time to sell and factories plan procurement budgets.</p>
       </div>
 
-      <div class="feature-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-star"></i></div>
         <div class="feature-title">Supplier Reliability Score</div>
         <p class="feature-desc">Every farmer gets a 0–100 reliability score based on delivery history, quality, timeliness and consistency.</p>
       </div>
 
-      <div class="feature-card" data-aos="fade-up" data-aos-delay="240">
+      <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-calendar-check"></i></div>
         <div class="feature-title">Harvest Prediction</div>
         <p class="feature-desc">Predict harvest windows based on crop type and sowing date so factories can plan procurement in advance.</p>
       </div>
 
-      <div class="feature-card" data-aos="fade-up" data-aos-delay="320">
+      <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
         <div class="feature-title">Surplus & Shortage Detection</div>
         <p class="feature-desc">Real-time analysis of supply vs demand across districts to alert government and FPOs before crises occur.</p>
       </div>
 
-      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+      <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-route"></i></div>
         <div class="feature-title">Route Optimization</div>
         <p class="feature-desc">Google Maps integration calculates the fastest, most cost-effective delivery routes for logistics providers.</p>
@@ -966,7 +927,7 @@
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
 
-      <div data-aos="fade-right">
+      <div>
         <span class="section-eyebrow">Weather Intelligence</span>
         <h2 class="section-title" style="text-align:left">Farm Smarter With Real-Time Weather</h2>
         <p class="section-desc" style="text-align:left;margin-bottom:28px">
@@ -998,7 +959,7 @@
         </div>
       </div>
 
-      <div data-aos="fade-left" data-aos-delay="150">
+      <div>
         <div class="weather-card">
           <div style="display:flex;justify-content:space-between;align-items:flex-start">
             <div>
@@ -1037,7 +998,7 @@
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
 
-      <div data-aos="fade-right" style="text-align:center">
+      <div style="text-align:center">
         <div style="background:linear-gradient(135deg,rgba(26,74,46,0.05),rgba(45,122,79,0.08));border-radius:20px;padding:40px;border:1.5px solid rgba(26,74,46,0.10)">
           <button class="voice-btn" aria-label="Voice demo">
             <i class="fa-solid fa-microphone"></i>
@@ -1056,7 +1017,7 @@
         </div>
       </div>
 
-      <div data-aos="fade-left" data-aos-delay="150">
+      <div>
         <span class="section-eyebrow">Multilingual & Voice</span>
         <h2 class="section-title" style="text-align:left">Speak Your Language. We Understand.</h2>
         <p class="section-desc" style="text-align:left;margin-bottom:24px">
@@ -1089,13 +1050,13 @@
 <section class="section section-alt" id="stats" aria-label="Platform Statistics">
   <div class="container">
 
-    <div class="section-header" data-aos="fade-up">
+    <div class="section-header">
       <span class="section-eyebrow">Platform Impact</span>
       <h2 class="section-title">Numbers That Matter</h2>
       <p class="section-desc">Real impact across India's agricultural ecosystem.</p>
     </div>
 
-    <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+    <div class="stats-grid">
       <div class="stat-item">
         <div class="stat-num">10,000+</div>
         <div class="stat-lbl">Registered Farmers</div>
@@ -1122,7 +1083,7 @@
 ══════════════════════════════════════════ -->
 <section class="cta-section" aria-label="Call to Action">
   <div class="container" style="position:relative;z-index:1">
-    <div data-aos="fade-up">
+    <div>
 
       <img src="assets/images/logo.png" alt="AgriSync OS"
            style="height:90px;width:auto;object-fit:contain;margin:0 auto 24px;display:block;
@@ -1219,11 +1180,8 @@
 <!-- ══════════════════════════════════════════
      SCRIPTS
 ══════════════════════════════════════════ -->
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script type="module">
   import { initLandingNav } from './js/navigation.js';
-
-  AOS.init({ duration: 700, once: true, offset: 60 });
   initLandingNav();
 
   // Smooth scroll

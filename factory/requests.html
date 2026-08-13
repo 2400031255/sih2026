@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Requests — AgriSync OS</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <style>
+    .coming-soon {
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:60vh;text-align:center;gap:16px;
+    }
+    .cs-icon {
+      width:80px;height:80px;border-radius:20px;
+      background:rgba(36,92,58,0.10);
+      display:flex;align-items:center;justify-content:center;
+      font-size:32px;color:#4C8C8A;margin-bottom:8px;
+    }
+    .cs-title {font-size:24px;font-weight:800;color:var(--text-primary);}
+    .cs-desc  {font-size:14px;color:var(--text-muted);max-width:320px;line-height:1.7;}
+  </style>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="../index.html" class="sidebar-brand">
+      <img src="../assets/images/logo.png" alt="AgriSync OS" style="height:36px;width:36px;object-fit:contain;border-radius:8px;flex-shrink:0" />
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">AgriSync OS</div>
+        <div class="sidebar-brand-tag">Factory Portal</div>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sidebar-avatar">U</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+        <div class="sidebar-user-role">factory</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="fa-solid fa-house"></i><span>Dashboard</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" class="nav-item" id="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+  </aside>
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-title">My Requests</div>
+      </div>
+    </header>
+    <main class="page-content">
+      <div class="coming-soon">
+        <div class="cs-icon"><i class="fa-solid fa-paper-plane"></i></div>
+        <div class="cs-title">My Requests</div>
+        <p class="cs-desc">This section is coming soon. Full functionality will be available in the next update.</p>
+        <a href="dashboard.html" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+      </div>
+    </main>
+  </div>
+</div>
+<script type="module">
+  import { requireAuth, logoutUser } from '../js/auth.js';
+  import { initDashboardUI } from '../js/navigation.js';
+  const { profile } = await requireAuth('factory');
+  document.getElementById('sidebar-name').textContent = profile.name || 'factory';
+  document.getElementById('sidebar-avatar').textContent = (profile.name||'U').charAt(0).toUpperCase();
+  initDashboardUI();
+  document.getElementById('logout-btn').addEventListener('click', e => { e.preventDefault(); logoutUser(); });
+</script>
+</body>
+</html>

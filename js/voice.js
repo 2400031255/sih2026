@@ -14,16 +14,25 @@ const SPEECH_LANG_MAP = {
 };
 
 // ── SPEECH RECOGNITION ─────────────────────────────────────
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+function getSpeechRecognition() {
+  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+}
 
 export function isVoiceSupported() {
-  return !!SpeechRecognition;
+  return !!getSpeechRecognition();
 }
 
 export function startListening({ onResult, onError, onEnd, continuous = false }) {
+  const SpeechRecognition = getSpeechRecognition();
   if (!SpeechRecognition) {
-    showToast('Voice recognition is not supported on this browser.', 'error');
+    showToast('Voice recognition is not supported on this browser. Use Chrome.', 'error');
     onError?.('unsupported');
+    return null;
+  }
+  // Requires HTTPS or localhost
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+    showToast('Voice requires a secure (HTTPS) connection.', 'error');
+    onError?.('insecure');
     return null;
   }
 

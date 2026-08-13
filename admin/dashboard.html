@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard — AgriSync OS</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💼</text></svg>" />
+  <link rel="icon" type="image/png" href="../assets/images/logo.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/dashboard.css" />
   <link rel="stylesheet" href="../css/components.css" />
@@ -20,7 +19,7 @@
 <div class="app-shell">
   <aside class="sidebar" id="sidebar">
     <a href="../index.html" class="sidebar-brand">
-      <div class="sidebar-logo">⚙️</div>
+      <img src="../assets/images/logo.png" alt="AgriSync OS" style="height:36px;width:36px;object-fit:contain;border-radius:8px;flex-shrink:0" />
       <div class="sidebar-brand-text">
         <div class="sidebar-brand-name">AgriSync OS</div>
         <div class="sidebar-brand-tag">Admin Panel</div>
@@ -88,28 +87,28 @@
 
       <!-- Stats -->
       <div class="stats-grid">
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-card">
           <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-total-users">—</div>
             <div class="stat-label">Total Users</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="stat-card">
           <div class="stat-icon gold"><i class="fa-solid fa-box"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-total-orders">—</div>
             <div class="stat-label">Total Orders</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="stat-card">
           <div class="stat-icon blue"><i class="fa-solid fa-seedling"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-total-crops">—</div>
             <div class="stat-label">Total Crops</div>
           </div>
         </div>
-        <div class="stat-card" data-aos="fade-up" data-aos-delay="240">
+        <div class="stat-card">
           <div class="stat-icon terra"><i class="fa-solid fa-truck"></i></div>
           <div class="stat-info">
             <div class="stat-value" id="stat-total-deliveries">—</div>
@@ -129,7 +128,7 @@
       </div>
 
       <!-- Users Table -->
-      <div class="card" data-aos="fade-up">
+      <div class="card">
         <div class="card-header">
           <div class="card-title"><i class="fa-solid fa-users"></i> User Management</div>
           <span class="text-muted text-sm" id="users-count">Loading...</span>
@@ -156,14 +155,12 @@
   </div>
 </nav>
 
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script type="module">
   import { requireAuth, logoutUser } from '../js/auth.js';
   import { initDashboardUI, showToast } from '../js/navigation.js';
   import { getAllUsers, toggleUserStatus, renderUserRow } from '../js/admin.js';
   import { getPlatformStats } from '../js/government.js';
 
-  AOS.init({ duration: 600, once: true });
   const { user, profile } = await requireAuth('admin');
   document.getElementById('sidebar-name').textContent = profile.name || 'Admin';
   document.getElementById('sidebar-avatar').textContent = (profile.name||'A').charAt(0).toUpperCase();

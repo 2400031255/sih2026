@@ -296,8 +296,9 @@ export function setLanguage(code) {
   if (!translations[code]) return;
   currentLang = code;
   localStorage.setItem('agrisync_lang', code);
-  applyTranslations();
   document.documentElement.lang = code;
+  // Defer so dynamic content has time to render
+  requestAnimationFrame(() => applyTranslations());
 }
 
 export function getLang() { return currentLang; }
@@ -323,5 +324,9 @@ export function applyTranslations() {
   });
 }
 
-// Auto-apply on DOM ready
-document.addEventListener('DOMContentLoaded', applyTranslations);
+// Apply on DOM ready (for static content only)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyTranslations);
+} else {
+  applyTranslations();
+}
