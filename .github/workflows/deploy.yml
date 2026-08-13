@@ -1,23 +1,39 @@
-name: 🌾 AgriSync OS — Deploy to Firebase
+name: 🌾 AgriSync OS — GitHub Pages Deploy
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   deploy:
-    name: Deploy to Firebase Hosting
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: ✅ Checkout code
+      - name: ✅ Checkout
         uses: actions/checkout@v4
 
-      - name: 🚀 Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: ⚙️ Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: 📦 Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: sih2026-1a32c
-          channelId: live
+          path: '.'
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
