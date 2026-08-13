@@ -113,7 +113,10 @@ export async function logoutUser() {
   try {
     await signOut(auth);
     localStorage.removeItem('agrisync_user');
-    window.location.href = 'login.html';
+    // Works from any subdirectory depth on GitHub Pages
+    const depth = window.location.pathname.split('/').filter(Boolean).length;
+    const base  = depth <= 2 ? './' : '../';
+    window.location.href = base + 'login.html';
   } catch (err) {
     showToast('Logout failed. Please try again.', 'error');
   }
@@ -144,17 +147,19 @@ export function requireAuth(allowedRole) {
   return new Promise((resolve) => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       unsub();
+      const depth = window.location.pathname.split('/').filter(Boolean).length;
+      const base  = depth <= 2 ? './' : '../';
       if (!user) {
-        window.location.href = 'login.html';
+        window.location.href = base + 'login.html';
         return;
       }
       const profile = await getUserProfile(user.uid);
       if (!profile) {
-        window.location.href = 'login.html';
+        window.location.href = base + 'login.html';
         return;
       }
       if (allowedRole && profile.role !== allowedRole && profile.role !== 'admin' && profile.role !== 'government') {
-        window.location.href = ROLE_ROUTES[profile.role] || 'login.html';
+        window.location.href = ROLE_ROUTES[profile.role] || base + 'login.html';
         return;
       }
       window.__agrisync_user = { ...user, profile };
@@ -167,7 +172,9 @@ export function requireAuth(allowedRole) {
 // ── REDIRECT AFTER LOGIN ───────────────────────────────────
 export function redirectByRole(role) {
   const route = ROLE_ROUTES[role];
-  window.location.href = route || 'login.html';
+  const depth = window.location.pathname.split('/').filter(Boolean).length;
+  const base  = depth <= 2 ? './' : '../';
+  window.location.href = route || base + 'login.html';
 }
 
 // ── CURRENT USER (sync) ────────────────────────────────────
