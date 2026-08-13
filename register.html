@@ -4,39 +4,288 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Account — AgriSync OS</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
+
   <style>
-    body { background: var(--bg); }
-    .role-select-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--sp-3);
-      margin-bottom: var(--sp-5);
+    :root {
+      --font-base:    'Inter', system-ui, sans-serif;
+      --forest-green: #1a4a2e;
+      --leaf-green:   #2d7a4f;
+      --gold-light:   #f0c84a;
+      --harvest-gold: #c9a227;
+      --warm-cream:   #f5f0e8;
+      --charcoal:     #1c2b22;
+      --white:        #ffffff;
+      --text-primary: #1c2b22;
+      --text-muted:   #7a9485;
+      --danger:       #c0392b;
     }
-    .role-option {
-      border: 2px solid rgba(36,92,58,0.15);
-      border-radius: var(--radius-md);
-      padding: var(--sp-3) var(--sp-2);
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-base);
+      background: var(--warm-cream);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+    }
+
+    /* ── LEFT PANEL ── */
+    .auth-left {
+      background: linear-gradient(160deg, #0d2b1a 0%, #1a4a2e 45%, #1e5535 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .auth-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.14) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .auth-left-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .auth-left-inner { position: relative; z-index: 1; text-align: center; width: 100%; }
+
+    .auth-logo-link {
+      display: inline-flex; align-items: center; gap: 12px;
+      text-decoration: none; margin-bottom: 40px;
+    }
+    .auth-logo-img { height: 52px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25)); }
+    .auth-logo-name { font-size: 20px; font-weight: 900; color: var(--white); letter-spacing: -0.5px; line-height: 1.1; }
+    .auth-logo-name span { color: var(--gold-light); }
+    .auth-logo-sub { font-size: 10px; color: rgba(255,255,255,0.50); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .auth-hero-logo {
+      width: 180px; height: 180px; object-fit: contain;
+      margin: 0 auto 28px;
+      filter: drop-shadow(0 8px 28px rgba(0,0,0,0.30));
+      animation: authLogoFloat 5s ease-in-out infinite;
+    }
+    @keyframes authLogoFloat {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .auth-left-title { font-size: 24px; font-weight: 900; color: var(--white); letter-spacing: -0.5px; margin-bottom: 10px; }
+    .auth-left-desc  { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 32px; }
+
+    /* Steps */
+    .auth-steps { text-align: left; width: 100%; }
+    .auth-step {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 16px;
+    }
+    .auth-step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+    }
+    .auth-step-num.active { background: var(--gold-light); color: var(--charcoal); }
+    .auth-step-num.inactive { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); }
+    .auth-step-text { font-size: 13px; color: rgba(255,255,255,0.75); font-weight: 500; }
+
+    /* ── RIGHT PANEL ── */
+    .auth-right {
+      padding: 48px 56px;
+      background: var(--warm-cream);
+      overflow-y: auto;
+    }
+    .auth-form-box { max-width: 560px; margin: 0 auto; }
+
+    .auth-form-title { font-size: 28px; font-weight: 900; color: var(--text-primary); letter-spacing: -1px; margin-bottom: 6px; }
+    .auth-form-sub   { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+
+    /* Form */
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; color: var(--text-primary);
+      margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .form-label i { color: var(--leaf-green); font-size: 11px; }
+
+    .input-wrap { position: relative; }
+    .input-wrap .input-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 13px; pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px 12px 40px;
+      border: 1.5px solid rgba(26,74,46,0.15);
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-base);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      min-height: 46px;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--leaf-green);
+      box-shadow: 0 0 0 3px rgba(26,74,46,0.08);
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+
+    select.form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a9485' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .pwd-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: 13px; transition: color 0.2s;
+    }
+    .pwd-toggle:hover { color: var(--leaf-green); }
+
+    /* Role grid — FA icons, professional */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .role-opt {
+      border: 1.5px solid rgba(26,74,46,0.14);
+      border-radius: 12px;
+      padding: 16px 8px 12px;
       text-align: center;
       cursor: pointer;
-      transition: all var(--trans);
-      background: var(--surface);
+      transition: all 0.2s;
+      background: var(--white);
     }
-    .role-option:hover { border-color: var(--forest-green); background: rgba(36,92,58,0.04); }
-    .role-option.selected {
-      border-color: var(--forest-green);
-      background: rgba(36,92,58,0.08);
+    .role-opt:hover {
+      border-color: var(--leaf-green);
+      background: rgba(26,74,46,0.04);
+      transform: translateY(-2px);
     }
-    .role-option-icon { font-size: 24px; margin-bottom: 4px; }
-    .role-option-label { font-size: 11px; font-weight: 600; color: var(--text-primary); }
-    @media (max-width: 768px) {
-      .auth-page { grid-template-columns: 1fr; }
-      .auth-visual { display: none; }
-      .auth-form-side { padding: var(--sp-6) var(--sp-4); }
+    .role-opt.selected {
+      border-color: var(--leaf-green);
+      background: rgba(26,74,46,0.08);
+      box-shadow: 0 0 0 3px rgba(26,74,46,0.08);
+    }
+    .role-opt-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin: 0 auto 8px;
+      transition: all 0.2s;
+    }
+    .role-opt.selected .role-opt-icon { background: var(--forest-green); color: var(--white); }
+    .role-opt:not(.selected) .role-opt-icon { background: rgba(26,74,46,0.08); color: var(--forest-green); }
+    .role-opt-label { font-size: 11px; font-weight: 700; color: var(--text-primary); letter-spacing: 0.2px; }
+
+    /* Language grid */
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .lang-opt {
+      border: 1.5px solid rgba(26,74,46,0.12);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+    }
+    .lang-opt:hover { border-color: var(--leaf-green); }
+    .lang-opt.selected { border-color: var(--leaf-green); background: rgba(26,74,46,0.07); }
+    .lang-native  { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .lang-english { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Section divider */
+    .form-section {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin: 24px 0 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .form-section::after { content: ''; flex: 1; height: 1px; background: rgba(26,74,46,0.10); }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%; padding: 15px;
+      border-radius: 12px;
+      font-size: 15px; font-weight: 700;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--forest-green), var(--leaf-green));
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 18px rgba(26,74,46,0.28);
+      transition: all 0.22s;
+      font-family: var(--font-base);
+      min-height: 52px;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,74,46,0.36); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Error */
+    .error-alert {
+      display: none; align-items: flex-start; gap: 10px;
+      padding: 13px 16px;
+      background: rgba(192,57,43,0.08);
+      border: 1px solid rgba(192,57,43,0.20);
+      border-left: 4px solid var(--danger);
+      border-radius: 10px;
+      font-size: 13px; color: #8b1a12;
+      margin-bottom: 20px;
+    }
+
+    /* Spinner */
+    .spinner-sm {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.30);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Toast */
+    #toast-container {
+      position: fixed; top: 20px; right: 20px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      body { grid-template-columns: 1fr; }
+      .auth-left { display: none; }
+      .auth-right { padding: 32px 20px; }
+      .role-grid { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 </head>
@@ -44,161 +293,134 @@
 
 <div id="toast-container"></div>
 
-<div class="auth-page">
+<!-- ── LEFT PANEL ── -->
+<div class="auth-left">
+  <div class="auth-left-grid"></div>
+  <div class="auth-left-inner">
 
-  <!-- ── LEFT VISUAL ──────────────────────────────────────── -->
-  <div class="auth-visual">
-    <div class="auth-visual-pattern"></div>
-    <div class="auth-visual-content">
-
-      <a href="index.html" style="display:inline-flex;align-items:center;gap:var(--sp-3);
-                                   text-decoration:none;margin-bottom:var(--sp-10)">
-        <div style="width:48px;height:48px;background:var(--harvest-gold);border-radius:var(--radius-md);
-                    display:flex;align-items:center;justify-content:center;font-size:24px">🌾</div>
-        <div style="text-align:left">
-          <div style="font-size:var(--fs-xl);font-weight:var(--fw-black);color:var(--white)">AgriSync OS</div>
-          <div style="font-size:var(--fs-xs);color:rgba(255,255,255,0.6)">From Farm. To Factory. Smarter.</div>
-        </div>
-      </a>
-
-      <div class="auth-visual-icon">🚀</div>
-      <h2 class="auth-visual-title">Join AgriSync OS</h2>
-      <p class="auth-visual-desc">
-        Create your free account and connect with India's
-        largest agricultural procurement network.
-      </p>
-
-      <!-- Steps -->
-      <div style="margin-top:var(--sp-8);text-align:left;width:100%;max-width:320px">
-        <div style="display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-4)">
-          <div style="width:32px;height:32px;border-radius:50%;background:var(--harvest-gold);
-                      color:var(--charcoal);display:flex;align-items:center;justify-content:center;
-                      font-weight:700;font-size:13px;flex-shrink:0">1</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.8)">Create your account</div>
-        </div>
-        <div style="display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-4)">
-          <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);
-                      color:var(--white);display:flex;align-items:center;justify-content:center;
-                      font-weight:700;font-size:13px;flex-shrink:0">2</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.8)">Choose your role</div>
-        </div>
-        <div style="display:flex;gap:var(--sp-3);align-items:center">
-          <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);
-                      color:var(--white);display:flex;align-items:center;justify-content:center;
-                      font-weight:700;font-size:13px;flex-shrink:0">3</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.8)">Access your dashboard</div>
-        </div>
+    <a href="index.html" class="auth-logo-link">
+      <img src="assets/images/logo.png" alt="AgriSync OS" class="auth-logo-img" />
+      <div>
+        <div class="auth-logo-name">Agri<span>Sync</span> OS</div>
+        <div class="auth-logo-sub">From Farm. To Factory. Smarter.</div>
       </div>
+    </a>
 
+    <img src="assets/images/logo.png" alt="AgriSync OS" class="auth-hero-logo" />
+
+    <h2 class="auth-left-title">Join AgriSync OS</h2>
+    <p class="auth-left-desc">
+      Create your free account and connect with India's
+      largest agricultural procurement network.
+    </p>
+
+    <div class="auth-steps">
+      <div class="auth-step">
+        <div class="auth-step-num active">1</div>
+        <div class="auth-step-text">Create your account</div>
+      </div>
+      <div class="auth-step">
+        <div class="auth-step-num inactive">2</div>
+        <div class="auth-step-text">Choose your role</div>
+      </div>
+      <div class="auth-step">
+        <div class="auth-step-num inactive">3</div>
+        <div class="auth-step-text">Access your dashboard</div>
+      </div>
     </div>
+
   </div>
+</div>
 
-  <!-- ── RIGHT FORM ────────────────────────────────────────── -->
-  <div class="auth-form-side">
-    <div class="auth-form-inner">
+<!-- ── RIGHT PANEL ── -->
+<div class="auth-right">
+  <div class="auth-form-box">
 
-      <h1 class="auth-title">Create Account</h1>
-      <p class="auth-subtitle">Join thousands of farmers and factories on AgriSync OS.</p>
+    <h1 class="auth-form-title">Create Account</h1>
+    <p class="auth-form-sub">Join thousands of farmers and factories on AgriSync OS.</p>
 
-      <!-- Error Alert -->
-      <div id="reg-error" class="alert alert-danger" style="display:none;margin-bottom:var(--sp-5)">
-        <i class="fa-solid fa-circle-xmark"></i>
-        <span id="reg-error-msg"></span>
+    <div id="reg-error" class="error-alert">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <span id="reg-error-msg"></span>
+    </div>
+
+    <form id="register-form" novalidate>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label class="form-label" for="reg-name"><i class="fa-solid fa-user"></i> Full Name</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-user input-icon"></i>
+          <input type="text" id="reg-name" class="form-input" placeholder="Ramesh Kumar" required autocomplete="name" />
+        </div>
       </div>
 
-      <form id="register-form" novalidate>
-
-        <!-- Full Name -->
+      <!-- Email + Mobile -->
+      <div class="form-row">
         <div class="form-group">
-          <label class="form-label" for="reg-name">
-            <i class="fa-solid fa-user"></i> Full Name
-          </label>
-          <div class="input-group">
-            <i class="fa-solid fa-user input-icon"></i>
-            <input type="text" id="reg-name" class="form-control"
-                   placeholder="Ramesh Kumar" required autocomplete="name" />
+          <label class="form-label" for="reg-email"><i class="fa-solid fa-envelope"></i> Email</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email" id="reg-email" class="form-input" placeholder="your@email.com" required autocomplete="email" />
           </div>
         </div>
-
-        <!-- Email + Mobile -->
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="reg-email">
-              <i class="fa-solid fa-envelope"></i> Email
-            </label>
-            <div class="input-group">
-              <i class="fa-solid fa-envelope input-icon"></i>
-              <input type="email" id="reg-email" class="form-control"
-                     placeholder="your@email.com" required autocomplete="email" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="reg-mobile">
-              <i class="fa-solid fa-phone"></i> Mobile
-            </label>
-            <div class="input-group">
-              <i class="fa-solid fa-phone input-icon"></i>
-              <input type="tel" id="reg-mobile" class="form-control"
-                     placeholder="+91 98765 43210" autocomplete="tel" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Password -->
         <div class="form-group">
-          <label class="form-label" for="reg-password">
-            <i class="fa-solid fa-lock"></i> Password
-          </label>
-          <div class="input-group">
-            <i class="fa-solid fa-lock input-icon"></i>
-            <input type="password" id="reg-password" class="form-control"
-                   placeholder="Minimum 6 characters" required autocomplete="new-password" />
-            <button type="button" id="toggle-reg-pwd"
-                    style="position:absolute;right:14px;background:none;border:none;
-                           cursor:pointer;color:var(--text-muted);font-size:14px"
-                    aria-label="Toggle password">
-              <i class="fa-solid fa-eye"></i>
-            </button>
+          <label class="form-label" for="reg-mobile"><i class="fa-solid fa-phone"></i> Mobile</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-phone input-icon"></i>
+            <input type="tel" id="reg-mobile" class="form-input" placeholder="+91 98765 43210" autocomplete="tel" />
           </div>
         </div>
+      </div>
 
-        <!-- Role Selection -->
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label" for="reg-password"><i class="fa-solid fa-lock"></i> Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input type="password" id="reg-password" class="form-input" placeholder="Minimum 6 characters" required autocomplete="new-password" />
+          <button type="button" id="toggle-reg-pwd" class="pwd-toggle" aria-label="Toggle password">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Role -->
+      <div class="form-section">Select Your Role</div>
+      <div class="form-group">
+        <div class="role-grid" id="role-grid">
+          <div class="role-opt" data-role="farmer">
+            <div class="role-opt-icon"><i class="fa-solid fa-tractor"></i></div>
+            <div class="role-opt-label">Farmer</div>
+          </div>
+          <div class="role-opt" data-role="factory">
+            <div class="role-opt-icon"><i class="fa-solid fa-industry"></i></div>
+            <div class="role-opt-label">Factory</div>
+          </div>
+          <div class="role-opt" data-role="logistics">
+            <div class="role-opt-icon"><i class="fa-solid fa-truck"></i></div>
+            <div class="role-opt-label">Logistics</div>
+          </div>
+          <div class="role-opt" data-role="government">
+            <div class="role-opt-icon"><i class="fa-solid fa-landmark"></i></div>
+            <div class="role-opt-label">Govt / FPO</div>
+          </div>
+          <div class="role-opt" data-role="admin">
+            <div class="role-opt-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="role-opt-label">Admin</div>
+          </div>
+        </div>
+        <input type="hidden" id="reg-role" required />
+      </div>
+
+      <!-- State + District -->
+      <div class="form-section">Location</div>
+      <div class="form-row">
         <div class="form-group">
-          <label class="form-label">
-            <i class="fa-solid fa-id-badge"></i> I am a
-          </label>
-          <div class="role-select-grid" id="role-grid">
-            <div class="role-option" data-role="farmer">
-              <div class="role-option-icon">👨🌾</div>
-              <div class="role-option-label">Farmer</div>
-            </div>
-            <div class="role-option" data-role="factory">
-              <div class="role-option-icon">🏭</div>
-              <div class="role-option-label">Factory</div>
-            </div>
-            <div class="role-option" data-role="logistics">
-              <div class="role-option-icon">🚚</div>
-              <div class="role-option-label">Logistics</div>
-            </div>
-            <div class="role-option" data-role="government">
-              <div class="role-option-icon">🏢</div>
-              <div class="role-option-label">Government</div>
-            </div>
-            <div class="role-option" data-role="admin">
-              <div class="role-option-icon">👨💼</div>
-              <div class="role-option-label">Admin</div>
-            </div>
-          </div>
-          <input type="hidden" id="reg-role" required />
-        </div>
-
-        <!-- State + District -->
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="reg-state">
-              <i class="fa-solid fa-map"></i> State
-            </label>
-            <select id="reg-state" class="form-control">
+          <label class="form-label" for="reg-state"><i class="fa-solid fa-map"></i> State</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-map input-icon"></i>
+            <select id="reg-state" class="form-input" style="padding-left:40px">
               <option value="">Select State</option>
               <option>Andhra Pradesh</option><option>Telangana</option>
               <option>Tamil Nadu</option><option>Karnataka</option>
@@ -211,88 +433,56 @@
               <option>Jharkhand</option><option>Chhattisgarh</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="reg-district">
-              <i class="fa-solid fa-location-dot"></i> District
-            </label>
-            <input type="text" id="reg-district" class="form-control" placeholder="Your district" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-district"><i class="fa-solid fa-location-dot"></i> District</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-location-dot input-icon"></i>
+            <input type="text" id="reg-district" class="form-input" placeholder="Your district" />
           </div>
         </div>
-
-        <!-- Village -->
-        <div class="form-group">
-          <label class="form-label" for="reg-village">
-            <i class="fa-solid fa-house"></i> Village / Address
-          </label>
-          <input type="text" id="reg-village" class="form-control" placeholder="Village or full address" />
-        </div>
-
-        <!-- Language -->
-        <div class="form-group">
-          <label class="form-label">
-            <i class="fa-solid fa-globe"></i> Preferred Language
-          </label>
-          <div class="lang-grid" id="lang-grid">
-            <div class="lang-option selected" data-lang="en">
-              <div class="lang-native">English</div>
-              <div class="lang-english">English</div>
-            </div>
-            <div class="lang-option" data-lang="hi">
-              <div class="lang-native">हिन्दी</div>
-              <div class="lang-english">Hindi</div>
-            </div>
-            <div class="lang-option" data-lang="te">
-              <div class="lang-native">తెలుగు</div>
-              <div class="lang-english">Telugu</div>
-            </div>
-            <div class="lang-option" data-lang="ta">
-              <div class="lang-native">தமிழ்</div>
-              <div class="lang-english">Tamil</div>
-            </div>
-            <div class="lang-option" data-lang="kn">
-              <div class="lang-native">ಕನ್ನಡ</div>
-              <div class="lang-english">Kannada</div>
-            </div>
-            <div class="lang-option" data-lang="ml">
-              <div class="lang-native">മലയാളം</div>
-              <div class="lang-english">Malayalam</div>
-            </div>
-            <div class="lang-option" data-lang="mr">
-              <div class="lang-native">मराठी</div>
-              <div class="lang-english">Marathi</div>
-            </div>
-            <div class="lang-option" data-lang="bn">
-              <div class="lang-native">বাংলা</div>
-              <div class="lang-english">Bengali</div>
-            </div>
-            <div class="lang-option" data-lang="pa">
-              <div class="lang-native">ਪੰਜਾਬੀ</div>
-              <div class="lang-english">Punjabi</div>
-            </div>
-          </div>
-          <input type="hidden" id="reg-lang" value="en" />
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-block btn-lg" id="reg-btn">
-          <i class="fa-solid fa-user-plus"></i>
-          Create Account
-        </button>
-
-      </form>
-
-      <div style="text-align:center;margin-top:var(--sp-5);font-size:var(--fs-sm);color:var(--text-muted)">
-        Already have an account?
-        <a href="login.html" style="color:var(--forest-green);font-weight:var(--fw-semi);margin-left:4px">
-          Sign In
-        </a>
       </div>
 
+      <!-- Village -->
+      <div class="form-group">
+        <label class="form-label" for="reg-village"><i class="fa-solid fa-house"></i> Village / Address</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-house input-icon"></i>
+          <input type="text" id="reg-village" class="form-input" placeholder="Village or full address" />
+        </div>
+      </div>
+
+      <!-- Language -->
+      <div class="form-section">Preferred Language</div>
+      <div class="form-group">
+        <div class="lang-grid" id="lang-grid">
+          <div class="lang-opt selected" data-lang="en"><div class="lang-native">English</div><div class="lang-english">English</div></div>
+          <div class="lang-opt" data-lang="hi"><div class="lang-native">हिन्दी</div><div class="lang-english">Hindi</div></div>
+          <div class="lang-opt" data-lang="te"><div class="lang-native">తెలుగు</div><div class="lang-english">Telugu</div></div>
+          <div class="lang-opt" data-lang="ta"><div class="lang-native">தமிழ்</div><div class="lang-english">Tamil</div></div>
+          <div class="lang-opt" data-lang="kn"><div class="lang-native">ಕನ್ನಡ</div><div class="lang-english">Kannada</div></div>
+          <div class="lang-opt" data-lang="ml"><div class="lang-native">മലയാളം</div><div class="lang-english">Malayalam</div></div>
+          <div class="lang-opt" data-lang="mr"><div class="lang-native">मराठी</div><div class="lang-english">Marathi</div></div>
+          <div class="lang-opt" data-lang="bn"><div class="lang-native">বাংলা</div><div class="lang-english">Bengali</div></div>
+          <div class="lang-opt" data-lang="pa"><div class="lang-native">ਪੰਜਾਬੀ</div><div class="lang-english">Punjabi</div></div>
+        </div>
+        <input type="hidden" id="reg-lang" value="en" />
+      </div>
+
+      <button type="submit" class="btn-submit" id="reg-btn">
+        <i class="fa-solid fa-user-plus"></i> Create Account
+      </button>
+
+    </form>
+
+    <div style="text-align:center;margin-top:20px;font-size:14px;color:var(--text-muted)">
+      Already have an account?
+      <a href="login.html" style="color:var(--leaf-green);font-weight:700;margin-left:4px;text-decoration:none">Sign In</a>
     </div>
+
   </div>
+</div>
 
-</div><!-- /auth-page -->
-
-<!-- ── SCRIPTS ───────────────────────────────────────────── -->
 <script type="module">
   import { registerUser } from './js/auth.js';
   import { showToast } from './js/navigation.js';
@@ -300,39 +490,34 @@
   let selectedRole = '';
   let selectedLang = 'en';
 
-  // Role selection
-  document.querySelectorAll('.role-option').forEach(opt => {
+  document.querySelectorAll('.role-opt').forEach(opt => {
     opt.addEventListener('click', () => {
-      document.querySelectorAll('.role-option').forEach(o => o.classList.remove('selected'));
+      document.querySelectorAll('.role-opt').forEach(o => o.classList.remove('selected'));
       opt.classList.add('selected');
       selectedRole = opt.dataset.role;
       document.getElementById('reg-role').value = selectedRole;
     });
   });
 
-  // Language selection
-  document.querySelectorAll('.lang-option').forEach(opt => {
+  document.querySelectorAll('.lang-opt').forEach(opt => {
     opt.addEventListener('click', () => {
-      document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('selected'));
+      document.querySelectorAll('.lang-opt').forEach(o => o.classList.remove('selected'));
       opt.classList.add('selected');
       selectedLang = opt.dataset.lang;
       document.getElementById('reg-lang').value = selectedLang;
     });
   });
 
-  // Toggle password
   document.getElementById('toggle-reg-pwd').addEventListener('click', () => {
-    const pwd = document.getElementById('reg-password');
+    const pwd  = document.getElementById('reg-password');
     const icon = document.querySelector('#toggle-reg-pwd i');
     const isText = pwd.type === 'text';
     pwd.type = isText ? 'password' : 'text';
     icon.className = isText ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
   });
 
-  // Form submit
   document.getElementById('register-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const errorBox = document.getElementById('reg-error');
     const errorMsg = document.getElementById('reg-error-msg');
     errorBox.style.display = 'none';
@@ -345,40 +530,32 @@
     const district = document.getElementById('reg-district').value.trim();
     const village  = document.getElementById('reg-village').value.trim();
 
-    // Validation
-    if (!name)          { showError('Please enter your full name.'); return; }
-    if (!email)         { showError('Please enter your email address.'); return; }
-    if (!password || password.length < 6) { showError('Password must be at least 6 characters.'); return; }
-    if (!selectedRole)  { showError('Please select your role.'); return; }
+    if (!name)                        { showErr('Please enter your full name.'); return; }
+    if (!email)                       { showErr('Please enter your email address.'); return; }
+    if (!password || password.length < 6) { showErr('Password must be at least 6 characters.'); return; }
+    if (!selectedRole)                { showErr('Please select your role.'); return; }
 
     const btn = document.getElementById('reg-btn');
     btn.disabled = true;
-    btn.innerHTML = '<div class="spinner spinner-sm"></div> Creating account...';
+    btn.innerHTML = '<div class="spinner-sm"></div> Creating account...';
 
-    const result = await registerUser({
-      name, email, mobile, password,
-      role: selectedRole, state, district, village,
-      language: selectedLang,
-    });
+    const result = await registerUser({ name, email, mobile, password, role: selectedRole, state, district, village, language: selectedLang });
 
     if (result.success) {
-      showToast('Account created! Redirecting to your dashboard...', 'success');
+      showToast('Account created! Redirecting...', 'success');
       const routes = {
-        farmer: '/farmer/dashboard.html', factory: '/factory/dashboard.html',
-        logistics: '/logistics/dashboard.html', government: '/government/dashboard.html',
-        admin: '/admin/dashboard.html',
+        farmer: 'farmer/dashboard.html', factory: 'factory/dashboard.html',
+        logistics: 'logistics/dashboard.html', government: 'government/dashboard.html',
+        admin: 'admin/dashboard.html',
       };
-      setTimeout(() => { window.location.href = routes[selectedRole] || '/login.html'; }, 1200);
+      setTimeout(() => { window.location.href = routes[selectedRole] || 'login.html'; }, 1200);
     } else {
-      showError(result.error);
+      showErr(result.error);
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Create Account';
     }
 
-    function showError(msg) {
-      errorMsg.textContent = msg;
-      errorBox.style.display = 'flex';
-    }
+    function showErr(msg) { errorMsg.textContent = msg; errorBox.style.display = 'flex'; }
   });
 </script>
 
