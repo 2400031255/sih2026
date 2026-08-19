@@ -2,32 +2,135 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Users — only own profile
+    // ── HELPER FUNCTIONS ──────────────────────────────────
+    function isAuth() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+    function getRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    function isGovtAdmin() {
+      return isAuth() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'government_admin' &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.approved == true;
+    }
+    function roleNotChanged() {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role','approved']);
+    }
+
+    // ── USERS COLLECTION ──────────────────────────────────
     match /users/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      // Anyone authenticated can read their own profile
+      allow read: if isOwner(uid) || isGovtAdmin();
+
+      // Create: only if creating own document, role must NOT be government_admin
+      allow create: if isOwner(uid) &&
+        request.resource.data.role != 'government_admin' &&
+        request.resource.data.role != 'admin';
+
+      // Update: own profile only, cannot change role or approved
+      allow update: if isOwner(uid) && roleNotChanged();
+
+      // Delete: only govt admin
+      allow delete: if isGovtAdmin();
     }
 
-    // Farmers — readable by all auth users, writable by owner
+    // ── FARMERS COLLECTION ────────────────────────────────
     match /farmers/{uid} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == uid;
+      allow read:   if isAuth();
+      allow create: if isOwner(uid) && request.resource.data.role == 'farmer';
+      allow update: if isOwner(uid) && roleNotChanged();
+      allow delete: if isGovtAdmin();
     }
 
-    // Factories — readable by all auth users, writable by owner
+    // ── FACTORIES COLLECTION ─────────────────────────────
     match /factories/{uid} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == uid;
+      allow read:   if isAuth();
+      allow create: if isOwner(uid) && request.resource.data.role == 'factory';
+      allow update: if isOwner(uid) && roleNotChanged();
+      allow delete: if isGovtAdmin();
     }
 
-    // Logistics — readable by all auth users, writable by owner
+    // ── LOGISTICS COLLECTION ─────────────────────────────
     match /logistics/{uid} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == uid;
+      allow read:   if isAuth();
+      allow create: if isOwner(uid) && request.resource.data.role == 'logistics';
+      allow update: if isOwner(uid) && roleNotChanged();
+      allow delete: if isGovtAdmin();
     }
 
-    // All other collections — authenticated users only
+    // ── CROPS ─────────────────────────────────────────────
+    match /crops/{cropId} {
+      allow read:   if isAuth();
+      allow create: if isAuth() && request.resource.data.farmerId == request.auth.uid;
+      allow update: if isAuth() && resource.data.farmerId == request.auth.uid;
+      allow delete: if isAuth() && resource.data.farmerId == request.auth.uid;
+    }
+
+    // ── ORDERS ────────────────────────────────────────────
+    match /orders/{orderId} {
+      allow read:   if isAuth() &&
+        (resource.data.farmerId == request.auth.uid ||
+         resource.data.factoryId == request.auth.uid ||
+         isGovtAdmin());
+      allow create: if isAuth();
+      allow update: if isAuth() &&
+        (resource.data.farmerId == request.auth.uid ||
+         resource.data.factoryId == request.auth.uid ||
+         resource.data.logisticsId == request.auth.uid);
+    }
+
+    // ── PROCUREMENT REQUESTS ──────────────────────────────
+    match /procurement_requests/{reqId} {
+      allow read:   if isAuth() &&
+        (resource.data.farmerId == request.auth.uid ||
+         resource.data.factoryId == request.auth.uid);
+      allow create: if isAuth();
+      allow update: if isAuth() &&
+        (resource.data.farmerId == request.auth.uid ||
+         resource.data.factoryId == request.auth.uid);
+    }
+
+    // ── DELIVERIES ────────────────────────────────────────
+    match /deliveries/{delId} {
+      allow read:   if isAuth();
+      allow create: if isAuth();
+      allow update: if isAuth() && resource.data.logisticsId == request.auth.uid;
+    }
+
+    // ── TRUCKS / DRIVERS ──────────────────────────────────
+    match /trucks/{id} {
+      allow read:   if isAuth();
+      allow write:  if isAuth() && (resource == null || resource.data.ownerId == request.auth.uid);
+    }
+    match /drivers/{id} {
+      allow read:   if isAuth();
+      allow write:  if isAuth() && (resource == null || resource.data.ownerId == request.auth.uid);
+    }
+
+    // ── NOTIFICATIONS ─────────────────────────────────────
+    match /notifications/{notifId} {
+      allow read:   if isAuth() && resource.data.userId == request.auth.uid;
+      allow create: if isAuth();
+      allow update: if isAuth() && resource.data.userId == request.auth.uid;
+    }
+
+    // ── ANALYTICS / REPORTS (govt admin only) ────────────
+    match /analytics/{docId} {
+      allow read:  if isAuth();
+      allow write: if isGovtAdmin();
+    }
+    match /reports/{docId} {
+      allow read:  if isAuth();
+      allow write: if isGovtAdmin();
+    }
+
+    // ── FALLBACK ──────────────────────────────────────────
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAuth();
     }
   }
 }

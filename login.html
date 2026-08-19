@@ -1,635 +1,727 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In — AgriSync OS</title>
-  <link rel="icon" type="image/png" href="assets/images/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/components.css" />
-
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>AgriSync OS — Sign In</title>
+  <link rel="icon" href="assets/images/logo.png"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
   <style>
-    :root {
-      --font-base:     'Inter', system-ui, sans-serif;
-      --forest-green:  #1a4a2e;
-      --leaf-green:    #2d7a4f;
-      --gold-light:    #f0c84a;
-      --harvest-gold:  #c9a227;
-      --warm-cream:    #f5f0e8;
-      --charcoal:      #1c2b22;
-      --white:         #ffffff;
-      --text-primary:  #1c2b22;
-      --text-secondary:#4a6355;
-      --text-muted:    #7a9485;
-      --danger:        #c0392b;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--font-base);
-      background: var(--warm-cream);
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    /* ── LEFT PANEL ── */
-    .auth-left {
-      background: linear-gradient(160deg, #0d2b1a 0%, #1a4a2e 45%, #1e5535 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 48px;
-      position: relative;
-      overflow: hidden;
-    }
-    .auth-left::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.14) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 20%, rgba(106,171,130,0.08) 0%, transparent 45%);
-      pointer-events: none;
-    }
-    .auth-left-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-    }
-    .auth-left-inner {
-      position: relative; z-index: 1;
-      text-align: center;
-      max-width: 380px;
-    }
-
-    /* Logo on left */
-    .auth-logo-link {
-      display: inline-flex; align-items: center; gap: 12px;
-      text-decoration: none; margin-bottom: 48px;
-    }
-    .auth-logo-img {
-      height: 56px; width: auto; object-fit: contain;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25));
-    }
-    .auth-logo-text { text-align: left; }
-    .auth-logo-name {
-      font-size: 22px; font-weight: 900; color: var(--white);
-      letter-spacing: -0.5px; line-height: 1.1;
-    }
-    .auth-logo-name span { color: var(--gold-light); }
-    .auth-logo-sub {
-      font-size: 10px; color: rgba(255,255,255,0.50);
-      font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
-    }
-
-    /* Big logo in center */
-    .auth-hero-logo {
-      width: 200px; height: 200px; object-fit: contain;
-      margin: 0 auto 32px;
-      filter: drop-shadow(0 8px 28px rgba(0,0,0,0.30));
-      animation: authLogoFloat 5s ease-in-out infinite;
-    }
-    @keyframes authLogoFloat {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-10px); }
-    }
-
-    .auth-left-title {
-      font-size: 28px; font-weight: 900; color: var(--white);
-      letter-spacing: -0.8px; margin-bottom: 12px; line-height: 1.15;
-    }
-    .auth-left-desc {
-      font-size: 14px; color: rgba(255,255,255,0.60);
-      line-height: 1.75; margin-bottom: 36px;
-    }
-
-    /* Feature pills */
-    .auth-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-    .auth-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.09);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 12px; font-weight: 500;
-      color: rgba(255,255,255,0.80);
-    }
-
-    /* ── RIGHT PANEL ── */
-    .auth-right {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 48px;
-      background: var(--warm-cream);
-      overflow-y: auto;
-    }
-    .auth-form-box {
-      width: 100%; max-width: 420px;
-    }
-
-    .auth-form-header { margin-bottom: 32px; }
-    .auth-form-title {
-      font-size: 30px; font-weight: 900; color: var(--text-primary);
-      letter-spacing: -1px; margin-bottom: 6px;
-    }
-    .auth-form-sub {
-      font-size: 14px; color: var(--text-muted);
-    }
-
-    /* Form elements */
-    .form-group { margin-bottom: 20px; }
-    .form-label {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 13px; font-weight: 600; color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-    .form-label i { color: var(--leaf-green); font-size: 12px; }
-
-    .input-wrap { position: relative; }
-    .input-wrap .input-icon {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); font-size: 14px; pointer-events: none;
-    }
-    .form-input {
-      width: 100%;
-      padding: 13px 16px 13px 42px;
-      border: 1.5px solid rgba(26,74,46,0.16);
-      border-radius: 12px;
-      background: var(--white);
-      color: var(--text-primary);
-      font-size: 15px;
-      font-family: var(--font-base);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      min-height: 50px;
-    }
-    .form-input:focus {
-      outline: none;
-      border-color: var(--leaf-green);
-      box-shadow: 0 0 0 3px rgba(26,74,46,0.09);
-    }
-    .form-input::placeholder { color: var(--text-muted); }
-
-    .pwd-toggle {
-      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer;
-      color: var(--text-muted); font-size: 14px;
-      transition: color 0.2s;
-    }
-    .pwd-toggle:hover { color: var(--leaf-green); }
-
-    .forgot-row {
-      display: flex; justify-content: flex-end; margin-bottom: 24px;
-    }
-    .forgot-btn {
-      background: none; border: none; cursor: pointer;
-      font-size: 13px; font-weight: 600;
-      color: var(--leaf-green); font-family: var(--font-base);
-      transition: color 0.2s;
-    }
-    .forgot-btn:hover { color: var(--forest-green); }
-
-    /* Submit button */
-    .btn-submit {
-      width: 100%;
-      padding: 15px;
-      border-radius: 12px;
-      font-size: 16px; font-weight: 700;
-      color: var(--white);
-      background: linear-gradient(135deg, var(--forest-green), var(--leaf-green));
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      box-shadow: 0 4px 18px rgba(26,74,46,0.30);
-      transition: all 0.22s;
-      font-family: var(--font-base);
-      min-height: 52px;
-    }
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(26,74,46,0.38);
-    }
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    /* Divider */
-    .divider {
-      display: flex; align-items: center; gap: 14px;
-      color: var(--text-muted); font-size: 13px;
-      margin: 24px 0;
-    }
-    .divider::before, .divider::after {
-      content: ''; flex: 1; height: 1px;
-      background: rgba(26,74,46,0.12);
-    }
-
-    /* Register link */
-    .auth-switch {
-      text-align: center; font-size: 14px; color: var(--text-muted);
-    }
-    .auth-switch a {
-      color: var(--leaf-green); font-weight: 700;
-      text-decoration: none; margin-left: 4px;
-    }
-    .auth-switch a:hover { color: var(--forest-green); }
-
-    /* Demo box */
-    .demo-box {
-      margin-top: 24px;
-      padding: 16px 18px;
-      background: rgba(201,162,39,0.07);
-      border: 1px solid rgba(201,162,39,0.22);
-      border-radius: 12px;
-    }
-    .demo-box-title {
-      font-size: 12px; font-weight: 700;
-      color: var(--text-primary); margin-bottom: 8px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .demo-box-list {
-      font-size: 12px; color: var(--text-muted); line-height: 2;
-    }
-    .demo-row {
-      display: flex; justify-content: space-between; align-items: center;
-      cursor: pointer; padding: 2px 0;
-      transition: color 0.15s;
-    }
-    .demo-row:hover { color: var(--forest-green); }
-    .demo-row code {
-      font-family: monospace; font-size: 11px;
-      background: rgba(26,74,46,0.07);
-      padding: 2px 8px; border-radius: 6px;
-      color: var(--forest-green);
-    }
-
-    /* Error alert */
-    .error-alert {
-      display: none;
-      align-items: flex-start; gap: 10px;
-      padding: 14px 16px;
-      background: rgba(192,57,43,0.08);
-      border: 1px solid rgba(192,57,43,0.22);
-      border-left: 4px solid var(--danger);
-      border-radius: 10px;
-      font-size: 13px; color: #8b1a12;
-      margin-bottom: 20px;
-    }
-    .error-alert i { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
-
-    /* Spinner */
-    .spinner-sm {
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.30);
-      border-top-color: var(--white);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      flex-shrink: 0;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(28,43,34,0.55);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      display: flex; align-items: center; justify-content: center;
-      padding: 16px;
-      opacity: 0; visibility: hidden;
-      transition: all 0.22s;
-    }
-    .modal-overlay.active { opacity: 1; visibility: visible; }
-    .modal {
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 16px 60px rgba(0,0,0,0.18);
-      width: 100%; max-width: 400px;
-      transform: scale(0.95) translateY(10px);
-      transition: transform 0.22s;
-    }
-    .modal-overlay.active .modal { transform: scale(1) translateY(0); }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px;
-      border-bottom: 1px solid rgba(26,74,46,0.10);
-    }
-    .modal-title { font-size: 18px; font-weight: 800; color: var(--text-primary); }
-    .modal-close {
-      width: 34px; height: 34px; border-radius: 50%;
-      border: none; background: rgba(26,74,46,0.07);
-      color: var(--text-muted); cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; transition: all 0.2s;
-    }
-    .modal-close:hover { background: rgba(192,57,43,0.10); color: var(--danger); }
-    .modal-body   { padding: 20px 24px; }
-    .modal-footer {
-      padding: 14px 24px;
-      border-top: 1px solid rgba(26,74,46,0.10);
-      display: flex; gap: 10px; justify-content: flex-end;
-    }
-    .btn-ghost-sm {
-      padding: 9px 18px; border-radius: 10px;
-      font-size: 13px; font-weight: 600;
-      background: transparent; color: var(--text-muted);
-      border: 1px solid rgba(26,74,46,0.15);
-      cursor: pointer; font-family: var(--font-base);
-      transition: all 0.2s;
-    }
-    .btn-ghost-sm:hover { background: rgba(26,74,46,0.05); color: var(--text-primary); }
-    .btn-primary-sm {
-      padding: 9px 20px; border-radius: 10px;
-      font-size: 13px; font-weight: 700;
-      background: var(--forest-green); color: var(--white);
-      border: none; cursor: pointer; font-family: var(--font-base);
-      display: flex; align-items: center; gap: 6px;
-      transition: all 0.2s;
-    }
-    .btn-primary-sm:hover { background: var(--leaf-green); }
-    .btn-primary-sm:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* Toast */
-    #toast-container {
-      position: fixed; top: 20px; right: 20px;
-      z-index: 9999;
-      display: flex; flex-direction: column; gap: 10px;
-      pointer-events: none;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      body { grid-template-columns: 1fr; }
-      .auth-left { display: none; }
-      .auth-right { padding: 40px 24px; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:#F7F3E8;font-family:'Segoe UI',system-ui,sans-serif;display:flex;align-items:center;justify-content:center}
+    .auth-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;width:100%}
+    .auth-left{background:linear-gradient(160deg,#0d2b1a 0%,#173F2A 40%,#245C3A 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 40px;position:relative;overflow:hidden}
+    .auth-left::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 70%,rgba(227,181,47,0.12) 0%,transparent 55%),radial-gradient(circle at 80% 20%,rgba(168,195,154,0.07) 0%,transparent 45%);pointer-events:none}
+    .auth-left-inner{position:relative;z-index:1;text-align:center;max-width:400px}
+    .auth-logo{width:140px;height:140px;object-fit:contain;margin:0 auto 24px;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.3))}
+    .auth-brand{font-size:32px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:6px}
+    .auth-brand span{color:#E3B52F}
+    .auth-tagline{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:40px;letter-spacing:0.3px}
+    .auth-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:40px}
+    .auth-pill{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:999px;padding:6px 14px;font-size:12px;color:rgba(255,255,255,0.75);display:flex;align-items:center;gap:6px}
+    .auth-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%}
+    .auth-stat{text-align:center;background:rgba(255,255,255,0.06);border-radius:12px;padding:16px 8px;border:1px solid rgba(255,255,255,0.08)}
+    .auth-stat-val{font-size:22px;font-weight:800;color:#E3B52F;line-height:1}
+    .auth-stat-lbl{font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+    .auth-right{background:#F7F3E8;display:flex;flex-direction:column;justify-content:center;padding:48px 40px;overflow-y:auto}
+    .auth-form-box{max-width:440px;width:100%;margin:0 auto}
+    .auth-tabs{display:flex;gap:8px;margin-bottom:32px;background:rgba(36,92,58,0.07);border-radius:12px;padding:4px}
+    .auth-tab{flex:1;padding:10px;border:none;background:transparent;border-radius:9px;font-size:14px;font-weight:600;color:#5A6B5E;cursor:pointer;transition:all 0.2s}
+    .auth-tab.active{background:#fff;color:#173F2A;box-shadow:0 2px 8px rgba(36,92,58,0.12)}
+    .role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:28px}
+    .role-btn{border:2px solid rgba(36,92,58,0.15);border-radius:14px;padding:16px 10px;background:#fff;cursor:pointer;text-align:center;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .role-btn:hover{border-color:#245C3A;background:rgba(36,92,58,0.04)}
+    .role-btn.active{border-color:#245C3A;background:rgba(36,92,58,0.08);box-shadow:0 0 0 3px rgba(36,92,58,0.1)}
+    .role-btn-icon{font-size:28px;line-height:1}
+    .role-btn-label{font-size:12px;font-weight:700;color:#26332B}
+    .role-btn-sub{font-size:10px;color:#8FA08A}
+    .form-section{display:none}
+    .form-section.active{display:block}
+    .field-group{margin-bottom:20px}
+    .field-label{font-size:13px;font-weight:600;color:#26332B;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+    .field-label i{color:#245C3A;font-size:12px}
+    .field-input{width:100%;padding:13px 16px;border:1.5px solid rgba(36,92,58,0.18);border-radius:10px;background:#fff;font-size:15px;color:#26332B;transition:border-color 0.2s,box-shadow 0.2s;outline:none}
+    .field-input:focus{border-color:#245C3A;box-shadow:0 0 0 3px rgba(36,92,58,0.1)}
+    .phone-row{display:flex;gap:8px}
+    .phone-prefix{padding:13px 14px;border:1.5px solid rgba(36,92,58,0.18);border-radius:10px;background:#fff;font-size:15px;font-weight:600;color:#26332B;min-width:64px;text-align:center}
+    .btn-primary-auth{width:100%;padding:15px;background:#173F2A;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px}
+    .btn-primary-auth:hover{background:#245C3A;transform:translateY(-1px);box-shadow:0 6px 20px rgba(23,63,42,0.3)}
+    .btn-primary-auth:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+    .btn-ghost-auth{width:100%;padding:13px;background:transparent;color:#245C3A;border:1.5px solid rgba(36,92,58,0.25);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:10px}
+    .btn-ghost-auth:hover{background:rgba(36,92,58,0.06)}
+    .auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:#8FA08A;font-size:13px}
+    .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:rgba(36,92,58,0.12)}
+    .auth-switch{text-align:center;font-size:13px;color:#5A6B5E;margin-top:20px}
+    .auth-switch a{color:#245C3A;font-weight:600;cursor:pointer;text-decoration:none}
+    .auth-switch a:hover{text-decoration:underline}
+    .error-box{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);border-radius:10px;padding:12px 16px;font-size:13px;color:#8b1a12;display:none;align-items:center;gap:8px;margin-bottom:16px}
+    .error-box.show{display:flex}
+    .success-box{background:rgba(36,92,58,0.08);border:1px solid rgba(36,92,58,0.2);border-radius:10px;padding:12px 16px;font-size:13px;color:#173F2A;display:none;align-items:center;gap:8px;margin-bottom:16px}
+    .success-box.show{display:flex}
+    .otp-row{display:flex;gap:10px;justify-content:center;margin:20px 0}
+    .otp-input{width:48px;height:56px;border:2px solid rgba(36,92,58,0.2);border-radius:12px;text-align:center;font-size:22px;font-weight:700;color:#173F2A;background:#fff;outline:none;transition:all 0.2s}
+    .otp-input:focus{border-color:#245C3A;box-shadow:0 0 0 3px rgba(36,92,58,0.12)}
+    .otp-input.filled{border-color:#245C3A;background:rgba(36,92,58,0.04)}
+    .resend-row{text-align:center;font-size:13px;color:#5A6B5E;margin-top:12px}
+    .resend-btn{color:#245C3A;font-weight:600;cursor:pointer;background:none;border:none;font-size:13px}
+    .resend-btn:disabled{color:#8FA08A;cursor:not-allowed}
+    .phone-display{text-align:center;font-size:15px;font-weight:600;color:#173F2A;margin-bottom:8px}
+    .phone-display span{color:#245C3A}
+    .change-num{color:#245C3A;font-size:13px;cursor:pointer;text-decoration:underline;background:none;border:none;font-weight:600}
+    .spinner-sm{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .pwd-wrap{position:relative}
+    .pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#8FA08A;font-size:14px}
+    .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .auth-heading{font-size:26px;font-weight:800;color:#173F2A;margin-bottom:4px}
+    .auth-subheading{font-size:14px;color:#5A6B5E;margin-bottom:28px}
+    .step-indicator{display:flex;align-items:center;gap:6px;margin-bottom:24px}
+    .step-dot{width:8px;height:8px;border-radius:50%;background:rgba(36,92,58,0.2);transition:all 0.3s}
+    .step-dot.active{background:#245C3A;width:24px;border-radius:4px}
+    .step-dot.done{background:#E3B52F}
+    @media(max-width:768px){
+      .auth-wrap{grid-template-columns:1fr}
+      .auth-left{display:none}
+      .auth-right{padding:32px 20px}
+      .role-grid{grid-template-columns:repeat(2,1fr)}
+      .form-row-2{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-
 <div id="toast-container"></div>
+<div class="auth-wrap">
 
-<!-- ══════════════════════════════════════════
-     LEFT PANEL
-══════════════════════════════════════════ -->
-<div class="auth-left">
-  <div class="auth-left-grid"></div>
-  <div class="auth-left-inner">
-
-    <a href="index.html" class="auth-logo-link">
-      <img src="assets/images/logo.png" alt="AgriSync OS Logo" class="auth-logo-img" />
-      <div class="auth-logo-text">
-        <div class="auth-logo-name">Agri<span>Sync</span> OS</div>
-        <div class="auth-logo-sub">From Farm. To Factory. Smarter.</div>
+  <!-- LEFT PANEL -->
+  <div class="auth-left">
+    <div class="auth-left-inner">
+      <img src="assets/images/logo.png" alt="AgriSync OS" class="auth-logo"/>
+      <div class="auth-brand">Agri<span>Sync</span> OS</div>
+      <div class="auth-tagline">Smart Agriculture. Connected Supply Chain.</div>
+      <div class="auth-pills">
+        <div class="auth-pill"><i class="fa-solid fa-robot"></i> AI-Powered</div>
+        <div class="auth-pill"><i class="fa-solid fa-globe"></i> 9 Languages</div>
+        <div class="auth-pill"><i class="fa-solid fa-microphone"></i> Voice-Enabled</div>
+        <div class="auth-pill"><i class="fa-solid fa-shield-halved"></i> Secure OTP</div>
       </div>
-    </a>
-    <a href="index.html" style="display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,0.60);font-size:12px;font-weight:600;text-decoration:none;margin-bottom:32px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);transition:all 0.2s" onmouseover="this.style.color='#f0c84a';this.style.borderColor='rgba(240,200,74,0.40)'" onmouseout="this.style.color='rgba(255,255,255,0.60)';this.style.borderColor='rgba(255,255,255,0.15)'">
-      <i class="fa-solid fa-house"></i> Home
-    </a>
-
-    <img src="assets/images/logo.png" alt="AgriSync OS" class="auth-hero-logo" />
-
-    <h2 class="auth-left-title">Welcome Back to<br>AgriSync OS</h2>
-    <p class="auth-left-desc">
-      Sign in to access your dashboard and continue
-      building India's smarter agricultural supply chain.
-    </p>
-
-    <div class="auth-pills">
-      <span class="auth-pill">🤖 AI Recommendations</span>
-      <span class="auth-pill">🌧️ Weather Alerts</span>
-      <span class="auth-pill">🎤 Voice Support</span>
-      <span class="auth-pill">🗺️ Live Maps</span>
-      <span class="auth-pill">🌐 9 Languages</span>
+      <div class="auth-stats">
+        <div class="auth-stat">
+          <div class="auth-stat-val">10K+</div>
+          <div class="auth-stat-lbl">Farmers</div>
+        </div>
+        <div class="auth-stat">
+          <div class="auth-stat-val">500+</div>
+          <div class="auth-stat-lbl">Factories</div>
+        </div>
+        <div class="auth-stat">
+          <div class="auth-stat-val">₹50Cr</div>
+          <div class="auth-stat-lbl">Procured</div>
+        </div>
+      </div>
     </div>
-
   </div>
-</div>
 
-<!-- ══════════════════════════════════════════
-     RIGHT PANEL — FORM
-══════════════════════════════════════════ -->
-<div class="auth-right">
-  <div class="auth-form-box">
+  <!-- RIGHT PANEL -->
+  <div class="auth-right">
+    <div class="auth-form-box">
 
-    <div class="auth-form-header">
-      <h1 class="auth-form-title">Sign In</h1>
-      <p class="auth-form-sub">Enter your credentials to access your dashboard.</p>
-    </div>
+      <!-- TABS: Sign In / Create Account -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+      </div>
 
-    <!-- Error Alert -->
-    <div id="login-error" class="error-alert">
-      <i class="fa-solid fa-circle-xmark"></i>
-      <span id="login-error-msg"></span>
-    </div>
+      <!-- ROLE SELECTION -->
+      <div class="role-grid" id="role-grid">
+        <button class="role-btn active" data-role="farmer" onclick="selectRole('farmer',this)">
+          <div class="role-btn-icon">👨‍🌾</div>
+          <div class="role-btn-label">Farmer</div>
+          <div class="role-btn-sub">Mobile OTP</div>
+        </button>
+        <button class="role-btn" data-role="factory" onclick="selectRole('factory',this)">
+          <div class="role-btn-icon">🏭</div>
+          <div class="role-btn-label">Factory</div>
+          <div class="role-btn-sub">Email Login</div>
+        </button>
+        <button class="role-btn" data-role="logistics" onclick="selectRole('logistics',this)">
+          <div class="role-btn-icon">🚚</div>
+          <div class="role-btn-label">Logistics</div>
+          <div class="role-btn-sub">Email Login</div>
+        </button>
+        <button class="role-btn" data-role="government_admin" onclick="selectRole('government_admin',this)">
+          <div class="role-btn-icon">🏢</div>
+          <div class="role-btn-label">Government / FPO</div>
+          <div class="role-btn-sub">Admin Login</div>
+        </button>
+      </div>
 
-    <!-- Form -->
-    <form id="login-form" novalidate>
+      <!-- ERROR / SUCCESS -->
+      <div class="error-box" id="err-box"><i class="fa-solid fa-circle-xmark"></i><span id="err-msg"></span></div>
+      <div class="success-box" id="suc-box"><i class="fa-solid fa-circle-check"></i><span id="suc-msg"></span></div>
 
-      <div class="form-group">
-        <label class="form-label" for="email">
-          <i class="fa-solid fa-envelope"></i> Email Address
-        </label>
-        <div class="input-wrap">
-          <i class="fa-solid fa-envelope input-icon"></i>
-          <input type="email" id="email" class="form-input"
-                 placeholder="your@email.com" required autocomplete="email" />
+      <!-- ══ SIGN IN FORMS ══ -->
+
+      <!-- FARMER SIGN IN: Mobile -->
+      <div class="form-section active" id="si-farmer">
+        <div class="auth-heading">Welcome Back 🌾</div>
+        <div class="auth-subheading">Enter your mobile number to receive OTP</div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-mobile-screen"></i> Mobile Number</div>
+          <div class="phone-row">
+            <div class="phone-prefix">+91</div>
+            <input class="field-input" id="si-farmer-mobile" type="tel" inputmode="numeric"
+              maxlength="10" placeholder="10-digit mobile number"/>
+          </div>
+        </div>
+        <button class="btn-primary-auth" id="si-farmer-send-btn" onclick="farmerSendOTP('signin')">
+          <i class="fa-solid fa-paper-plane"></i> Send OTP
+        </button>
+        
+      </div>
+
+      <!-- FARMER SIGN IN: OTP -->
+      <div class="form-section" id="si-farmer-otp">
+        <div class="auth-heading">Verify OTP 🔐</div>
+        <div class="phone-display">Code sent to <span id="si-phone-display"></span></div>
+        <div class="otp-row" id="si-otp-row">
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+        </div>
+        <button class="btn-primary-auth" id="si-verify-btn" onclick="farmerVerifyOTP('signin')">
+          <i class="fa-solid fa-shield-check"></i> Verify &amp; Sign In
+        </button>
+        <div class="resend-row">
+          <button class="resend-btn" id="si-resend-btn" disabled onclick="farmerSendOTP('signin',true)">
+            Resend OTP (<span id="si-countdown">30</span>s)
+          </button>
+          &nbsp;·&nbsp;
+          <button class="change-num" onclick="showSection('si-farmer')">Change Number</button>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label" for="password">
-          <i class="fa-solid fa-lock"></i> Password
-        </label>
-        <div class="input-wrap">
-          <i class="fa-solid fa-lock input-icon"></i>
-          <input type="password" id="password" class="form-input"
-                 placeholder="Enter your password" required autocomplete="current-password" />
-          <button type="button" id="toggle-password" class="pwd-toggle" aria-label="Toggle password">
-            <i class="fa-solid fa-eye"></i>
+      <!-- FACTORY / LOGISTICS / GOVT SIGN IN: Email -->
+      <div class="form-section" id="si-email">
+        <div class="auth-heading" id="si-email-heading">Sign In 🏭</div>
+        <div class="auth-subheading">Enter your credentials</div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-envelope"></i> Email Address</div>
+          <input class="field-input" id="si-email-val" type="email" placeholder="your@email.com" autocomplete="email"/>
+        </div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-lock"></i> Password</div>
+          <div class="pwd-wrap">
+            <input class="field-input" id="si-pwd-val" type="password" placeholder="Your password" autocomplete="current-password"/>
+            <button class="pwd-toggle" onclick="togglePwd('si-pwd-val',this)" type="button">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <button class="btn-primary-auth" id="si-email-btn" onclick="emailSignIn()">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </button>
+        <div style="text-align:right;margin-top:10px">
+          <button class="change-num" onclick="showForgot()">Forgot Password?</button>
+        </div>
+      </div>
+
+
+      <!-- ══ SIGN UP FORMS ══ -->
+
+      <!-- FARMER SIGNUP: Language -->
+      <div class="form-section" id="su-farmer-lang">
+        <div class="auth-heading">Choose Language 🌐</div>
+        <div class="auth-subheading">Select your preferred language</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px" id="lang-grid">
+          <button class="role-btn active" data-lang="en" onclick="selectLang('en',this)"><div class="role-btn-icon">🇬🇧</div><div class="role-btn-label">English</div></button>
+          <button class="role-btn" data-lang="hi" onclick="selectLang('hi',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">हिन्दी</div></button>
+          <button class="role-btn" data-lang="te" onclick="selectLang('te',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">తెలుగు</div></button>
+          <button class="role-btn" data-lang="ta" onclick="selectLang('ta',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">தமிழ்</div></button>
+          <button class="role-btn" data-lang="kn" onclick="selectLang('kn',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">ಕನ್ನಡ</div></button>
+          <button class="role-btn" data-lang="ml" onclick="selectLang('ml',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">മലയാളം</div></button>
+          <button class="role-btn" data-lang="mr" onclick="selectLang('mr',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">मराठी</div></button>
+          <button class="role-btn" data-lang="bn" onclick="selectLang('bn',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">বাংলা</div></button>
+          <button class="role-btn" data-lang="pa" onclick="selectLang('pa',this)"><div class="role-btn-icon">🇮🇳</div><div class="role-btn-label">ਪੰਜਾਬੀ</div></button>
+        </div>
+        <button class="btn-primary-auth" onclick="showSection('su-farmer-mobile')">
+          <i class="fa-solid fa-arrow-right"></i> Continue
+        </button>
+      </div>
+
+      <!-- FARMER SIGNUP: Mobile -->
+      <div class="form-section" id="su-farmer-mobile">
+        <div class="step-indicator"><div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+        <div class="auth-heading">Mobile Number 📱</div>
+        <div class="auth-subheading">We'll send a verification code</div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-mobile-screen"></i> Mobile Number</div>
+          <div class="phone-row">
+            <div class="phone-prefix">+91</div>
+            <input class="field-input" id="su-farmer-mobile" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"/>
+          </div>
+        </div>
+        <button class="btn-primary-auth" id="su-farmer-send-btn" onclick="farmerSendOTP('signup')">
+          <i class="fa-solid fa-paper-plane"></i> Send OTP
+        </button>
+        
+        <button class="btn-ghost-auth" onclick="showSection('su-farmer-lang')">← Back</button>
+      </div>
+
+      <!-- FARMER SIGNUP: OTP -->
+      <div class="form-section" id="su-farmer-otp">
+        <div class="step-indicator"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div></div>
+        <div class="auth-heading">Verify OTP 🔐</div>
+        <div class="phone-display">Code sent to <span id="su-phone-display"></span></div>
+        <div class="otp-row" id="su-otp-row">
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+          <input class="otp-input" maxlength="1" inputmode="numeric" type="tel"/>
+        </div>
+        <button class="btn-primary-auth" id="su-verify-btn" onclick="farmerVerifyOTP('signup')">
+          <i class="fa-solid fa-shield-check"></i> Verify
+        </button>
+        <div class="resend-row">
+          <button class="resend-btn" id="su-resend-btn" disabled onclick="farmerSendOTP('signup',true)">
+            Resend OTP (<span id="su-countdown">30</span>s)
+          </button>
+          &nbsp;·&nbsp;
+          <button class="change-num" onclick="showSection('su-farmer-mobile')">Change Number</button>
+        </div>
+      </div>
+
+      <!-- FARMER SIGNUP: Profile -->
+      <div class="form-section" id="su-farmer-profile">
+        <div class="step-indicator"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div></div>
+        <div class="auth-heading">Your Profile 👤</div>
+        <div class="auth-subheading">Tell us about yourself</div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-user"></i> Full Name</div>
+          <div style="display:flex;gap:8px">
+            <input class="field-input" id="su-farmer-name" type="text" placeholder="Your full name" style="flex:1"/>
+            <button type="button" onclick="voiceFillName()" style="padding:0 14px;border:1.5px solid rgba(36,92,58,0.2);border-radius:10px;background:#fff;cursor:pointer;font-size:18px" title="Speak your name">🎤</button>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-map"></i> State</div>
+            <select class="field-input" id="su-farmer-state">
+              <option value="">Select State</option>
+              <option>Andhra Pradesh</option><option>Telangana</option><option>Tamil Nadu</option>
+              <option>Karnataka</option><option>Kerala</option><option>Maharashtra</option>
+              <option>Gujarat</option><option>Rajasthan</option><option>Madhya Pradesh</option>
+              <option>Uttar Pradesh</option><option>Bihar</option><option>West Bengal</option>
+              <option>Punjab</option><option>Haryana</option><option>Odisha</option>
+              <option>Assam</option><option>Jharkhand</option><option>Chhattisgarh</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-location-dot"></i> District</div>
+            <input class="field-input" id="su-farmer-district" type="text" placeholder="District"/>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-seedling"></i> Main Crops (optional)</div>
+          <input class="field-input" id="su-farmer-crops" type="text" placeholder="e.g. Tomato, Onion, Rice"/>
+        </div>
+        <button class="btn-primary-auth" id="su-farmer-create-btn" onclick="createFarmerAccount()">
+          <i class="fa-solid fa-check-circle"></i> Create My Account
+        </button>
+      </div>
+
+      <!-- FACTORY SIGNUP -->
+      <div class="form-section" id="su-factory">
+        <div class="auth-heading">Factory Registration 🏭</div>
+        <div class="auth-subheading">Create your factory account</div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-industry"></i> Factory / Company Name</div>
+          <input class="field-input" id="su-fac-name" type="text" placeholder="ABC Foods Pvt Ltd"/>
+        </div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-envelope"></i> Email Address</div>
+          <input class="field-input" id="su-fac-email" type="email" placeholder="factory@example.com"/>
+        </div>
+        <div class="form-row-2">
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-lock"></i> Password</div>
+            <div class="pwd-wrap">
+              <input class="field-input" id="su-fac-pwd" type="password" placeholder="Min 6 chars"/>
+              <button class="pwd-toggle" onclick="togglePwd('su-fac-pwd',this)" type="button"><i class="fa-solid fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-lock"></i> Confirm Password</div>
+            <input class="field-input" id="su-fac-pwd2" type="password" placeholder="Repeat password"/>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-user"></i> Contact Person</div>
+            <input class="field-input" id="su-fac-contact" type="text" placeholder="Name"/>
+          </div>
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-phone"></i> Mobile</div>
+            <input class="field-input" id="su-fac-mobile" type="tel" placeholder="+91 XXXXX XXXXX"/>
+          </div>
+        </div>
+        <button class="btn-primary-auth" id="su-fac-btn" onclick="emailSignUp('factory')">
+          <i class="fa-solid fa-user-plus"></i> Create Factory Account
+        </button>
+      </div>
+
+      <!-- LOGISTICS SIGNUP -->
+      <div class="form-section" id="su-logistics">
+        <div class="auth-heading">Logistics Registration 🚚</div>
+        <div class="auth-subheading">Create your logistics account</div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-truck"></i> Company Name</div>
+          <input class="field-input" id="su-log-name" type="text" placeholder="ABC Logistics"/>
+        </div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-envelope"></i> Email Address</div>
+          <input class="field-input" id="su-log-email" type="email" placeholder="logistics@example.com"/>
+        </div>
+        <div class="form-row-2">
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-lock"></i> Password</div>
+            <div class="pwd-wrap">
+              <input class="field-input" id="su-log-pwd" type="password" placeholder="Min 6 chars"/>
+              <button class="pwd-toggle" onclick="togglePwd('su-log-pwd',this)" type="button"><i class="fa-solid fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-lock"></i> Confirm Password</div>
+            <input class="field-input" id="su-log-pwd2" type="password" placeholder="Repeat password"/>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-user"></i> Contact Person</div>
+            <input class="field-input" id="su-log-contact" type="text" placeholder="Name"/>
+          </div>
+          <div class="field-group">
+            <div class="field-label"><i class="fa-solid fa-phone"></i> Mobile</div>
+            <input class="field-input" id="su-log-mobile" type="tel" placeholder="+91 XXXXX XXXXX"/>
+          </div>
+        </div>
+        <button class="btn-primary-auth" id="su-log-btn" onclick="emailSignUp('logistics')">
+          <i class="fa-solid fa-user-plus"></i> Create Logistics Account
+        </button>
+      </div>
+
+      <!-- GOVT: no public signup -->
+      <div class="form-section" id="su-govt">
+        <div style="text-align:center;padding:32px 0">
+          <div style="font-size:56px;margin-bottom:16px">🏢</div>
+          <div class="auth-heading">Government / FPO</div>
+          <div class="auth-subheading" style="margin-bottom:24px">Admin accounts are created by authorized administrators only. Please sign in if you already have an account.</div>
+          <button class="btn-primary-auth" onclick="switchTab('signin');selectRole('government_admin',document.querySelector('[data-role=government_admin]'))">
+            <i class="fa-solid fa-right-to-bracket"></i> Go to Admin Sign In
           </button>
         </div>
       </div>
 
-      <div class="forgot-row">
-        <button type="button" id="forgot-btn" class="forgot-btn">Forgot Password?</button>
+      <!-- FORGOT PASSWORD -->
+      <div class="form-section" id="forgot-section">
+        <div class="auth-heading">Reset Password 🔑</div>
+        <div class="auth-subheading">Enter your email to receive a reset link</div>
+        <div class="field-group">
+          <div class="field-label"><i class="fa-solid fa-envelope"></i> Email Address</div>
+          <input class="field-input" id="forgot-email" type="email" placeholder="your@email.com"/>
+        </div>
+        <button class="btn-primary-auth" id="forgot-btn" onclick="doForgot()">
+          <i class="fa-solid fa-paper-plane"></i> Send Reset Link
+        </button>
+        <button class="btn-ghost-auth" onclick="backFromForgot()">← Back to Sign In</button>
       </div>
 
-      <button type="submit" class="btn-submit" id="login-btn">
-        <i class="fa-solid fa-right-to-bracket"></i>
-        Sign In
-      </button>
-
-    </form>
-
-    <div class="divider">or</div>
-
-    <div class="auth-switch">
-      Don't have an account?
-      <a href="register.html">Create Account</a>
-    </div>
-
-    <!-- Demo Accounts -->
-    <div class="demo-box">
-      <div class="demo-box-title">🧪 Demo Accounts — click to fill</div>
-      <div class="demo-box-list">
-        <div class="demo-row" onclick="fillDemo('farmer@demo.com')">
-          <span>👨🌾 Farmer</span><code>farmer@demo.com</code>
-        </div>
-        <div class="demo-row" onclick="fillDemo('factory@demo.com')">
-          <span>🏭 Factory</span><code>factory@demo.com</code>
-        </div>
-        <div class="demo-row" onclick="fillDemo('logistics@demo.com')">
-          <span>🚚 Logistics</span><code>logistics@demo.com</code>
-        </div>
-        <div class="demo-row" onclick="fillDemo('govt@demo.com')">
-          <span>🏢 Government</span><code>govt@demo.com</code>
-        </div>
+      <div class="auth-switch" id="auth-switch-text">
+        Don't have an account? <a onclick="switchTab('signup')">Create Account</a>
       </div>
-      <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,162,39,0.20);font-size:11px;color:var(--text-muted)">
-        First time? <a href="setup.html" style="color:var(--leaf-green);font-weight:700;text-decoration:none">Run setup to create demo accounts →</a>
-      </div>
-    </div>
 
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     FORGOT PASSWORD MODAL
-══════════════════════════════════════════ -->
-<div class="modal-overlay" id="forgot-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Reset Password</div>
-      <button class="modal-close" onclick="closeForgotModal()" aria-label="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px">
-        Enter your email address and we'll send you a password reset link.
-      </p>
-      <div class="form-group">
-        <label class="form-label" for="reset-email">
-          <i class="fa-solid fa-envelope"></i> Email Address
-        </label>
-        <div class="input-wrap">
-          <i class="fa-solid fa-envelope input-icon"></i>
-          <input type="email" id="reset-email" class="form-input" placeholder="your@email.com" />
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-ghost-sm" onclick="closeForgotModal()">Cancel</button>
-      <button class="btn-primary-sm" id="reset-btn">
-        <i class="fa-solid fa-paper-plane"></i> Send Reset Link
-      </button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════ -->
 <script type="module">
-  import { loginUser, resetPassword } from './js/auth.js';
-  import { showToast } from './js/navigation.js';
+import { sendOTP, verifyOTP, createFarmerProfile, loginUser, registerUser,
+         resetPassword, getUserProfile, redirectByRole } from './js/auth.js';
+import { showToast } from './js/navigation.js';
+import { setLanguage } from './js/language.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { auth } from './js/firebase.js';
 
-  const form      = document.getElementById('login-form');
-  const loginBtn  = document.getElementById('login-btn');
-  const errorBox  = document.getElementById('login-error');
-  const errorMsg  = document.getElementById('login-error-msg');
-  const pwdInput  = document.getElementById('password');
-  const togglePwd = document.getElementById('toggle-password');
-  const forgotBtn = document.getElementById('forgot-btn');
-  const resetBtn  = document.getElementById('reset-btn');
+let currentRole = 'farmer';
+let currentTab  = 'signin';
+let selectedLang = 'en';
+let farmerMobile = '';
+let prevSection  = '';
 
-  // Toggle password visibility
-  togglePwd.addEventListener('click', () => {
-    const isText = pwdInput.type === 'text';
-    pwdInput.type = isText ? 'password' : 'text';
-    togglePwd.querySelector('i').className = isText ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
-  });
-
-  // Open forgot modal
-  forgotBtn.addEventListener('click', () => {
-    document.getElementById('forgot-modal').classList.add('active');
-  });
-
-  // Login submit
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    errorBox.style.display = 'none';
-
-    const email    = document.getElementById('email').value.trim();
-    const password = pwdInput.value;
-
-    if (!email || !password) {
-      showErr('Please enter your email and password.');
-      return;
-    }
-
-    loginBtn.disabled = true;
-    loginBtn.innerHTML = '<div class="spinner-sm"></div> Signing in...';
-
-    const result = await loginUser(email, password);
-
-    if (result.success) {
-      showToast('Welcome back! Redirecting...', 'success');
-      const routes = {
-        farmer:     'farmer/dashboard.html',
-        factory:    'factory/dashboard.html',
-        logistics:  'logistics/dashboard.html',
-        government: 'government/dashboard.html',
-        admin:      'admin/dashboard.html',
-      };
-      setTimeout(() => {
-        window.location.href = routes[result.profile.role] || 'login.html';
-      }, 800);
-    } else {
-      showErr(result.error);
-      loginBtn.disabled = false;
-      loginBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
-    }
-  });
-
-  // Reset password
-  resetBtn.addEventListener('click', async () => {
-    const email = document.getElementById('reset-email').value.trim();
-    if (!email) { showToast('Please enter your email.', 'error'); return; }
-    resetBtn.disabled = true;
-    const result = await resetPassword(email);
-    if (result.success) {
-      showToast('Reset link sent! Check your email.', 'success');
-      closeForgotModal();
-    } else {
-      showToast(result.error, 'error');
-    }
-    resetBtn.disabled = false;
-  });
-
-  function showErr(msg) {
-    errorMsg.textContent = msg;
-    errorBox.style.display = 'flex';
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const p = await getUserProfile(user.uid);
+    if (p) redirectByRole(p.role);
   }
+});
 
-  // Expose globals
-  window.closeForgotModal = () => {
-    document.getElementById('forgot-modal').classList.remove('active');
-  };
-  window.fillDemo = (email) => {
-    document.getElementById('email').value = email;
-    document.getElementById('password').value = 'demo123';
-    errorBox.style.display = 'none';
-  };
+window.switchTab = function(tab) {
+  currentTab = tab;
+  document.getElementById('tab-signin').classList.toggle('active', tab==='signin');
+  document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+  document.getElementById('auth-switch-text').innerHTML = tab==='signin'
+    ? "Don't have an account? <a onclick=\"switchTab('signup')\">Create Account</a>"
+    : "Already have an account? <a onclick=\"switchTab('signin')\">Sign In</a>";
+  clearMessages(); renderForRole();
+};
+
+window.selectRole = function(role, el) {
+  currentRole = role;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  clearMessages(); renderForRole();
+};
+
+function renderForRole() {
+  hideAll();
+  if (currentTab === 'signin') {
+    if (currentRole === 'farmer') { showSection('si-farmer'); }
+    else {
+      const h = {factory:'Sign In 🏭',logistics:'Sign In 🚚',government_admin:'Admin Sign In 🏢'};
+      document.getElementById('si-email-heading').textContent = h[currentRole]||'Sign In';
+      showSection('si-email');
+    }
+  } else {
+    if (currentRole==='farmer')         showSection('su-farmer-lang');
+    else if (currentRole==='factory')   showSection('su-factory');
+    else if (currentRole==='logistics') showSection('su-logistics');
+    else                                showSection('su-govt');
+  }
+}
+
+function hideAll() { document.querySelectorAll('.form-section').forEach(s=>s.classList.remove('active')); }
+window.showSection = function(id) { hideAll(); document.getElementById(id)?.classList.add('active'); };
+
+window.selectLang = function(lang, el) {
+  selectedLang = lang;
+  document.querySelectorAll('#lang-grid .role-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  setLanguage(lang);
+};
+
+function clearMessages() {
+  document.getElementById('err-box').classList.remove('show');
+  document.getElementById('suc-box').classList.remove('show');
+}
+function showError(msg) {
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('err-box').classList.add('show');
+  document.getElementById('suc-box').classList.remove('show');
+}
+function showSuccess(msg) {
+  document.getElementById('suc-msg').textContent = msg;
+  document.getElementById('suc-box').classList.add('show');
+  document.getElementById('err-box').classList.remove('show');
+}
+
+window.farmerSendOTP = async function(flow, isResend=false) {
+  const mId  = flow==='signin' ? 'si-farmer-mobile' : 'su-farmer-mobile';
+  const bId  = flow==='signin' ? 'si-farmer-send-btn' : 'su-farmer-send-btn';
+  const rcId = flow==='signin' ? 'recaptcha-signin' : 'recaptcha-signup';
+  const raw  = document.getElementById(mId).value.trim().replace(/\D/g,'');
+  if (raw.length!==10) { showError('Please enter a valid 10-digit mobile number.'); return; }
+  farmerMobile = '+91'+raw;
+  const btn = document.getElementById(bId);
+  btn.disabled=true; btn.innerHTML='<span class="spinner-sm"></span> Sending OTP...';
+  clearMessages();
+  const res = await sendOTP(farmerMobile);
+  btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Send OTP';
+  if (!res.success) { showError(res.error); return; }
+  const dId = flow==='signin' ? 'si-phone-display' : 'su-phone-display';
+  document.getElementById(dId).textContent = farmerMobile;
+  showSection(flow==='signin' ? 'si-farmer-otp' : 'su-farmer-otp');
+  showSuccess('OTP sent successfully!');
+  startCountdown(flow);
+  initOTPInputs(flow==='signin' ? 'si-otp-row' : 'su-otp-row');
+};
+
+function startCountdown(flow) {
+  const cdId=flow==='signin'?'si-countdown':'su-countdown';
+  const bId=flow==='signin'?'si-resend-btn':'su-resend-btn';
+  const btn=document.getElementById(bId);
+  btn.disabled=true; let s=30;
+  document.getElementById(cdId).textContent=s;
+  const iv=setInterval(()=>{ s--; document.getElementById(cdId).textContent=s;
+    if(s<=0){clearInterval(iv);btn.disabled=false;btn.textContent='Resend OTP';}},1000);
+}
+
+function initOTPInputs(rowId) {
+  const inputs=[...document.querySelectorAll('#'+rowId+' .otp-input')];
+  inputs.forEach((inp,i)=>{
+    inp.value=''; inp.classList.remove('filled');
+    inp.oninput=()=>{ inp.value=inp.value.replace(/\D/g,'').slice(-1);
+      if(inp.value){inp.classList.add('filled');if(i<5)inputs[i+1].focus();}
+      else inp.classList.remove('filled');};
+    inp.onkeydown=e=>{if(e.key==='Backspace'&&!inp.value&&i>0)inputs[i-1].focus();};
+    inp.onpaste=e=>{e.preventDefault();
+      const p=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'');
+      inputs.forEach((x,j)=>{x.value=p[j]||'';if(p[j])x.classList.add('filled');});
+      if(p.length>=6)inputs[5].focus();};
+  });
+  inputs[0].focus();
+}
+
+function getOTP(rowId) {
+  return [...document.querySelectorAll('#'+rowId+' .otp-input')].map(i=>i.value).join('');
+}
+
+window.farmerVerifyOTP = async function(flow) {
+  const rowId=flow==='signin'?'si-otp-row':'su-otp-row';
+  const bId=flow==='signin'?'si-verify-btn':'su-verify-btn';
+  const otp=getOTP(rowId);
+  if(otp.length!==6){showError('Please enter the complete 6-digit code.');return;}
+  const btn=document.getElementById(bId);
+  btn.disabled=true; btn.innerHTML='<span class="spinner-sm"></span> Verifying...';
+  clearMessages();
+  const res=await verifyOTP(otp);
+  if(!res.success){
+    btn.disabled=false;
+    btn.innerHTML=flow==='signin'
+      ? '<i class="fa-solid fa-shield-check"></i> Verify &amp; Sign In'
+      : '<i class="fa-solid fa-shield-check"></i> Verify';
+    showError(res.error); return;
+  }
+  const profile=await getUserProfile(res.user.uid);
+  if(profile){
+    showSuccess('Welcome back! Loading dashboard...');
+    setTimeout(()=>redirectByRole(profile.role),1000);
+  } else {
+    window.__new_farmer_uid=res.user.uid;
+    showSection('su-farmer-profile');
+    showSuccess('Mobile verified! Complete your profile.');
+  }
+};
+
+window.createFarmerAccount = async function() {
+  const name=document.getElementById('su-farmer-name').value.trim();
+  const state=document.getElementById('su-farmer-state').value;
+  const district=document.getElementById('su-farmer-district').value.trim();
+  const cropsRaw=document.getElementById('su-farmer-crops').value.trim();
+  const uid=window.__new_farmer_uid;
+  if(!name){showError('Please enter your name.');return;}
+  if(!uid){showError('Session expired. Please start again.');showSection('su-farmer-lang');return;}
+  const btn=document.getElementById('su-farmer-create-btn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner-sm"></span> Creating account...';
+  clearMessages();
+  const crops=cropsRaw?cropsRaw.split(',').map(c=>c.trim()).filter(Boolean):[];
+  try {
+    await createFarmerProfile(uid,{name,mobile:farmerMobile,language:selectedLang,state,district,crops});
+    showSuccess('Account created! Loading your dashboard...');
+    setTimeout(()=>redirectByRole('farmer'),1200);
+  } catch(e) {
+    btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-check-circle"></i> Create My Account';
+    showError('Failed to create profile. Please try again.');
+  }
+};
+
+window.emailSignIn = async function() {
+  const email=document.getElementById('si-email-val').value.trim();
+  const pwd=document.getElementById('si-pwd-val').value;
+  if(!email||!pwd){showError('Please enter your email and password.');return;}
+  const btn=document.getElementById('si-email-btn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner-sm"></span> Signing in...';
+  clearMessages();
+  const res=await loginUser(email,pwd);
+  btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+  if(!res.success){showError(res.error);return;}
+  const role=res.profile.role;
+  if(currentRole==='government_admin'&&role!=='government_admin'&&role!=='government'&&role!=='admin'){
+    showError('Access denied. This account does not have Government/FPO admin privileges.');return;
+  }
+  if(currentRole==='factory'&&role!=='factory'){showError('Access denied. Please select the correct role.');return;}
+  if(currentRole==='logistics'&&role!=='logistics'){showError('Access denied. Please select the correct role.');return;}
+  showSuccess('Sign in successful! Loading your dashboard...');
+  setTimeout(()=>redirectByRole(role),1000);
+};
+
+window.emailSignUp = async function(role) {
+  let name,email,pwd,pwd2,contact,mobile,companyName;
+  if(role==='factory'){
+    companyName=document.getElementById('su-fac-name').value.trim();
+    email=document.getElementById('su-fac-email').value.trim();
+    pwd=document.getElementById('su-fac-pwd').value;
+    pwd2=document.getElementById('su-fac-pwd2').value;
+    contact=document.getElementById('su-fac-contact').value.trim();
+    mobile=document.getElementById('su-fac-mobile').value.trim();
+  } else {
+    companyName=document.getElementById('su-log-name').value.trim();
+    email=document.getElementById('su-log-email').value.trim();
+    pwd=document.getElementById('su-log-pwd').value;
+    pwd2=document.getElementById('su-log-pwd2').value;
+    contact=document.getElementById('su-log-contact').value.trim();
+    mobile=document.getElementById('su-log-mobile').value.trim();
+  }
+  name=companyName;
+  if(!companyName){showError('Please enter company name.');return;}
+  if(!email){showError('Please enter email address.');return;}
+  if(!pwd||pwd.length<6){showError('Password must be at least 6 characters.');return;}
+  if(pwd!==pwd2){showError('Passwords do not match.');return;}
+  const bId=role==='factory'?'su-fac-btn':'su-log-btn';
+  const btn=document.getElementById(bId);
+  btn.disabled=true; btn.innerHTML='<span class="spinner-sm"></span> Creating account...';
+  clearMessages();
+  const res=await registerUser({name,email,password:pwd,role,mobile,companyName,contactPerson:contact,language:'en'});
+  btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-user-plus"></i> Create Account';
+  if(!res.success){showError(res.error);return;}
+  showSuccess('Account created! Loading your dashboard...');
+  setTimeout(()=>redirectByRole(role),1200);
+};
+
+window.showForgot=function(){
+  prevSection=currentRole==='farmer'?'si-farmer':'si-email';
+  showSection('forgot-section');
+  document.getElementById('auth-switch-text').style.display='none';
+};
+window.backFromForgot=function(){
+  showSection(prevSection||'si-email');
+  document.getElementById('auth-switch-text').style.display='block';
+};
+window.doForgot=async function(){
+  const email=document.getElementById('forgot-email').value.trim();
+  if(!email){showError('Please enter your email address.');return;}
+  const btn=document.getElementById('forgot-btn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner-sm"></span> Sending...';
+  const res=await resetPassword(email);
+  btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Send Reset Link';
+  if(res.success)showSuccess('Reset link sent! Check your email.');
+  else showError(res.error);
+};
+
+window.togglePwd=function(id,btn){
+  const inp=document.getElementById(id);
+  const isText=inp.type==='text';
+  inp.type=isText?'password':'text';
+  btn.querySelector('i').className=isText?'fa-solid fa-eye':'fa-solid fa-eye-slash';
+};
+
+window.voiceFillName=function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showToast('Voice not supported on this browser.','info');return;}
+  const r=new SR(); r.lang='te-IN';
+  r.onresult=e=>{document.getElementById('su-farmer-name').value=e.results[0][0].transcript;};
+  r.onerror=()=>showToast('Could not hear. Please type your name.','info');
+  r.start();
+};
+
+renderForRole();
 </script>
-
+<div id="recaptcha-container"></div>
 </body>
 </html>
