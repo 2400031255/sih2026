@@ -92,7 +92,7 @@ export async function sendOTP(phoneNumber) {
       try { recaptchaVerifier.clear(); } catch (_) {}
       recaptchaVerifier = null;
     }
-    return { success: false, error: parsePhoneError(err.code) };
+    return { success: false, error: parsePhoneError(err.code) + ' [' + err.code + ']' };
   }
 }
 
