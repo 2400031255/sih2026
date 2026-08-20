@@ -239,7 +239,8 @@ export async function getUserProfile(uid) {
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     return snap.exists() ? snap.data() : null;
-  } catch {
+  } catch (err) {
+    console.error('getUserProfile error:', err.code, err.message);
     return null;
   }
 }
