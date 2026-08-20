@@ -393,8 +393,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-setupRecaptcha('recaptcha-container');
-
 window.selectRole = function(role, el) {
   currentRole = role;
   document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));

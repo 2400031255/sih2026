@@ -79,20 +79,19 @@ export async function sendOTP(phoneNumber) {
     return { success: false, error: 'Please enter a valid Indian mobile number.' };
   }
   try {
-    // Reuse existing verifier or create a new one
-    if (!recaptchaVerifier) {
-      setupRecaptcha('recaptcha-container');
-    }
+    // Always recreate verifier to avoid stale/already-rendered state
+    setupRecaptcha('recaptcha-container');
     const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
     window.__agrisync_confirmation = confirmationResult;
     return { success: true };
   } catch (err) {
-    console.error('OTP send error:', err.code, err.message);
+    console.error('OTP send error:', err.code, err.message, err);
     if (recaptchaVerifier) {
       try { recaptchaVerifier.clear(); } catch (_) {}
       recaptchaVerifier = null;
     }
-    return { success: false, error: parsePhoneError(err.code) + ' [' + err.code + ']' };
+    const code = err.code || err.message || 'unknown';
+    return { success: false, error: parsePhoneError(err.code) + ' [' + code + ']' };
   }
 }
 
@@ -321,7 +320,7 @@ function parsePhoneError(code) {
     'auth/captcha-check-failed':      'Security check failed. Please refresh and try again.',
     'auth/session-expired':           'Session expired. Please request a new OTP.',
   };
-  return map[code] || 'Verification failed. Please try again.';
+  return map[code] || 'Verification failed. Please try again. Check console for details.';
 }
 
 // ── EMAIL ERROR MESSAGES ───────────────────────────────────
