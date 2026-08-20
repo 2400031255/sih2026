@@ -20,8 +20,8 @@ service cloud.firestore {
 
     // ── USERS COLLECTION ──────────────────────────────────
     match /users/{uid} {
-      // Anyone authenticated can read their own profile
-      allow read: if isOwner(uid) || isGovtAdmin();
+      // Any authenticated user can read any user profile
+      allow read: if isAuth();
 
       // Create: only if creating own document, role must NOT be government_admin
       allow create: if isOwner(uid) &&
