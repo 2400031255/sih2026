@@ -534,7 +534,6 @@ function showSuccess(msg) {
 window.farmerSendOTP = async function(flow, isResend=false) {
   const mId  = flow==='signin' ? 'si-farmer-mobile' : 'su-farmer-mobile';
   const bId  = flow==='signin' ? 'si-farmer-send-btn' : 'su-farmer-send-btn';
-  const rcId = flow==='signin' ? 'recaptcha-signin' : 'recaptcha-signup';
   const raw  = document.getElementById(mId).value.trim().replace(/\D/g,'');
   if (raw.length!==10) { showError('Please enter a valid 10-digit mobile number.'); return; }
   farmerMobile = '+91'+raw;
@@ -721,10 +720,12 @@ window.voiceFillName=function(){
 };
 
 renderForRole();
-
-// Pre-initialize reCAPTCHA on page load so it's ready when user clicks Send OTP
-setupRecaptcha('recaptcha-container');
 </script>
 <div id="recaptcha-container" style="display:none"></div>
+<script type="module">
+import { setupRecaptcha } from './js/auth.js';
+// Init reCAPTCHA after DOM is ready (container div exists above)
+setupRecaptcha('recaptcha-container');
+</script>
 </body>
 </html>
