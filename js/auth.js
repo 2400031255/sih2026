@@ -75,19 +75,19 @@ export function setupRecaptcha(containerId) {
 
 // ── PHONE AUTH: SEND OTP ───────────────────────────────────
 export async function sendOTP(phoneNumber) {
+  if (!phoneNumber || !/^\+91[6-9]\d{9}$/.test(phoneNumber)) {
+    return { success: false, error: 'Please enter a valid Indian mobile number.' };
+  }
   try {
-    // Validate phone number format
-    if (!phoneNumber || !/^\+91[6-9]\d{9}$/.test(phoneNumber)) {
-      return { success: false, error: 'Please enter a valid Indian mobile number.' };
+    // Reuse existing verifier or create a new one
+    if (!recaptchaVerifier) {
+      setupRecaptcha('recaptcha-container');
     }
-    // Setup invisible reCAPTCHA on dedicated container
-    const verifier = setupRecaptcha('recaptcha-container');
-    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, verifier);
+    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
     window.__agrisync_confirmation = confirmationResult;
     return { success: true };
   } catch (err) {
     console.error('OTP send error:', err.code, err.message);
-    // Clear verifier on error so next attempt gets a fresh one
     if (recaptchaVerifier) {
       try { recaptchaVerifier.clear(); } catch (_) {}
       recaptchaVerifier = null;

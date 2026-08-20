@@ -453,7 +453,7 @@
 
 <script type="module">
 import { sendOTP, verifyOTP, createFarmerProfile, loginUser, registerUser,
-         resetPassword, getUserProfile, redirectByRole } from './js/auth.js';
+         resetPassword, getUserProfile, redirectByRole, setupRecaptcha } from './js/auth.js';
 import { showToast } from './js/navigation.js';
 import { setLanguage } from './js/language.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -721,7 +721,10 @@ window.voiceFillName=function(){
 };
 
 renderForRole();
+
+// Pre-initialize reCAPTCHA on page load so it's ready when user clicks Send OTP
+setupRecaptcha('recaptcha-container');
 </script>
-<div id="recaptcha-container"></div>
+<div id="recaptcha-container" style="display:none"></div>
 </body>
 </html>
