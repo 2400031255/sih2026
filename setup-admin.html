@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AgriSync Admin Setup</title>
+  <style>
+    body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f0f0f0;margin:0}
+    .box{background:#fff;padding:40px;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.1);max-width:400px;width:100%;text-align:center}
+    h2{color:#173F2A;margin-bottom:8px}
+    p{color:#666;font-size:14px;margin-bottom:24px}
+    button{background:#173F2A;color:#fff;border:none;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;width:100%}
+    button:disabled{opacity:0.6;cursor:not-allowed}
+    .msg{margin-top:16px;padding:12px;border-radius:8px;font-size:14px;display:none}
+    .msg.success{background:#e8f5e9;color:#1b5e20;display:block}
+    .msg.error{background:#ffebee;color:#b71c1c;display:block}
+    input{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;margin-bottom:12px;box-sizing:border-box}
+  </style>
+</head>
+<body>
+<div class="box">
+  <h2>🔧 Admin Setup</h2>
+  <p>Creates the Government/FPO admin account. Run this once only.</p>
+  <input type="email" id="email" value="admin@agrisync.com" placeholder="Admin email"/>
+  <input type="password" id="password" value="admin123" placeholder="Admin password"/>
+  <button id="btn" onclick="createAdmin()">Create Admin Account</button>
+  <div class="msg" id="msg"></div>
+</div>
+
+<script type="module">
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, setDoc, getDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { auth, db } from './js/firebase.js';
+
+window.createAdmin = async function() {
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const btn = document.getElementById('btn');
+  const msg = document.getElementById('msg');
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+  msg.className = 'msg';
+
+  try {
+    let uid;
+
+    // Try creating new user first
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      uid = cred.user.uid;
+    } catch (e) {
+      if (e.code === 'auth/email-already-in-use') {
+        // Already exists — sign in to get UID
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        uid = cred.user.uid;
+      } else {
+        throw e;
+      }
+    }
+
+    // Check if already set up
+    const existing = await getDoc(doc(db, 'users', uid));
+    if (existing.exists() && existing.data().role === 'government_admin') {
+      msg.className = 'msg success';
+      msg.textContent = '✅ Admin already exists! UID: ' + uid + ' — Go to login page.';
+      btn.textContent = 'Done';
+      return;
+    }
+
+    // Write to users collection with correct UID as document ID
+    await setDoc(doc(db, 'users', uid), {
+      uid,
+      role:      'government_admin',
+      approved:  true,
+      active:    true,
+      name:      'Admin',
+      email,
+      language:  'en',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+
+    msg.className = 'msg success';
+    msg.textContent = '✅ Admin created! UID: ' + uid + ' — Now go to login page and sign in.';
+    btn.textContent = 'Done ✓';
+  } catch (e) {
+    msg.className = 'msg error';
+    msg.textContent = '❌ Error: ' + e.message;
+    btn.disabled = false;
+    btn.textContent = 'Retry';
+  }
+};
+</script>
+</body>
+</html>
